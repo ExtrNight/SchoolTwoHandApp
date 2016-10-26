@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="myTheme_color">#00bb9c</color>  <!--主题图标，备选：#11cd6d-->
+    <color name="colorViewpage">#e2dede</color>
+    <color name="view">#c3b5b5</color>
+
+    <color name="bottom_bar_normal_bg">#ffffff</color> <!--底部栏的背景#2D2F31-->
+    <color name="common_bottom_bar_selected_bg">#161718</color>
+    <!--<color name="common_bottom_bar_normal_bg">#2d2f31</color>   底部按钮的背景-->
+    <color name="common_bottom_bar_normal_bg">#ffffff</color>
+    <color name="common_bottom_bar_green">#00bb9c</color>
+
+    <color name="background_transparent">#00000000</color> <!--背景透明-->
+    <color name="background_gray">#EEEEEE</color>><!--分割View的背景：淡灰色 #808080-->
+
+    <!-- #ccc -->
+    <color name="border_clo">#ccc</color><!-- 淘圈我的页面，淘圈名下面的文字，淡色 -->
+
+</resources>

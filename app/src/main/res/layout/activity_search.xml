@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.school.twohand.activity.taoquan.SearchActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/background_gray">
+
+        <RelativeLayout
+            android:paddingLeft="@dimen/padding_search_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:paddingRight="10dp"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_taoquan_search_return"
+                android:src="@mipmap/btn_return"
+                android:layout_centerVertical="true" />
+
+            <EditText
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:id="@+id/et_query"
+                android:layout_toRightOf="@+id/iv_taoquan_search_return"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:background="@drawable/seabar_input"
+                android:drawableLeft="@drawable/search_bar_icon_normal"
+                android:hint="输入搜索内容"
+                android:textSize="16sp"
+                android:singleLine="true"
+                android:layout_marginLeft="5dp"/>
+
+            <ImageButton
+                android:id="@+id/ib_search_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="3dp"
+                android:background="@android:color/transparent"
+                android:padding="6dp"
+                android:src="@drawable/ease_search_clear" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="搜索"
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            android:layout_marginRight="5dp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_result_null"
+        android:text="没有找到符合条件的淘圈哦~"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:visibility="gone"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lv_search"/>
+
+</LinearLayout>

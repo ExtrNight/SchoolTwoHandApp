@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#ffffff"
+    android:layout_gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:padding="15dp">
+
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/taoquan_mine_item_image"
+            android:padding="5dp"
+            android:background="#ffffff"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/taoquan_mine_item_image"
+            android:layout_toEndOf="@+id/taoquan_mine_item_image"
+            android:paddingLeft="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taoquan_mine_item_name"
+                android:minLines="1"
+                android:maxLines="1"
+                android:maxEms="10"
+                android:textSize="18sp"
+                android:textColor="#444"
+                android:text="淘圈名"
+                android:ellipsize="marquee"/>
+
+            <TextView
+                android:id="@+id/taoquan_mine_item_describe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:layout_marginTop="7dp"
+                android:textColor="@color/border_clo"
+                android:layout_below="@+id/taoquan_mine_item_name"
+                android:text="快进入淘圈看看吧" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/isCircleManager"
+                android:textSize="15sp"
+
+                android:textColor="@color/myTheme_color"
+                android:layout_alignBottom="@id/taoquan_mine_item_name"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="100dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/taoquan_mine_item_popularity"
+                android:textSize="15sp"
+                android:textColor="#ff0000"
+                android:layout_alignBottom="@id/taoquan_mine_item_name"
+                android:layout_alignParentRight="true" />
+            <!--android:text="人气+ 45"-->
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <View style="@style/bg_line"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

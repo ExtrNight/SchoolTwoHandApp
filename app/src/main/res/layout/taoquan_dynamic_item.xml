@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:background="@color/background_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="9dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/iv_taoquan_dynamic_item_userImage"
+            android:background="#ffffff"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_taoquan_dynamic_item_userName"
+            android:layout_toRightOf="@+id/iv_taoquan_dynamic_item_userImage"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="5dp"
+            android:text="用户名"
+            android:maxLines="1"
+            android:maxEms="6"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:ellipsize="end" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/LL_dynamic_content"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_taoquan_dynamic_content"
+            android:layout_gravity="top"
+            android:paddingRight="5dp"
+            android:text="  好好好好好"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"/>
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/iv_taoquan_dynamic_item_image"
+            android:src="@mipmap/upload_circle_image"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"
+        android:layout_marginTop="15dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/location_11cd6e_16" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_taoquan_dynamic_item_location"
+                android:text="来自苏州"
+                android:maxLines="12"
+                android:ellipsize="end"
+                android:textColor="#11cd6e"
+                android:textSize="12sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_taoquan_dynamic_item_circleName"
+                android:layout_marginLeft="5dp"
+                android:text="淘圈 | 阿迪粉聚集地"
+                android:textColor="#11cd6e"
+                android:textSize="12sp"
+                android:maxLength="24"
+                android:ellipsize="end"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/LL_leave_message">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/like_11cd6e_32"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_likes"
+                    android:layout_marginTop="2dp"
+                    android:text="赞"
+                    android:maxLength="2"
+                    android:ellipsize="end"
+                    android:textSize="13sp"
+                    android:textColor="#000000"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:id="@+id/LL_like"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/pv_11cd6e_32"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_pv"
+                    android:text="浏览量"
+                    android:textSize="13sp"
+                    android:layout_marginTop="1dp"
+                    android:textColor="#000000"
+                    android:maxLength="3"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    </LinearLayout>
+
+    </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

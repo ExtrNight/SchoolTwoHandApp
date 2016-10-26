@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:padding="3dp"
+        android:background="#11cd6e"
+        >
+
+        <TextView
+            android:id="@+id/dingwei"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+
+            android:gravity="center"
+            android:text="定位"
+            android:background="#feeeee"
+
+            />
+        <Button
+            android:id="@+id/sousuo"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/dingwei"
+            android:layout_alignRight="@+id/fenlei"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="10dp"
+            android:text="搜索"/>
+        <Button
+            android:id="@+id/fenlei"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginRight="5dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+           android:background="@mipmap/fenlei"/>
+
+    </RelativeLayout>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="#97d9ffe8">
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="100dp"
+                android:text="一口价"/>
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拍卖"/>
+        </RadioGroup>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/home_changePage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </android.support.v4.view.ViewPager>
+
+
+</LinearLayout>

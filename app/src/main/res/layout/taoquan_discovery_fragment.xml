@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <in.srain.cube.views.ptr.PtrClassicFrameLayout
+        android:id="@+id/ultra_ptr_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.school.twohand.customview.MyScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sv">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/ib_createTaoquan"
+                    android:src="@mipmap/create_taoquan"
+                    android:background="@color/background_transparent" />
+
+                <!-- 引用地图和附近淘圈的布局页面 -->
+                <include android:id="@+id/i_taoquan_nearby"
+                    layout="@layout/taoquan_nearby"/>
+
+                <!-- 引用“不可错过的淘圈”的布局页面 -->
+                <include android:id="@+id/i_taoquan_nomissed"
+                    layout="@layout/taoquan_nomissed"/>
+
+                <!-- 引用“每日精选的淘圈”的布局页面 -->
+                <include android:id="@+id/i_taoquan_everyday"
+                    layout="@layout/taoquan_everyday"/>
+
+
+
+
+
+            </LinearLayout>
+
+
+        </com.school.twohand.customview.MyScrollView>
+
+    </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
+</LinearLayout>

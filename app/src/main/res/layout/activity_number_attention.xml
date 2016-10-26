@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.school.twohand.activity.NumberAttentionActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/colorViewpage"
+        >
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="8dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="我关注的人"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_backgd3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/aa"/>
+    <TextView
+        android:id="@+id/ti3"
+        android:layout_below="@+id/iv_backgd3"
+        android:layout_centerHorizontal="true"
+        android:layout_width="205dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="太悲凉了，连个关注的人都没有快快去关注其他人吧！"/>
+
+</RelativeLayout>

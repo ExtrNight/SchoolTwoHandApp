@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/ll_top_taoquan"
+            android:background="@color/myTheme_color">
+
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:id="@+id/rg"
+                    android:layout_centerInParent="true">
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rb_discovery"
+                            android:text="发现"
+                            android:textSize="18dp"
+                            android:button="@null" />
+                        <RadioButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/rb_mine"
+                            android:text="我的"
+                            android:textSize="18dp"
+                            android:layout_marginLeft="20dp"
+                            android:button="@null" />
+                </RadioGroup>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/underline"
+                    android:src="@mipmap/underline"
+                    android:layout_marginLeft="1dp"
+                    android:layout_alignLeft="@+id/rg"
+                    android:layout_alignParentBottom="true" />
+
+        </RelativeLayout>
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ib_search"
+            android:src="@mipmap/search_000000_64"
+            android:background="#00000000"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="11dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/vp"
+            android:layout_below="@+id/ll_top_taoquan"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
+</RelativeLayout>

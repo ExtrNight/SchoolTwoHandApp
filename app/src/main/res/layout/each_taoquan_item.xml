@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_gravity="center_vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/each_taoquan_item_userImage"
+            android:background="#ffffff"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/each_taoquan_item_userName"
+            android:layout_toRightOf="@+id/each_taoquan_item_userImage"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="10dp"
+            android:text="用户名"
+            android:maxLines="1"
+            android:maxEms="6"
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:ellipsize="end" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_isCircleMaster"
+            android:layout_toRightOf="@+id/each_taoquan_item_userName"
+            android:layout_marginLeft="5dp"
+            android:text="圈主"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="start"
+            android:textSize="8sp"
+            android:textColor="#11cd6e"
+            android:visibility="gone"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/each_taoquan_item_price"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@+id/each_taoquan_item_userName"
+            android:text="￥ 700"
+            android:maxLines="1"
+            android:maxEms="6"
+            android:textSize="22sp"
+            android:textColor="#ff0000"
+            android:ellipsize="end"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/LL_click_to_details">
+
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:id="@+id/my_hs"
+        android:paddingLeft="20dp"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/LL"
+            android:orientation="horizontal">
+            <!--<GridView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:id="@+id/gv_each_taoquan_item_image">-->
+            <!--</GridView>-->
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="5dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/each_taoquan_item_describe"
+            android:text="这里是商品描述这里是商品描述这里是商品描述这里是商品描述"
+            android:maxLines="2"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            android:ellipsize="end"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/background_gray"
+            android:layout_marginTop="15dp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:layout_gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_goods_user_school"
+                android:layout_marginBottom="10dp"
+                android:text="来自苏州"
+                android:textSize="13sp"
+                android:maxEms="10"
+                android:maxLines="1"
+                android:textColor="@color/myTheme_color"
+                android:ellipsize="end"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_likes_pageview"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="点赞 1 · 留言 1"
+                android:textSize="13sp"
+                android:maxEms="12"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </RelativeLayout>
+    </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="12dp"
+        android:background="@color/background_gray"/>
+
+</LinearLayout>

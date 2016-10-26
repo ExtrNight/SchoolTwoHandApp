@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/li_nameTop"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/white"
+        >
+        <FrameLayout
+            android:id="@+id/fl_nameTop"
+            android:layout_width="0dp"
+            android:layout_weight="7"
+            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_nameTop"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="jnvptlup"
+            android:textSize="20dp"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical|left"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="27dp"
+            />
+            <TextView
+                android:id="@+id/tv_tv_nameSecond"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:layout_marginTop="57dp"
+                android:text="虽然没挣到钱，但是闲鱼开心就好"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:textColor="#c3b5b5"/>
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="match_parent">
+            <ImageView
+               android:id="@+id/headImg"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:layout_marginTop="28dp"
+                android:background="@mipmap/head"
+                android:src="@drawable/layerlist_circle_mask"
+                />
+            <ImageView
+                android:id="@+id/go"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@mipmap/go"
+                android:layout_marginTop="40dp"
+                android:layout_marginLeft="13dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_below="@id/li_nameTop"
+        android:background="#c3b5b5"
+        android:id="@+id/view1" />
+
+
+</RelativeLayout>

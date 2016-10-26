@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+<LinearLayout
+
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#93DB70"
+    android:padding="10dp"
+    >
+    <TextView
+        android:id="@+id/tileText"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:text="选好了才有人搜的到"/>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/RelCar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/car"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/carText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car"
+            android:layout_marginTop="10dp"
+            android:text="校园代步"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/car"
+            android:layout_below="@+id/carText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="自行车 电动车"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relphone"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/phone"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/phoneText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/phone"
+            android:layout_marginTop="10dp"
+            android:text="手机"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/phone"
+            android:layout_below="@+id/phoneText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="iPhone 华为 "/>
+    </RelativeLayout>
+</LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/Relcomputer"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/computer"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/computerText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/computer"
+            android:layout_marginTop="10dp"
+            android:text="电脑"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/computer"
+            android:layout_below="@+id/computerText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="联想 戴尔 Mac"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Reldigital"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/digital"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/digitalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/digital"
+            android:layout_marginTop="10dp"
+            android:text="数码配件"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/digital"
+            android:layout_below="@+id/digitalText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="耳机 U盘 键盘"/>
+    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/Reldigit"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/digit"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/digitText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/digit"
+            android:layout_marginTop="10dp"
+            android:text="数码"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/digit"
+            android:layout_below="@+id/digitText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="iPad 相机 游戏"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relelectrical"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/electrical"
+
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/electricalText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/electrical"
+            android:layout_marginTop="10dp"
+            android:text="电器"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/electrical"
+            android:layout_below="@+id/electricalText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="电扇 台灯 饮水"/>
+    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/Relsport"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/sport"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/sportText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sport"
+            android:layout_marginTop="10dp"
+            android:text="运动健身"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/sport"
+            android:layout_below="@+id/sportText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="篮球 足球 球拍"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relclothes"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/clothes"
+
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/clothesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/clothes"
+            android:layout_marginTop="10dp"
+            android:text="衣物伞帽"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/clothes"
+            android:layout_below="@+id/clothesText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="上衣 裤子 背包"/>
+    </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/Relbook"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/book"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/bookText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/book"
+            android:layout_marginTop="10dp"
+            android:text="图书教材"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/book"
+            android:layout_below="@+id/bookText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="教材 考研 课外"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relrent"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/rent"
+
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/rentText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rent"
+            android:layout_marginTop="10dp"
+            android:text="租赁"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rent"
+            android:layout_below="@+id/rentText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="租房 服装 道具"/>
+    </RelativeLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1">
+    <RelativeLayout
+        android:id="@+id/Rellife"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5">
+        <ImageView
+            android:id="@+id/life"
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/lifeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/life"
+            android:layout_marginTop="10dp"
+            android:text="生活娱乐"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/life"
+            android:layout_below="@+id/lifeText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="乐器 日常 "/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/Relother"
+        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:layout_weight="0.5"
+        android:layout_marginLeft="15dp">
+
+        <ImageView
+            android:id="@+id/other"
+
+            android:layout_width="75dp"
+            android:layout_height="75dp" />
+        <TextView
+            android:id="@+id/otherText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/other"
+            android:layout_marginTop="10dp"
+            android:text="其他"
+            android:textSize="20sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/other"
+            android:layout_below="@+id/otherText"
+            android:layout_marginTop="10dp"
+            android:textSize="13sp"
+            android:text="其他你想到的"/>
+    </RelativeLayout>
+       </LinearLayout>
+
+</LinearLayout>
+</ScrollView>
