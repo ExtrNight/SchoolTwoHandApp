@@ -107,7 +107,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
         initView();
         initData();
         Log.i("EachTaoquanActivity", "onCreate: 111");
-        init();
+
     }
 
     private void init() {
