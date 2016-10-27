@@ -106,7 +106,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
         init();
         initView();
         initData();
-        Log.i("EachTaoquanActivity", "onCreate: 5555");
+        Log.i("EachTaoquanActivity", "onCreate: 5665");
 
     }
 
