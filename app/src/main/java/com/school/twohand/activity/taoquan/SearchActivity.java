@@ -105,8 +105,6 @@ public class SearchActivity extends AppCompatActivity {
                         circlesAdapter = new CommonAdapter<AmoyCircle>(SearchActivity.this, amoyCircles, R.layout.taoquan_mine_item) {
                             @Override
                             public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                                //取出控件，赋值
-
                                 //设置淘圈名
                                 TextView taoquan_mine_item_name = viewHolder.getViewById(R.id.taoquan_mine_item_name);
                                 taoquan_mine_item_name.setText(amoyCircle.getCircleName());
@@ -186,7 +184,6 @@ public class SearchActivity extends AppCompatActivity {
     class MyTextChange implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -202,8 +199,9 @@ public class SearchActivity extends AppCompatActivity {
         }
         @Override
         public void afterTextChanged(Editable s) {
-
         }
     }
+
+
 
 }

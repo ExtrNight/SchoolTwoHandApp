@@ -171,7 +171,6 @@ public class TaoquanNearbyMoreActivity extends AppCompatActivity implements Ultr
                 }else{
                     circlesAdapter.notifyDataSetChanged();
                 }
-
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
@@ -302,4 +301,7 @@ public class TaoquanNearbyMoreActivity extends AppCompatActivity implements Ultr
             }
         },1000);
     }
+
+
+
 }

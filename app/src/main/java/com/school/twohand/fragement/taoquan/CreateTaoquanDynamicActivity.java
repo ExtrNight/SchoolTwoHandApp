@@ -94,7 +94,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
                 AmoyCircleDynamic amoyCircleDynamic = new AmoyCircleDynamic(user,circleId,title,content,0,new Timestamp(System.currentTimeMillis()),null);
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();//设置日期格式（24小时）
                 String amoyCircleDynamicJson = gson.toJson(amoyCircleDynamic);
-                RequestParams requestParams = new RequestParams(NetUtil.url+"/InsertCircleDynamicServlet");
+                RequestParams requestParams = new RequestParams(NetUtil.url+"InsertCircleDynamicServlet");
                 requestParams.addQueryStringParameter("amoyCircleDynamicJson",amoyCircleDynamicJson);
                 pd = new ProgressDialog(CreateTaoquanDynamicActivity.this);
                 pd.setMessage("发布中..");

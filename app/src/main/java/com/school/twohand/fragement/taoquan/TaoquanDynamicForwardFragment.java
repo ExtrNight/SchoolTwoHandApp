@@ -100,7 +100,7 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
 
     //获取该淘圈的所有我评论的动态
     public void getData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
         requestParams.addBodyParameter("requirement",2+""); //表示只查出我评论的动态
@@ -187,7 +187,7 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
     }
 
     private void loadMoreData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
         requestParams.addBodyParameter("requirement",2+""); //表示只查出我评论的动态

@@ -125,7 +125,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
 
     //判断淘圈中是否存在此人,若存在，isCircleMember为true，
     private void isCircleMemberExists(int userId, int circleId) {
-        RequestParams requestParams = new RequestParams(NetUtil.url + "/isCircleMemberExistsServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url + "isCircleMemberExistsServlet");
         requestParams.addQueryStringParameter("userId", userId + "");
         requestParams.addQueryStringParameter("circleId", circleId + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
@@ -193,7 +193,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
 
     //获取显示的商品的数据并显示
     private void getGoodsData(QueryGoodsBean queryGoodsBean) {
-        String url = NetUtil.url + "/QueryGoodsServlet";
+        String url = NetUtil.url + "QueryGoodsServlet";
         RequestParams requestParams = new RequestParams(url);
         Gson gson = new Gson();
         String queryGoodsBeanString = gson.toJson(queryGoodsBean);
@@ -394,40 +394,12 @@ public class EachTaoquanActivity extends AppCompatActivity {
             case R.id.btn_bottom:  //加入淘圈
                 joinCircle(user.getUserId(), amoyCircle.getCircleId());
                 break;
-            case R.id.btn_bottom_publish:
+            case R.id.btn_bottom_publish: //发布
                 break;
             case R.id.iv_each_taoquan_return:
                 finish();
                 break;
             case R.id.iv_each_taoquan_more:
-                //点击弹出popupWidow：“退出淘圈”
-//                View popupWindowView = LayoutInflater.from(this).inflate(R.layout.popupwindow_quit_taoquan,null);
-//                final PopupWindow popupWindow = new PopupWindow(popupWindowView, ViewGroup.LayoutParams.WRAP_CONTENT,
-//                        ViewGroup.LayoutParams.WRAP_CONTENT);
-//                //设置在外部触摸的时候可以消失掉
-//                popupWindow.setOutsideTouchable(true);
-//                popupWindow.setBackgroundDrawable(new BitmapDrawable());//据说新版本不设置该方法也可以？？
-//                //设置popupWindow显示位置
-//                popupWindow.showAsDropDown(view,0,50);
-//                TextView tv_quit_taoquan = (TextView) popupWindowView.findViewById(R.id.tv_quit_taoquan);
-//                tv_quit_taoquan.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        //显示对话框
-//                        new AlertDialog.Builder(EachTaoquanActivity.this).setMessage("确定退出该淘圈？")
-//                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        popupWindow.dismiss();
-//                                        quitCircle(user.getUserId(),amoyCircle.getCircleId());                                    }
-//                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                popupWindow.dismiss();
-//                            }
-//                        }).show();
-//                    }
-//                });
                 //弹出“退出淘圈”弹框
                 String[] items = {"退出淘圈"};
                 new AlertDialog.Builder(EachTaoquanActivity.this).setItems(items, new DialogInterface.OnClickListener() {
@@ -485,7 +457,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
 
     //加入淘圈，需要参数：用户Id，所加入淘圈Id
     private void joinCircle(int userId, int circleId) {
-        RequestParams requestParams = new RequestParams(NetUtil.url + "/JoinCircleServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url + "JoinCircleServlet");
         requestParams.addQueryStringParameter("userId", userId + "");
         requestParams.addQueryStringParameter("circleId", circleId + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
@@ -514,7 +486,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
 
     //退出淘圈，需要参数：用户Id，所加入淘圈Id
     private void quitCircle(int userId, int circleId) {
-        RequestParams requestParams = new RequestParams(NetUtil.url + "/QuitCircleServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url + "QuitCircleServlet");
         requestParams.addQueryStringParameter("userId", userId + "");
         requestParams.addQueryStringParameter("circleId", circleId + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
@@ -578,5 +550,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
         // 启动分享GUI
         oks.show(this);
     }
+
+
 
 }

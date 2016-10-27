@@ -95,7 +95,6 @@ public class CreateTaoquanActivity extends AppCompatActivity {
         myApplication = (MyApplication) getApplication();
         user = myApplication.getUser();
         poiFlag=0;
-        Log.i("CreateTaoquanActivity", "onCreate: 2222");
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数
@@ -139,7 +138,7 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                     return;
                 }
 
-                String url = NetUtil.url + "/InsertCircleServlet";
+                String url = NetUtil.url + "InsertCircleServlet";
                 RequestParams requestParams = new RequestParams(url);
                 requestParams.addBodyParameter("circleUserId", user.getUserId() + "");
                 requestParams.addBodyParameter("circleName", circleName);
@@ -155,7 +154,7 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(final String result) {
-                        if (result.equals("/default.png")) {//如果图片地址为默认地址，即用户没有选择淘圈图片，则不上传图片
+                        if (result.equals("default.png")) {//如果图片地址为默认地址，即用户没有选择淘圈图片，则不上传图片
                             return;
                         }
                         //如果添加到服务器数据库成功，则把头像上传到服务器,服务器返回的result就是图片的服务器url地址
@@ -418,7 +417,6 @@ public class CreateTaoquanActivity extends AppCompatActivity {
     public class MyLocationListener implements BDLocationListener {
         @Override
         public void onReceiveLocation(final BDLocation location) {
-            Log.i("CreateTaoquanActivity", "onReceiveLocation: 111111111111111");
             myLocation = location;
             myLatitude = location.getLatitude(); //纬度
             myLongitude = location.getLongitude(); //经度
@@ -431,7 +429,9 @@ public class CreateTaoquanActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.i("CreateTaoquanActivity", "onDestroy: 111");
         poiFlag=0;
     }
+
+
+
 }

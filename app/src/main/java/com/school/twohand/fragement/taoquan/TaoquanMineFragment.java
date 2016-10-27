@@ -92,7 +92,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
     //获取数据
     void getData(){
         final int userId = user.getUserId();
-        String url = NetUtil.url+"/QueryCirclesServlet";
+        String url = NetUtil.url+"QueryCirclesServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("userId",userId+"");
 
@@ -137,7 +137,6 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                             if(amoyCircle.getCircleUserId()==userId){//若该淘圈userId等于该用户id，则设置显示为圈主
                                 isCircleManager.setText("主");
                             }
-
 
                         }
                     };
@@ -197,4 +196,8 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
             }
         },1000);
     }
+
+
+
+
 }

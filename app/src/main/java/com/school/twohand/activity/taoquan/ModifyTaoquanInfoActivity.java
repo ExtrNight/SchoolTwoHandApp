@@ -210,10 +210,9 @@ public class ModifyTaoquanInfoActivity extends AppCompatActivity {
 
     //将图片上传到服务器
     private void uploadImage(){
-        RequestParams requestParams = new RequestParams(NetUtil.url + "/CircleImageServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url + "CircleImageServlet");
         requestParams.setMultipart(true);  //指定上传文件格式
         requestParams.addBodyParameter("circleImage",file);
-        Log.i("Modify", "uploadImage: "+file+"--"+circleImageUrl);
         requestParams.addBodyParameter("circleImageUrl",circleImageUrl);
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -238,7 +237,7 @@ public class ModifyTaoquanInfoActivity extends AppCompatActivity {
 
     //修改数据库里淘圈头像地址
     private void updateCircleImageUrl(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/UpdateCircleInfoServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"UpdateCircleInfoServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("circleImageUrl",circleImageUrl);
         x.http().get(requestParams, new Callback.CommonCallback<String>() {

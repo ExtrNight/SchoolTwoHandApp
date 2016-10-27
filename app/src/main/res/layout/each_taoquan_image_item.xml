@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="140dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="5dp"
         android:id="@+id/iv_goods_image_item"
         android:src="@mipmap/upload_circle_image"
         android:scaleType="fitCenter"/>

@@ -96,7 +96,7 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
 
     //获取该淘圈的所有动态
     public void getData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
         requestParams.addQueryStringParameter("pageSize",pageSize+"");
@@ -181,7 +181,7 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
     }
 
     private void loadMoreData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
         requestParams.addQueryStringParameter("pageSize",pageSize+"");
@@ -306,12 +306,6 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
         },1000);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i("TaoquanDynamicActivity", "onActivityResult: "+requestCode+"--"+resultCode);
-    }
-
     //    //Fragment对于用户是否可见
 //    @Override
 //    public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -332,5 +326,7 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
 //            Log.i("Taoquan", "onHiddenChanged: 6666");
 //        }
 //    }
+
+
 
 }

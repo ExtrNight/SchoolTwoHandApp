@@ -102,7 +102,7 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
 
     //获取该淘圈的所有我的动态
     public void getData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
         requestParams.addBodyParameter("requirement",1+""); //表示只查出我的动态
@@ -189,7 +189,7 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
     }
 
     private void loadMoreData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCircleDynamicServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
         requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
         requestParams.addBodyParameter("requirement",1+""); //表示只查出我的动态

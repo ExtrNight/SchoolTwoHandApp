@@ -239,8 +239,6 @@ public class TaoquanNearbyMapActivity extends AppCompatActivity {
                     //在地图上添加Marker，并显示
                     mBaiduMap.addOverlay(option);
                 }
-
-
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {

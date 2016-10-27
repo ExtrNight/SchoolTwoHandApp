@@ -110,7 +110,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
     }
 
     void getData(int orderFlag){
-        String url = NetUtil.url+"/QueryCirclesByServlet";
+        String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
@@ -132,8 +132,6 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
                         circlesAdapter = new CommonAdapter<AmoyCircle>(TaoquanDiscoveryMoreActivity.this, amoyCircles, R.layout.taoquan_mine_item) {
                             @Override
                             public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                                //取出控件，赋值
-
                                 //设置淘圈名
                                 TextView taoquan_mine_item_name = viewHolder.getViewById(R.id.taoquan_mine_item_name);
                                 taoquan_mine_item_name.setText(amoyCircle.getCircleName());
@@ -219,8 +217,6 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
                         circlesAdapter = new CommonAdapter<AmoyCircle>(TaoquanDiscoveryMoreActivity.this, amoyCircles, R.layout.taoquan_mine_item) {
                             @Override
                             public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                                //取出控件，赋值
-
                                 //设置淘圈名
                                 TextView taoquan_mine_item_name = viewHolder.getViewById(R.id.taoquan_mine_item_name);
                                 taoquan_mine_item_name.setText(amoyCircle.getCircleName());

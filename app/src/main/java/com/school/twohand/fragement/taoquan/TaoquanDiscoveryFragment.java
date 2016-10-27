@@ -154,7 +154,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
 
     //获取“不可错过的淘圈”等等的GridView的数据源并显示,需要的是requirement和GridView对象,显示6个
     void getGridViewData(int orderFlag, final MyGridView myGridView){
-        String url = NetUtil.url+"/QueryCirclesByServlet";
+        String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
         requestParams.addQueryStringParameter("pageNo",1+"");
@@ -173,8 +173,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
                     circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles,R.layout.taoquan_gridview_item) {
                         @Override
                         public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                            //取出控件，赋值
-
                             //设置淘圈头像
                             ImageView iv_nomissed = viewHolder.getViewById(R.id.taoquan_gridview_item_image);
                             String url = NetUtil.imageUrl+ amoyCircle.getCircleImageUrl();
@@ -391,7 +389,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
 
     //根据当前位置的纬度和经度查出附近的淘圈的集合
     private void getCirclesData(final double latitude, final double longitude){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"/QueryCirclesByLaLuServlet");
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCirclesByLaLuServlet");
         requestParams.addQueryStringParameter("latitude",latitude+"");
         requestParams.addQueryStringParameter("longitude",longitude+"");
         requestParams.addQueryStringParameter("precision",0.005+""); //精确度，数值越大，显示淘圈的范围越大
@@ -513,4 +511,8 @@ public class TaoquanDiscoveryFragment extends Fragment {
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
     }
+
+
+
+
 }

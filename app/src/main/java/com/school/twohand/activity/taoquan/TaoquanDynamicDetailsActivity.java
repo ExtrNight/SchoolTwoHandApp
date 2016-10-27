@@ -243,11 +243,9 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                             //点击评论可回复评论，长按自己的评论是删除评论，点击别人的评论是给别人的评论进行评论
                             RelativeLayout RL_click_comment = viewHolder.getViewById(R.id.RL_click_comment);
                             if(amoyCircleDynamicComment.getUser().getUserId()==user.getUserId()){ //是自己的评论
-                                Log.i("DynamicDetails", "convert: "+amoyCircleDynamicComment.getUser().getUserId());
                                 RL_click_comment.setOnLongClickListener(new View.OnLongClickListener() {
                                     @Override
                                     public boolean onLongClick(View v) {//长按
-                                        Log.i("DynamicDetails", "onLongClick: "+amoyCircleDynamicComment.getUser().getUserId());
                                         if(amoyCircleDynamicComment.getIsEnd()==1){//如果有子评论，则不能删除
                                             Toast.makeText(TaoquanDynamicDetailsActivity.this, "已有子评论，不能删除哦~", Toast.LENGTH_SHORT).show();
                                         }else{//弹出“删除”弹框
