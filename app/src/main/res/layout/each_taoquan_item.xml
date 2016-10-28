@@ -5,7 +5,8 @@
     android:background="#ffffff"
     android:orientation="vertical"
     android:gravity="center"
-    android:layout_gravity="center_vertical">
+    android:layout_gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants">
 
     <RelativeLayout
         android:layout_width="match_parent"

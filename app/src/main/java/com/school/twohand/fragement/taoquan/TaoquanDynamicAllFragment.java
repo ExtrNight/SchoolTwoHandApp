@@ -301,7 +301,9 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
             @Override
             public void run() {
                 loadMoreData();
-                mLv_dynamic_all.refreshComplete();
+                if(mLv_dynamic_all!=null){
+                    mLv_dynamic_all.refreshComplete();
+                }
             }
         },1000);
     }

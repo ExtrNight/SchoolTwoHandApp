@@ -307,7 +307,10 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
             @Override
             public void run() {
                 loadMoreData();
-                mLv_dynamic_all.refreshComplete();
+                if(mLv_dynamic_all!=null){
+                    mLv_dynamic_all.refreshComplete();
+                }
+
             }
         },1000);
     }

@@ -147,10 +147,12 @@ public class OneFragment extends Fragment {
                         /**
                          * 修改为多图片滑动滑到最后一张的时候可以进入详情或者点击进入详情
                          */
-                        String goodsUrl = NetUtil.imageUrl+goods.getGoodsImages().get(0).getImageAddress();
-                        ImageOptions goodsImageOptions= new ImageOptions.Builder()
-                                .build();
-                        x.image().bind(goodsImage,goodsUrl,goodsImageOptions);
+                        if(goods.getGoodsImages().size()!=0){
+                            String goodsUrl = NetUtil.imageUrl+goods.getGoodsImages().get(0).getImageAddress();
+                            ImageOptions goodsImageOptions= new ImageOptions.Builder()
+                                    .build();
+                            x.image().bind(goodsImage,goodsUrl,goodsImageOptions);
+                        }
 
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());

@@ -9,21 +9,21 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
-import com.school.twohand.customview.MyListView;
+import com.school.twohand.customview.EachTaoquanListView;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.Goods;
-import com.school.twohand.entity.GoodsImage;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryGoodsBean;
@@ -43,47 +43,46 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * 单个淘圈的页面
  */
-public class EachTaoquanActivity extends AppCompatActivity {
+public class EachTaoquanActivity extends AppCompatActivity implements EachTaoquanListView.OnLoadChangeListener,View.OnClickListener{
 
-    @InjectView(R.id.iv_each_taoquan_image)
-    ImageView ivEachTaoquanImage;
-    @InjectView(R.id.tv_each_taoquan_name)
-    TextView tvEachTaoquanName;
-    @InjectView(R.id.tv_each_taoquan_goodsNum)
-    TextView tvEachTaoquanGoodsNum;
-    @InjectView(R.id.tv_each_taoquan_popularity)
-    TextView tvEachTaoquanPopularity;
-    @InjectView(R.id.ll_taoquan_bg)
-    RelativeLayout llTaoquanBg;
+//    @InjectView(R.id.iv_each_taoquan_image)
+//    ImageView ivEachTaoquanImage;
+//    @InjectView(R.id.tv_each_taoquan_name)
+//    TextView tvEachTaoquanName;
+//    @InjectView(R.id.tv_each_taoquan_goodsNum)
+//    TextView tvEachTaoquanGoodsNum;
+//    @InjectView(R.id.tv_each_taoquan_popularity)
+//    TextView tvEachTaoquanPopularity;
+//    @InjectView(R.id.ll_taoquan_bg)
+//    RelativeLayout llTaoquanBg;
     @InjectView(R.id.lv_each_taoquan_goods)
-    MyListView lvEachTaoquanGoods;
+    EachTaoquanListView lvEachTaoquanGoods;
     @InjectView(R.id.btn_bottom)
     Button btnBottom;
     @InjectView(R.id.btn_bottom_publish)
     Button btnBottomPublish;
-    @InjectView(R.id.iv_each_taoquan_return)
-    ImageView ivEachTaoquanReturn;
-    @InjectView(R.id.iv_each_taoquan_more)
-    ImageView ivEachTaoquanMore;
-    @InjectView(R.id.iv_each_taoquan_search)
-    ImageView ivEachTaoquanSearch;
-    @InjectView(R.id.iv_each_taoquan_share)
-    ImageView ivEachTaoquanShare;
-    @InjectView(R.id.LL_1)
-    LinearLayout LL_1;
-    @InjectView(R.id.LL_2)
-    LinearLayout rl2;
-    @InjectView(R.id.LL_3)
-    LinearLayout rl3;
-    @InjectView(R.id.LL_1_time)
-    LinearLayout LL_1_Time;
+//    @InjectView(R.id.iv_each_taoquan_return)
+//    ImageView ivEachTaoquanReturn;
+//    @InjectView(R.id.iv_each_taoquan_more)
+//    ImageView ivEachTaoquanMore;
+//    @InjectView(R.id.iv_each_taoquan_search)
+//    ImageView ivEachTaoquanSearch;
+//    @InjectView(R.id.iv_each_taoquan_share)
+//    ImageView ivEachTaoquanShare;
+//    @InjectView(R.id.LL_1)
+//    LinearLayout LL_1;
+//    @InjectView(R.id.LL_2)
+//    LinearLayout rl2;
+//    @InjectView(R.id.LL_3)
+//    LinearLayout rl3;
+//    @InjectView(R.id.LL_1_time)
+//    LinearLayout LL_1_Time;
 
     private static final int ModifyTaoquanInfo = 1;
 
@@ -98,6 +97,10 @@ public class EachTaoquanActivity extends AppCompatActivity {
     QueryGoodsBean queryGoodsBean;
     ProgressDialog pd;   //进度条，圆形
     Handler handler = new Handler();
+    int orderFlag = 0;          //0表示时间顺序
+    private int pageNo = 1 ;    //页号
+    private int pageSize = 5;  //每页数量
+    Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
         init();
         initView();
         initData();
+        initEvent();
 
     }
 
@@ -117,7 +121,8 @@ public class EachTaoquanActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         amoyCircle = bundle.getParcelable("amoyCircle"); //获取到上个页面传来的AmoyCircle对象
-
+        orderFlag = 0;
+        pageNo = 1;
         //判断淘圈是否存在此人，并改变isCircleMember和isCircleMaster的值
         isCircleMemberExists(user.getUserId(), amoyCircle.getCircleId());
 
@@ -136,11 +141,11 @@ public class EachTaoquanActivity extends AppCompatActivity {
                     //如果是淘圈成员,将“加入淘圈隐藏”，显示“发布”
                     btnBottom.setVisibility(View.GONE);
                     btnBottomPublish.setVisibility(View.VISIBLE);
-                    ivEachTaoquanMore.setVisibility(View.VISIBLE);//显示退出按钮
+                    lvEachTaoquanGoods.iv_exit.setVisibility(View.VISIBLE);//显示退出按钮
                     if (user.getUserId() == amoyCircle.getCircleUserId()) {
                         isCircleMaster = true;  //是淘圈圈主,圈主不可退出淘圈
-                        ivEachTaoquanMore.setVisibility(View.INVISIBLE);
-                        ivEachTaoquanImage.setOnClickListener(new View.OnClickListener() {
+                        lvEachTaoquanGoods.iv_exit.setVisibility(View.INVISIBLE);
+                        lvEachTaoquanGoods.iv_taoquan_head.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Intent intent = new Intent(EachTaoquanActivity.this, ModifyTaoquanInfoActivity.class);
@@ -177,18 +182,50 @@ public class EachTaoquanActivity extends AppCompatActivity {
                     .setFailureDrawableId(R.mipmap.upload_circle_image)
                     .setLoadingDrawableId(R.mipmap.upload_circle_image)
                     .setCrop(true).build();          //是否裁剪？
-            x.image().bind(ivEachTaoquanImage, url, imageOptions);
+            x.image().bind(lvEachTaoquanGoods.iv_taoquan_head, url, imageOptions);
             //设置淘圈名
-            tvEachTaoquanName.setText(amoyCircle.getCircleName());
+            lvEachTaoquanGoods.tv_taoquan_name.setText(amoyCircle.getCircleName());
             //设置淘圈人气
-            tvEachTaoquanPopularity.setText("人气 " + (amoyCircle.getCircleNumber() + 100));
+            lvEachTaoquanGoods.tv_taoquan_popularity.setText("人气 " + (amoyCircle.getCircleNumber() + 100));
+
+
         }
 
     }
 
     private void initData() {
-        queryGoodsBean = new QueryGoodsBean(null, null, null, 0, null, null, amoyCircle.getCircleId());//0表示时间顺序
+        queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());//0表示时间顺序
         getGoodsData(queryGoodsBean);
+    }
+
+    private void initEvent(){
+        btnBottom.setOnClickListener(this);
+        btnBottomPublish.setOnClickListener(this);
+        lvEachTaoquanGoods.iv_return.setOnClickListener(this);
+        lvEachTaoquanGoods.iv_exit.setOnClickListener(this);
+        lvEachTaoquanGoods.iv_search.setOnClickListener(this);
+        lvEachTaoquanGoods.iv_share.setOnClickListener(this);
+        lvEachTaoquanGoods.LL_order_by_heat.setOnClickListener(this);
+        lvEachTaoquanGoods.LL_order_by_time.setOnClickListener(this);
+        lvEachTaoquanGoods.LL_chat_room.setOnClickListener(this);
+        lvEachTaoquanGoods.LL_taoquan_dynamic.setOnClickListener(this);
+
+        //实现自定义ListView里的OnRefreshUploadChangeListener接口
+        lvEachTaoquanGoods.setOnLoadChangeListener(this);
+
+        lvEachTaoquanGoods.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(position<=goodsList.size()){
+                    Log.i("EachTaoquanActivity", "1111onClick: "+position);
+                    Intent intent = new Intent(EachTaoquanActivity.this, DetailGoodsActivity.class);
+                    intent.putExtra("goodsMessage", gson.toJson(goodsList));
+                    intent.putExtra("position", position ); //  position+ 1,头部也算位置,区别于346行的position？？为什么不一样
+                    startActivity(intent);
+                }
+            }
+        });
+
     }
 
     //获取显示的商品的数据并显示
@@ -202,13 +239,14 @@ public class EachTaoquanActivity extends AppCompatActivity {
             @Override
             public void onSuccess(final String result) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<Goods>>() {
-                }.getType();
+                Type type = new TypeToken<List<Goods>>() {}.getType();
                 List<Goods> newGoodsList = gson.fromJson(result, type);
+                if(newGoodsList.size()<=3){ //商品数量小于等于3，则移除底部布局
+                    lvEachTaoquanGoods.removeFootViewIfNeed();
+                }
                 goodsList.clear();
                 goodsList.addAll(newGoodsList);
-                tvEachTaoquanGoodsNum.setText("发布数 " + goodsList.size());
-
+                lvEachTaoquanGoods.tv_goods_number.setText("发布数 " + goodsList.size());
                 //设置ListView的数据源
                 if (goodsAdapter == null) {
                     goodsAdapter = new CommonAdapter<Goods>(EachTaoquanActivity.this, goodsList, R.layout.each_taoquan_item) {
@@ -224,7 +262,137 @@ public class EachTaoquanActivity extends AppCompatActivity {
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();          //是否裁剪？
                             x.image().bind(iv_userImage, url, imageOptions);
+                            //设置用户名
+                            TextView tv_userName = viewHolder.getViewById(R.id.each_taoquan_item_userName);
+                            tv_userName.setText(goods.getGoodsUser().getUserName());
+                            //设置用户是否是圈主
+                            TextView tv_isCircleMaster = viewHolder.getViewById(R.id.tv_isCircleMaster);
+                            tv_isCircleMaster.setVisibility(View.GONE);
+                            if(goods.getGoodsUser().getUserId()==amoyCircle.getCircleUserId()){
+                                tv_isCircleMaster.setVisibility(View.VISIBLE);
+                            }
+                            //设置价格
+                            TextView tv_price = viewHolder.getViewById(R.id.each_taoquan_item_price);
+                            tv_price.setText("￥ " + goods.getGoodsPrice());
+                            //设置商品描述
+                            TextView tv_describe = viewHolder.getViewById(R.id.each_taoquan_item_describe);
+                            tv_describe.setText(goods.getGoodsDescribe());
+                            //设置商品图片
+                            LinearLayout LL = viewHolder.getViewById(R.id.LL);
+                            LL.setTag(goods);
+                            addLLView(LL,position);
+                            //设置商品所属用户的学校
+                            TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
+                            String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
+                            if(goodsUserSchool!=null){
+                                tv_goods_user_school.setText("来自 "+goodsUserSchool);
+                            }
+                            //设置点赞量和浏览量
+                            TextView tv_likes_pageview = viewHolder.getViewById(R.id.tv_likes_pageview);
+                            tv_likes_pageview.setText("点赞 "+goods.getGoodsLikes().size()+" · 浏览 "+goods.getGoodsPV());
+                            //点击跳转详情界面
+                            LinearLayout LL_click_to_details = viewHolder.getViewById(R.id.LL_click_to_details);
+//                            LL_click_to_details.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Log.i("EachTaoquanActivity", "onClick: "+position);
+//                                    Intent intent = new Intent(EachTaoquanActivity.this, DetailGoodsActivity.class);
+//                                    intent.putExtra("goodsMessage", result);
+//                                    intent.putExtra("position", position + 1);
+//                                    startActivity(intent);
+//                                }
+//                            });
+                        }
+                    };
+                    lvEachTaoquanGoods.setAdapter(goodsAdapter);
+                } else {
+                    goodsAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+            @Override
+            public void onFinished() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(pd!=null){
+                            pd.cancel();
+                        }
+                    }
+                },500);
+            }
+        });
+    }
 
+    public void addLLView(LinearLayout LL, final int position) {
+        LL.removeAllViews(); //加之前要先把之前的remove掉，！！！
+//        Log.i("EachTaoquanActivity", "addLLView: ((EachCircleItem)LL.getTag()).getGoodsImages():"+((EachCircleItem)LL.getTag()).getGoodsImages());
+        for (int i = 0; i < ((Goods) LL.getTag()).getGoodsImages().size(); i++) {
+//                                View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
+//                                        R.layout.each_taoquan_image_item, LL, false);
+            View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
+                    R.layout.each_taoquan_image_item, null);
+            ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_goods_image_item);
+            iv_goodsImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(EachTaoquanActivity.this, DetailGoodsActivity.class);
+                    intent.putExtra("goodsMessage", gson.toJson(goodsList));
+                    Log.i("EachTaoquanActivity", "2222onClick: "+position);
+                    intent.putExtra("position", position + 1);
+                    startActivity(intent);
+                }
+            });
+            String url2 = NetUtil.imageUrl + ((Goods) LL.getTag()).getGoodsImages().get(i).getImageAddress();
+            ImageOptions imageOptions2 = new ImageOptions.Builder()
+                    .setFailureDrawableId(R.mipmap.ic_launcher)
+                    .setLoadingDrawableId(R.mipmap.ic_launcher)
+                    .setCrop(true).build();
+            x.image().bind(iv_goodsImage, url2, imageOptions2);
+            LL.addView(view);
+        }
+    }
+
+    //上拉加载更多数据
+    private void loadMoreGoodsData(){
+        String url = NetUtil.url + "QueryGoodsServlet";
+        RequestParams requestParams = new RequestParams(url);
+        Gson gson = new Gson();
+        String queryGoodsBeanString = gson.toJson(queryGoodsBean);
+        requestParams.addQueryStringParameter("queryGoodsBean", queryGoodsBeanString);
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(final String result) {
+                Gson gson = new Gson();
+                Type type = new TypeToken<List<Goods>>() {}.getType();
+                List<Goods> newGoodsList = gson.fromJson(result, type);
+                if(newGoodsList.size()==0){ //服务器没有返回新的数据
+                    pageNo--; //下一次继续加载这一页
+                    return;
+                }
+                //goodsList.clear();
+                goodsList.addAll(newGoodsList);
+                lvEachTaoquanGoods.tv_goods_number.setText("发布数 " + goodsList.size());
+                //设置ListView的数据源
+                if (goodsAdapter == null) {
+                    goodsAdapter = new CommonAdapter<Goods>(EachTaoquanActivity.this, goodsList, R.layout.each_taoquan_item) {
+                        @Override
+                        public void convert(ViewHolder viewHolder, Goods goods, final int position) {
+                            //显示用户头像
+                            ImageView iv_userImage = viewHolder.getViewById(R.id.each_taoquan_item_userImage);
+                            String url = NetUtil.imageUrl + goods.getGoodsUser().getUserHead();
+                            //设置图片样式
+                            ImageOptions imageOptions = new ImageOptions.Builder()
+                                    .setCircular(true)  /*设为圆形*/
+                                    .setFailureDrawableId(R.mipmap.ic_launcher)
+                                    .setLoadingDrawableId(R.mipmap.ic_launcher)
+                                    .setCrop(true).build();          //是否裁剪？
+                            x.image().bind(iv_userImage, url, imageOptions);
                             //设置用户名
                             TextView tv_userName = viewHolder.getViewById(R.id.each_taoquan_item_userName);
                             tv_userName.setText(goods.getGoodsUser().getUserName());
@@ -246,69 +414,14 @@ public class EachTaoquanActivity extends AppCompatActivity {
                                 }
                             });
                             tv_price.setText("￥ " + goods.getGoodsPrice());
-
                             //设置商品描述
                             TextView tv_describe = viewHolder.getViewById(R.id.each_taoquan_item_describe);
                             tv_describe.setText(goods.getGoodsDescribe());
-
                             //设置商品图片
-                            List<GoodsImage> goodsImages = goods.getGoodsImages();
-//                            Log.i("EachTaoquanActivity", "convert: goodsImages"+goodsImages);
-//                            int count = goodsImages.size();
-//                            GridView gv_goodsImage = viewHolder.getViewById(R.id.gv_each_taoquan_item_image);
-//                            DisplayMetrics dm = new DisplayMetrics();
-//                            getWindowManager().getDefaultDisplay().getMetrics(dm);
-//                            int columnWidth = dm.widthPixels / 3;//由一屏幕显示的项数决定
-//                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-//                                    count * columnWidth + count, LinearLayout.LayoutParams.WRAP_CONTENT);//
-//                            gv_goodsImage.setLayoutParams(params);//设置高和宽
-//                            gv_goodsImage.setColumnWidth(columnWidth);//根据你一屏显示的项数决定
-//                            gv_goodsImage.setHorizontalSpacing(1);
-//                            gv_goodsImage.setStretchMode(GridView.NO_STRETCH);
-//                            gv_goodsImage.setNumColumns(count);//设置一行显示的总列数
-//                            CommonAdapter<GoodsImage> goodsImageAdapter = new CommonAdapter<GoodsImage>(EachTaoquanActivity.this, goodsImages, R.layout.each_taoquan_image_item) {
-//                                @Override
-//                                public void convert(ViewHolder viewHolder, GoodsImage goodsImage, int position) {
-//                                    //取出控件赋值
-//                                    ImageView iv_goodsImage = viewHolder.getViewById(R.id.iv_goods_image_item);
-//                                    String url = PathUrl.imageUrl + goodsImage.getImageAddress();
-//                                    //设置图片样式
-//                                    ImageOptions imageOptions = new ImageOptions.Builder()
-//                                            /*.setCircular(true)  设为圆形*/
-//                                            .setFailureDrawableId(R.mipmap.ic_launcher)
-//                                            .setLoadingDrawableId(R.mipmap.ic_launcher)
-//                                            .setCrop(true).build();          //是否裁剪？
-//                                    x.image().bind(iv_goodsImage, url, imageOptions);
-//                                }
-//                            };
-//                            gv_goodsImage.setAdapter(goodsImageAdapter);
-                            //CustomHScrollView mHorizontalScrollView = viewHolder.getViewById(R.id.my_hs);
                             LinearLayout LL = viewHolder.getViewById(R.id.LL);
                             LL.setTag(goods);
+                            addLLView(LL,position);
 
-                            addLLView(LL,result,position);
-//                            Log.i("EachTaoquanActivity", "convert: LL:"+LL);
-                            //动态创建View并加入到HorizontalScrollView里包裹的线性布局里
-                            //bug!!! 第一行把所有的图片全显示出来了！
-                           /* for (int i = 0; i < goodsImages.size(); i++) {
-                                *//*if(position==1){
-                                    Log.i("EachTaoquanActivity", "convert: 1111:+LL"+LL);
-                                }*//*
-//                                View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
-//                                        R.layout.each_taoquan_image_item, LL, false);
-                                View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
-                                        R.layout.each_taoquan_image_item, null);
-                                ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_goods_image_item);
-                                String url2 = NetUtil.imageUrl + goodsImages.get(i).getImageAddress();
-                                //设置图片样式
-                                ImageOptions imageOptions2 = new ImageOptions.Builder()
-                                            *//*.setCircular(true)  设为圆形*//*
-                                        .setFailureDrawableId(R.mipmap.ic_launcher)
-                                        .setLoadingDrawableId(R.mipmap.ic_launcher)
-                                        .setCrop(true).build();          //是否裁剪？
-                                LL.addView(view);
-                                x.image().bind(iv_goodsImage, url2, imageOptions2);
-                            }*/
                             //设置商品所属用户的学校
                             TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
                             String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
@@ -356,41 +469,9 @@ public class EachTaoquanActivity extends AppCompatActivity {
         });
     }
 
-    public void addLLView(LinearLayout LL, final String result, final int position) {
-        LL.removeAllViews(); //加之前要先把之前的remove掉，！！！
-//        Log.i("EachTaoquanActivity", "addLLView: ((EachCircleItem)LL.getTag()).getGoodsImages():"+((EachCircleItem)LL.getTag()).getGoodsImages());
-        for (int i = 0; i < ((Goods) LL.getTag()).getGoodsImages().size(); i++) {
-//                                View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
-//                                        R.layout.each_taoquan_image_item, LL, false);
-            View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
-                    R.layout.each_taoquan_image_item, null);
-            ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_goods_image_item);
-            iv_goodsImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(EachTaoquanActivity.this, DetailGoodsActivity.class);
-                    intent.putExtra("goodsMessage", result);
-                    intent.putExtra("position", position + 1);
-                    startActivity(intent);
-                }
-            });
-            String url2 = NetUtil.imageUrl + ((Goods) LL.getTag()).getGoodsImages().get(i).getImageAddress();
-            ImageOptions imageOptions2 = new ImageOptions.Builder()
-                    .setFailureDrawableId(R.mipmap.ic_launcher)
-                    .setLoadingDrawableId(R.mipmap.ic_launcher)
-                    .setCrop(true).build();
-            x.image().bind(iv_goodsImage, url2, imageOptions2);
-            LL.addView(view);
-        }
-    }
-
-
-    @OnClick({R.id.ll_taoquan_bg, R.id.btn_bottom, R.id.btn_bottom_publish, R.id.iv_each_taoquan_return,
-            R.id.iv_each_taoquan_more, R.id.iv_each_taoquan_search, R.id.iv_each_taoquan_share, R.id.LL_1, R.id.LL_2, R.id.LL_3,R.id.LL_1_time})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.ll_taoquan_bg:
-                break;
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
             case R.id.btn_bottom:  //加入淘圈
                 joinCircle(user.getUserId(), amoyCircle.getCircleId());
                 break;
@@ -427,21 +508,27 @@ public class EachTaoquanActivity extends AppCompatActivity {
                 showShare();
                 break;
             case R.id.LL_1:
-                LL_1.setVisibility(View.GONE);
-                LL_1_Time.setVisibility(View.VISIBLE);
+                lvEachTaoquanGoods.LL_order_by_heat.setVisibility(View.GONE);
+                lvEachTaoquanGoods.LL_order_by_time.setVisibility(View.VISIBLE);
                 pd = new ProgressDialog(EachTaoquanActivity.this);
                 pd.setMessage("正在按照热度排序..");
                 pd.show();
-                queryGoodsBean = new QueryGoodsBean(null, null, null, 5, null, null, amoyCircle.getCircleId());//0表示时间顺序
+                orderFlag = 5;                 //5表示按照热度顺序
+                pageNo = 1;
+                queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());
+                goodsAdapter = null;
                 getGoodsData(queryGoodsBean);
                 break;
             case R.id.LL_1_time:
-                LL_1_Time.setVisibility(View.GONE);
-                LL_1.setVisibility(View.VISIBLE);
+                lvEachTaoquanGoods.LL_order_by_time.setVisibility(View.GONE);
+                lvEachTaoquanGoods.LL_order_by_heat.setVisibility(View.VISIBLE);
                 pd = new ProgressDialog(EachTaoquanActivity.this);
                 pd.setMessage("正在按照时间排序..");
                 pd.show();
-                queryGoodsBean = new QueryGoodsBean(null, null, null, 0, null, null, amoyCircle.getCircleId());//0表示时间顺序
+                orderFlag = 0;              //0表示时间顺序
+                pageNo = 1;
+                queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());
+                goodsAdapter = null;
                 getGoodsData(queryGoodsBean);
                 break;
             case R.id.LL_2:
@@ -469,7 +556,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
                     //将“加入淘圈隐藏”，显示“发布”
                     btnBottom.setVisibility(View.GONE);
                     btnBottomPublish.setVisibility(View.VISIBLE);
-                    ivEachTaoquanMore.setVisibility(View.VISIBLE);//显示退出按钮
+                    lvEachTaoquanGoods.iv_exit.setVisibility(View.VISIBLE);//显示退出按钮
                 }
             }
             @Override
@@ -498,7 +585,7 @@ public class EachTaoquanActivity extends AppCompatActivity {
                     //将“加入淘圈隐藏”，显示“发布”
                     btnBottomPublish.setVisibility(View.GONE);
                     btnBottom.setVisibility(View.VISIBLE);
-                    ivEachTaoquanMore.setVisibility(View.INVISIBLE);//显示退出按钮
+                    lvEachTaoquanGoods.iv_exit.setVisibility(View.INVISIBLE);//不显示退出按钮
                 }
             }
             @Override
@@ -551,6 +638,20 @@ public class EachTaoquanActivity extends AppCompatActivity {
         oks.show(this);
     }
 
+    //加载
+    @Override
+    public void onLoad() {
+        pageNo++;
+        //原来数据基础上增加
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());
+                loadMoreGoodsData();
+                lvEachTaoquanGoods.completeLoad();  //没获取到数据也要改变界面
+            }
+        },1000);
+    }
 
 
 }

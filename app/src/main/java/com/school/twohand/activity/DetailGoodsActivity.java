@@ -90,8 +90,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
         String goodsMessageString = intent.getStringExtra("goodsMessage");
         position = intent.getIntExtra("position",0)-1;
         Gson gson = new Gson();
-        goodsMessages = gson.fromJson(goodsMessageString, new TypeToken<List<Goods>>() {
-        }.getType());
+        goodsMessages = gson.fromJson(goodsMessageString, new TypeToken<List<Goods>>() {}.getType());
         goods = goodsMessages.get(position);
 
         //数据库获取对应商品留言表
