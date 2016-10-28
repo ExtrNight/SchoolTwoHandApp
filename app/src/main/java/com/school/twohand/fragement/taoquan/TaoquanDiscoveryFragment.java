@@ -256,6 +256,9 @@ public class TaoquanDiscoveryFragment extends Fragment {
                     @Override
                     public void run() {
                         initData(); //获取数据并刷新界面
+                        if(myLatitude!=0&&myLongitude!=0){
+                            getCirclesData(myLatitude,myLongitude);//刷新地图
+                        }
                         ptrFrame.refreshComplete();
                     }
                 }, 1500);
@@ -465,7 +468,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
                 } else if(realDistance<0.001){ //距离在1米以内
                     taoquan_mine_item_popularity.setText("1 m 以内");
                 }
-
 
                 //设置淘圈头像
                 ImageView taoquan_image = viewHolder.getViewById(R.id.taoquan_mine_item_image);

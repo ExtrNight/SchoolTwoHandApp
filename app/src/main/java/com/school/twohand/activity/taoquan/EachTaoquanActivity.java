@@ -373,6 +373,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                 List<Goods> newGoodsList = gson.fromJson(result, type);
                 if(newGoodsList.size()==0){ //服务器没有返回新的数据
                     pageNo--; //下一次继续加载这一页
+                    lvEachTaoquanGoods.removeFootViewIfNeed();
                     return;
                 }
                 //goodsList.clear();
