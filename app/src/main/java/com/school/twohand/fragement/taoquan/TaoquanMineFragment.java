@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +109,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                 Type type = new TypeToken<List<AmoyCircle>>(){}.getType();
                 List<AmoyCircle> newAmoyCircles = gson.fromJson(result,type);
                 if(newAmoyCircles.size()<=6){
-                    mLv.removeFootIfNeed(); //淘圈小于6个，就去掉底部布局
+                    mLv.removeFootIfNeed(); //淘圈小于等于6个，就去掉底部布局
                 }
                 amoyCircles.clear(); //清空数据
                 amoyCircles.addAll(newAmoyCircles); //将一个集合所有数据添加到集合
@@ -125,7 +126,6 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                             //设置淘圈人气
                             TextView taoquan_mine_item_popularity = viewHolder.getViewById(R.id.taoquan_mine_item_popularity);
                             taoquan_mine_item_popularity.setText("人气+ "+ amoyCircle.getCircleNumber());
-                            //taoquan_mine_item_popularity.setText(amoyCircle.getCircleCreateTime().toString());
 
                             //设置淘圈头像
                             ImageView taoquan_image = viewHolder.getViewById(R.id.taoquan_mine_item_image);
@@ -154,7 +154,15 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //Log.i("Taoquan", "position: "+position+"---"+parent.getCount());
-                            if(position>=0&&position<parent.getCount()-1) { //当出现底部布局的时候，底部布局也占一个位置
+                            if(position>=0&&position<parent.getCount()&&amoyCircles.size()<=6){ //没有底部布局
+                                AmoyCircle amoyCircle = (AmoyCircle) parent.getItemAtPosition(position);
+                                Intent intent = new Intent(getActivity(), EachTaoquanActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelable("amoyCircle", amoyCircle);
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            }
+                            if(position>=0&&position<parent.getCount()-1&&amoyCircles.size()>6) { //当出现底部布局的时候，底部布局也占一个位置
                                 AmoyCircle amoyCircle = (AmoyCircle) parent.getItemAtPosition(position);
                                 Intent intent = new Intent(getActivity(), EachTaoquanActivity.class);
                                 Bundle bundle = new Bundle();

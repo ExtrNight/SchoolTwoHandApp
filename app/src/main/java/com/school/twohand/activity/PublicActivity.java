@@ -52,7 +52,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
+/** 发布商品
  * Created by Administrator on 2016/10/19 0019.
  */
 public class PublicActivity extends AppCompatActivity {
