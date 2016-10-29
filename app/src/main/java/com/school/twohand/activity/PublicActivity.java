@@ -90,10 +90,10 @@ public class PublicActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 732;
     private static final int REQUEST_CODE_CLASS = 1;
     Integer classid = 0;
-    //淘圈数据源
-    List<AmoyCircle> amoyCircles;
-    //选中淘圈的id
-    Integer amoyId =0;
+    List<AmoyCircle> amoyCircles;//淘圈数据源
+    Integer amoyId =0;//选中淘圈的id
+    File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
@@ -118,17 +118,12 @@ public class PublicActivity extends AppCompatActivity {
                 };
                 publicCircle.setAdapter(commonAdapter);
             }
-
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onFinished() {
 
@@ -235,7 +230,7 @@ public class PublicActivity extends AppCompatActivity {
             //图片位置规则重置
             layoutParams.addRule(RelativeLayout.ALIGN_LEFT, 0);
             layoutParams.addRule(RelativeLayout.BELOW, 0);
-            //图片控件的消失与影藏
+            //图片控件的消失与隐藏
             for (int i = 0; i < mResults.size(); i++) {
                 //图片缩略显示
                 Bitmap bitmap = decodeSampledBitmapFromFd(mResults.get(i),80,100);
@@ -318,7 +313,12 @@ public class PublicActivity extends AppCompatActivity {
             try {
                 is = getContentResolver().openInputStream(imageUri);
                 bm = BitmapFactory.decodeStream(is);
+                if(is!=null){
+                    is.close();
+                }
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             files.add(saveImage(bm));
@@ -335,7 +335,6 @@ public class PublicActivity extends AppCompatActivity {
 
 
    //压缩图片，转化成输出流
-
     private ByteArrayOutputStream compressImage(Bitmap bitmap) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -358,8 +357,18 @@ public class PublicActivity extends AppCompatActivity {
 
     //将压缩好的bitmap保存在文件中
     public File saveImage(Bitmap bitmap) {
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/" +
-                getPhotoFileName());
+//        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM) + "/" +
+//                getPhotoFileName());
+
+        //1、获取sd卡目录,Environment.getExternalStorageDirectory()
+        //2、获取想要存储的文件夹的路径
+        imageFileDir = new File(Environment.getExternalStorageDirectory() + "/xiaoyuanershou/tempImage");
+        if (!imageFileDir.exists()) {//如果文件夹不存在，则创建该目录
+            imageFileDir.mkdirs();
+        }
+        //3、获取文件完整目录
+        File file = new File(imageFileDir,"/"+getPhotoFileName());
+
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
@@ -433,10 +442,8 @@ public class PublicActivity extends AppCompatActivity {
 
                 break;
             case R.id.publicClass:
-
                 Intent intent = new Intent(this, GoodsClassActivity.class);
                 startActivityForResult(intent, REQUEST_CODE_CLASS);
-
         }
     }
 
@@ -482,7 +489,6 @@ public class PublicActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String goodsString  = gson.toJson(goods);
         params.addBodyParameter("goods",goodsString);
-
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -491,25 +497,39 @@ public class PublicActivity extends AppCompatActivity {
                 Intent intent = new Intent(PublicActivity.this,ShowActivity.class);
                 startActivity(intent);
             }
-
             @Override
             public void onFinished() {
                 dia.dismiss();//加载完成
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.i("LAG", "onError: ");
             }
         });
-
-
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //删除文件夹里所有内容，直接对文件夹调用delete，若文件夹里内容为空，则可以成功删除，否则要将文件夹里所有文件全部删除才可以删除该文件夹
+        if(imageFileDir!=null){ //要先判断文件夹不为null，否则若用户没选择图片会出现空指针异常
+            if(imageFileDir.exists()){
+                //删除保存在本地的图片,不占用用户的内存
+                Log.i("CreateTaoquanDynamic", "onDestroy: 1111");
+                File[] tempImageFiles = imageFileDir.listFiles();
+                for(int i = 0;i<tempImageFiles.length;i++){
+                    if(tempImageFiles[i]!=null){
+                        if(tempImageFiles[i].isFile()&&tempImageFiles[i].exists()){
+                            tempImageFiles[i].delete();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 
 
 }

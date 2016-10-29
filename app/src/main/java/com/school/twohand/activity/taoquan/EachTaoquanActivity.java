@@ -85,6 +85,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 //    LinearLayout LL_1_Time;
 
     private static final int ModifyTaoquanInfo = 1;
+    private static final int PublishGoods = 2;
 
     MyApplication myApplication;
     User user;
@@ -477,6 +478,10 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                 joinCircle(user.getUserId(), amoyCircle.getCircleId());
                 break;
             case R.id.btn_bottom_publish: //发布
+                Intent intent = new Intent(this,TaoquanPublishActivity.class);
+                intent.putExtra("circleId",amoyCircle.getCircleId());
+                intent.putExtra("circleName",amoyCircle.getCircleName());
+                startActivityForResult(intent,PublishGoods);
                 break;
             case R.id.iv_each_taoquan_return:
                 finish();
@@ -607,6 +612,15 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
         if (requestCode == ModifyTaoquanInfo && resultCode == ModifyTaoquanInfoActivity.ResultCode) {
             //是在修改信息页面点击确认后返回的
             initView();
+        }else if(requestCode == PublishGoods&&resultCode==TaoquanPublishActivity.ResultCode){
+            //是在发布页面发布成功后返回的
+            lvEachTaoquanGoods.LL_order_by_time.setVisibility(View.GONE);//还是按照时间排序
+            lvEachTaoquanGoods.LL_order_by_heat.setVisibility(View.VISIBLE);
+            orderFlag = 0;              //0表示时间顺序
+            pageNo = 1;
+            queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());
+            goodsAdapter = null;
+            getGoodsData(queryGoodsBean);
         }
     }
 

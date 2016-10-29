@@ -5,14 +5,14 @@
     android:weightSum="1"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
     <LinearLayout
-        android:layout_weight="0.9"
+        android:layout_weight="0.92"
         android:layout_width="match_parent"
         android:layout_height="0dp">
-<ScrollView
-
-android:layout_width="match_parent"
-android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
 <LinearLayout
     android:orientation="vertical"
@@ -20,17 +20,17 @@ android:layout_height="match_parent">
     android:layout_height="match_parent">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@drawable/border_style_bottom"
-        >
+        android:layout_height="50dp"
+        android:background="@drawable/border_style_bottom">
         <TextView
             android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:text="发布"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="发布"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
     </android.support.v7.widget.Toolbar>
 
     <LinearLayout
@@ -135,7 +135,6 @@ android:layout_height="match_parent">
             android:layout_marginBottom="15dp"/>
     </RelativeLayout>
 
-
     </LinearLayout>
     <LinearLayout
         android:layout_marginTop="15dp"
@@ -232,7 +231,18 @@ android:layout_height="match_parent">
             android:layout_height="match_parent"
             android:textSize="20sp"
             android:gravity="center_vertical"
-            android:layout_weight="0.8"></Spinner>
+            android:layout_weight="0.8" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_publish_taoquan_name"
+            android:text="淘圈名"
+            android:layout_weight="0.8"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="40dp"
+            android:textSize="18dp"
+            android:textColor="#000000"
+            android:visibility="gone"/>
 
     </LinearLayout>
 
@@ -240,16 +250,16 @@ android:layout_height="match_parent">
 
 </ScrollView>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_weight="0.08"
         android:layout_alignParentBottom="true"
         android:paddingRight="10dp"
         android:paddingLeft="10dp"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        >
+        android:paddingBottom="8dp">
         <Button
             android:id="@+id/publicSure"
             android:layout_width="match_parent"
@@ -260,4 +270,5 @@ android:layout_height="match_parent">
             android:textColor="#ffffff"/>
 
     </LinearLayout>
+
 </LinearLayout>
