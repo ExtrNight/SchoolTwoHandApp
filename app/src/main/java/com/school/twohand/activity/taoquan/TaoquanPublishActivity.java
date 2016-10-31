@@ -1,12 +1,14 @@
-package com.school.twohand.activity;
+package com.school.twohand.activity.taoquan;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.king.photo_library.ImagesSelectorActivity;
 import com.king.photo_library.SelectorSettings;
+import com.school.twohand.activity.GoodsClassActivity;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.ClassTbl;
 import com.school.twohand.entity.Goods;
@@ -31,9 +33,7 @@ import com.school.twohand.entity.School;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
-import com.school.twohand.utils.CommonAdapter;
 import com.school.twohand.utils.NetUtil;
-import com.school.twohand.utils.ViewHolder;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -55,10 +55,11 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 
 /**
- * 发布商品
- * Created by Administrator on 2016/10/19 0019.
+ * 从淘圈发布商品
+ * Created by yang on 2016/10/29 0029.
  */
-public class PublicActivity extends AppCompatActivity {
+public class TaoquanPublishActivity extends AppCompatActivity {
+
     @InjectView(R.id.public_title)
     EditText publicTitle;
     @InjectView(R.id.public_content)
@@ -87,17 +88,17 @@ public class PublicActivity extends AppCompatActivity {
     TextView publicClass;
     @InjectView(R.id.publicCircle)
     Spinner publicCircle;
-    @InjectView(R.id.publish_finish)
-    ImageView publishFinish;
     @InjectView(R.id.tv_publish_taoquan_name)
     TextView tvPublishTaoquanName;
+    @InjectView(R.id.publish_finish)
+    ImageView publishFinish;
 
+    public static final int ResultCode = 19;
     private ArrayList<String> mResults = new ArrayList<>();
     List<File> files = new ArrayList<>();
     private static final int REQUEST_CODE = 732;
     private static final int REQUEST_CODE_CLASS = 1;
     Integer classid = 0;
-    List<AmoyCircle> amoyCircles;//淘圈数据源
     Integer amoyId = 0;//选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
 
@@ -105,43 +106,48 @@ public class PublicActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
-        //查询用户对应淘圈
-        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
-
-        requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //将淘圈弄到列表中
-                Gson gson = new Gson();
-                amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {
-                }.getType());
-                CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
-                    @Override
-                    public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                        TextView textView = viewHolder.getViewById(R.id.amoyItem);
-                        textView.setText(amoyCircle.getCircleName());
-                        amoyId = amoyCircle.getCircleId();
-                    }
-                };
-                publicCircle.setAdapter(commonAdapter);
+        publicCircle.setVisibility(View.GONE);
+        tvPublishTaoquanName.setVisibility(View.VISIBLE);
+        Intent intent = getIntent();
+        if (intent != null) {
+            amoyId = intent.getIntExtra("circleId", 0);
+            String circleName = intent.getStringExtra("circleName");
+            if (circleName != null) {
+                tvPublishTaoquanName.setText(circleName);
             }
+        }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
-
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });
+        initEvent();
 
     }
 
+    private void initEvent(){
+        //设置长按删除选择的图片
+        longClickToRemovePhoto(publicPhoto1,0);
+        longClickToRemovePhoto(publicPhoto2,1);
+        longClickToRemovePhoto(publicPhoto3,2);
+        longClickToRemovePhoto(publicPhoto4,3);
+        longClickToRemovePhoto(publicPhoto5,4);
+    }
+
+    //设置长按删除选择的图片
+    private void longClickToRemovePhoto(View view, final int position){
+        view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                String[] items = {"删除选中图片"};
+                new AlertDialog.Builder(TaoquanPublishActivity.this).setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mResults.remove(position);
+                        files.clear();
+                        initPhotoView();
+                    }
+                }).show();
+                return false;
+            }
+        });
+    }
 
     //回调请求码是REQUEST_CODE就请求图库，请求码是REQUEST_CODE_CLASS就请求分类界面返回分类结果
     @Override
@@ -157,7 +163,7 @@ public class PublicActivity extends AppCompatActivity {
                 //初始化选择图片后的图片控件
                 initPhotoView();
                 //选择图片的保存
-                final ProgressDialog dia = new ProgressDialog(PublicActivity.this);
+                final ProgressDialog dia = new ProgressDialog(TaoquanPublishActivity.this);
                 dia.setMessage("图片压缩处理中....");
                 dia.show();
                 Thread thread = new Thread(new Runnable() {
@@ -401,42 +407,16 @@ public class PublicActivity extends AppCompatActivity {
     }
 
     //图片点击事件以及发布按钮点击事件
-    @OnClick({R.id.public_photo1, R.id.public_photo2, R.id.public_photo3, R.id.public_photo4, R.id.public_photo5,
-            R.id.public_photo, R.id.publicSure, R.id.publicClass,R.id.publish_finish})
+    @OnClick({R.id.public_photo, R.id.publicSure, R.id.publicClass,R.id.publish_finish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.publish_finish:
                 finish();
                 break;
-            case R.id.public_photo1:
-                mResults.remove(0);
-                files.clear();
-                initPhotoView();
-                break;
-            case R.id.public_photo2:
-                mResults.remove(1);
-                files.clear();
-                initPhotoView();
-                break;
-            case R.id.public_photo3:
-                mResults.remove(2);
-                files.clear();
-                initPhotoView();
-                break;
-            case R.id.public_photo4:
-                mResults.remove(3);
-                files.clear();
-                initPhotoView();
-                break;
-            case R.id.public_photo5:
-                mResults.remove(4);
-                files.clear();
-                initPhotoView();
-                break;
             case R.id.public_photo:
                 if (mResults.size() < 5) {
                     // start multiple photos selector
-                    Intent intent = new Intent(PublicActivity.this, ImagesSelectorActivity.class);
+                    Intent intent = new Intent(TaoquanPublishActivity.this, ImagesSelectorActivity.class);
                     // max number of images to be selected
                     intent.putExtra(SelectorSettings.SELECTOR_MAX_IMAGE_NUMBER, 5);
                     // min size of image which will be shown; to filter tiny images (mainly icons)
@@ -452,7 +432,7 @@ public class PublicActivity extends AppCompatActivity {
             case R.id.publicSure:
                 if (publicTitle.getText().toString().trim().length() == 0 || publicContent.getText().toString().trim().length() == 0
                         || files.size() < 1 || publicPrice.getText().toString().trim().length() == 0 || publicClass.getText().toString().trim().length() == 0) {
-                    Toast.makeText(PublicActivity.this, "信息不全", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TaoquanPublishActivity.this, "信息不全", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadAll();
                 }
@@ -511,8 +491,9 @@ public class PublicActivity extends AppCompatActivity {
             public void onSuccess(String result) {
                 //加载成功回调，返回获取到的数据
                 Log.i("LAG", "onSuccess: " + result);
-                Intent intent = new Intent(PublicActivity.this, ShowActivity.class);
-                startActivity(intent);
+                Toast.makeText(TaoquanPublishActivity.this, "发布成功~", Toast.LENGTH_SHORT).show();
+                setResult(ResultCode);
+                finish();
             }
 
             @Override

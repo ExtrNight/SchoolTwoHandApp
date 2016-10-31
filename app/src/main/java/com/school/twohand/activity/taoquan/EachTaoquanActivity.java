@@ -277,7 +277,9 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                             tv_price.setText("￥ " + goods.getGoodsPrice());
                             //设置商品描述
                             TextView tv_describe = viewHolder.getViewById(R.id.each_taoquan_item_describe);
-                            tv_describe.setText(goods.getGoodsDescribe());
+                            if(goods.getGoodsTitle()!=null){
+                                tv_describe.setText(goods.getGoodsTitle()+" "+goods.getGoodsDescribe());
+                            }
                             //设置商品图片
                             LinearLayout LL = viewHolder.getViewById(R.id.LL);
                             LL.setTag(goods);
@@ -418,7 +420,10 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                             tv_price.setText("￥ " + goods.getGoodsPrice());
                             //设置商品描述
                             TextView tv_describe = viewHolder.getViewById(R.id.each_taoquan_item_describe);
-                            tv_describe.setText(goods.getGoodsDescribe());
+                            if(goods.getGoodsTitle()!=null){
+                                tv_describe.setText(goods.getGoodsTitle()+" "+goods.getGoodsDescribe());
+                            }
+
                             //设置商品图片
                             LinearLayout LL = viewHolder.getViewById(R.id.LL);
                             LL.setTag(goods);

@@ -44,7 +44,6 @@ import cn.jpush.im.api.BasicCallback;
 
 public class DetailGoodsActivity extends AppCompatActivity {
 
-
     @InjectView(R.id.view)
     Toolbar view;
     @InjectView(R.id.message_detail)
@@ -78,8 +77,9 @@ public class DetailGoodsActivity extends AppCompatActivity {
     int position;
     View headView;
     TextView likeNumber;
-     MessageBoard messageBoard = new MessageBoard();
+    MessageBoard messageBoard = new MessageBoard();
     MyApplication exampleApplication ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,25 +103,20 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 messageBoards = gson.fromJson(result,new TypeToken<List<MessageBoard>>(){}.getType());
                 initData();
             }
-
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onFinished() {
-
             }
         });
         initHeadView();
         listView.addHeaderView(headView);
     }
+
     public void initHeadView(){
         if (goods!=null){
             headView =  LayoutInflater.from(this).inflate(R.layout.detail_goods,null);
@@ -160,8 +155,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
             //服务器找商品图片信息
             for (int i = 0 ; i < goods.getGoodsImages().size();i++) {
                 String goodsUrl = NetUtil.imageUrl + goods.getGoodsImages().get(i).getImageAddress();
-                ImageOptions goodsImageOptions = new ImageOptions.Builder()
-                        .build();
+                ImageOptions goodsImageOptions = new ImageOptions.Builder().build();
                 if (i == 0){
                     x.image().bind(goodsImageA, goodsUrl, goodsImageOptions);
                     goodsImageA.setVisibility(View.VISIBLE);
@@ -187,20 +181,14 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 public void onSuccess(String result) {
                     readNumber.setText("浏览:"+result);
                 }
-
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
-
                 }
-
                 @Override
                 public void onCancelled(CancelledException cex) {
-
                 }
-
                 @Override
                 public void onFinished() {
-
                 }
             });
             //淘圈
@@ -240,24 +228,16 @@ public class DetailGoodsActivity extends AppCompatActivity {
                         }
                     }
                 }
-
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
-
                 }
-
                 @Override
                 public void onCancelled(CancelledException cex) {
-
                 }
-
                 @Override
                 public void onFinished() {
-
                 }
             });
-
-
 
 
         }
@@ -265,7 +245,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
 
     public void initData(){
-
         //留言
         if (commonAdapter == null){
             commonAdapter = new CommonAdapter<MessageBoard>(this,messageBoards,R.layout.message_board_item) {
@@ -343,48 +322,33 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         messageBoards.addAll(newMessageBoards);
                                         initData();
                                     }
-
                                     @Override
                                     public void onError(Throwable ex, boolean isOnCallback) {
-
                                     }
-
                                     @Override
                                     public void onCancelled(CancelledException cex) {
-
                                     }
-
                                     @Override
                                     public void onFinished() {
-
                                     }
                                 });
                             }
-
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
-
                             }
-
                             @Override
                             public void onCancelled(CancelledException cex) {
-
                             }
-
                             @Override
                             public void onFinished() {
-
                             }
                         });
                     }
                 });
                 sayLinearLayout.setVisibility(View.VISIBLE);
                 relativeLayout.setVisibility(View.INVISIBLE);
-
             }
         });
-
-
 
 
     }
@@ -428,45 +392,31 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
                                 initData();
                             }
-
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
-
                             }
-
                             @Override
                             public void onCancelled(CancelledException cex) {
-
                             }
-
                             @Override
                             public void onFinished() {
-
                             }
                         });
                     }
-
                     @Override
                     public void onError(Throwable ex, boolean isOnCallback) {
-
                     }
-
                     @Override
                     public void onCancelled(CancelledException cex) {
-
                     }
-
                     @Override
                     public void onFinished() {
-
                     }
                 });
                 break;
             case R.id.like_message:
                 //取消赞
                 if (likeMessage.isSelected()){
-
-
                     RequestParams requestParams2 = new RequestParams(NetUtil.url+"ZZZZZZServlet");
                     requestParams2.addQueryStringParameter("userMeId",((MyApplication)getApplication()).getUser().getUserId()+"");
                     requestParams2.addQueryStringParameter("likeOtherId",goods.getGoodsUser().getUserId()+"");
@@ -510,43 +460,30 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-
                                 @Override
                                 public void onError(Throwable ex, boolean isOnCallback) {
-
                                 }
-
                                 @Override
                                 public void onCancelled(CancelledException cex) {
-
                                 }
-
                                 @Override
                                 public void onFinished() {
-
                                 }
                             });
                         }
-
                         @Override
                         public void onError(Throwable ex, boolean isOnCallback) {
-
                         }
-
                         @Override
                         public void onCancelled(CancelledException cex) {
-
                         }
-
                         @Override
                         public void onFinished() {
-
                         }
                     });
 
                 }else {
                     //赞
-
                     RequestParams requestParams2 = new RequestParams(NetUtil.url+"ZZZZZZServlet");
                     requestParams2.addQueryStringParameter("userMeId",((MyApplication)getApplication()).getUser().getUserId()+"");
                     requestParams2.addQueryStringParameter("likeOtherId",goods.getGoodsUser().getUserId()+"");
@@ -555,7 +492,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     x.http().get(requestParams2, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-
                             RequestParams requestParams2 = new RequestParams(NetUtil.url+"QueryZZZZServlet");
                             requestParams2.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
                             x.http().get(requestParams2, new CommonCallback<String>() {
@@ -590,42 +526,29 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         }
                                     }
                                 }
-
                                 @Override
                                 public void onError(Throwable ex, boolean isOnCallback) {
-
                                 }
-
                                 @Override
                                 public void onCancelled(CancelledException cex) {
-
                                 }
-
                                 @Override
                                 public void onFinished() {
-
                                 }
                             });
                         }
-
                         @Override
                         public void onError(Throwable ex, boolean isOnCallback) {
-
                         }
-
                         @Override
                         public void onCancelled(CancelledException cex) {
-
                         }
-
                         @Override
                         public void onFinished() {
-
                         }
                     });
                 }
                 break;
-
             case R.id.iWantTo:
                 if (goods.getGoodsUser().getUserId()== 2) {
                     exampleApplication = (MyApplication) getApplication();
