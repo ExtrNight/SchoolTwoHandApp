@@ -3,6 +3,7 @@ package com.school.twohand.fragement.taoquan;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,6 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.location.Poi;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -34,14 +34,18 @@ import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.DetailGoodsActivity;
 import com.school.twohand.activity.taoquan.CreateTaoquanActivity;
 import com.school.twohand.activity.taoquan.EachTaoquanActivity;
 import com.school.twohand.activity.taoquan.TaoquanDiscoveryMoreActivity;
 import com.school.twohand.activity.taoquan.TaoquanNearbyMapActivity;
 import com.school.twohand.activity.taoquan.TaoquanNearbyMoreActivity;
 import com.school.twohand.customview.MyGridView;
-import com.school.twohand.customview.MyListView;
+
+import com.school.twohand.customview.TaoquanDiscoveryListView;
 import com.school.twohand.entity.AmoyCircle;
+import com.school.twohand.entity.Goods;
+import com.school.twohand.query.entity.QueryGoodsBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
 import com.school.twohand.utils.MapDistance;
@@ -54,6 +58,7 @@ import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
@@ -66,26 +71,23 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
 /** 淘圈页面的“发现”的fragment
  * Created by yang on 2016/9/28 0028.
  */
-public class TaoquanDiscoveryFragment extends Fragment {
+public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscoveryListView.OnLoadChangeListener {
 
     private PtrClassicFrameLayout ptrFrame;
-    ImageButton ib;
-    MyListView lv_taoquan_nearby;
-    TextView tv_taoquan_nearby_more;
-    MyGridView gv_nomissed;
-    TextView tv_nomissedMore;
-    MyGridView gv_everyday;
-    TextView tv_everydayMore;
+    TaoquanDiscoveryListView lv_taoquan_discovery;
 
-    TextView tv_circle_address;
+    BaiduMap mBaiduMap;  //获取BaiduMap对象
     double myLatitude; //当前位置的纬度
     double myLongitude; //当前位置的经度
-
-    //使用TextureMapView可解决第一次进入Fragment显示地图会闪一下黑屏的问题
-    TextureMapView mMapView = null;//注：Application里面不能设置android:hardwareAccelerated="true"（硬件加速）
-    BaiduMap mBaiduMap;  //获取BaiduMap对象
-    public LocationClient mLocationClient = null;
+    public LocationClient mLocationClient;
     public BDLocationListener myListener = new MyLocationListener();
+
+    CommonAdapter<Goods> goodsAdapter;
+    List<Goods> goodsList = new ArrayList<>();
+    int pageNo = 1;
+    QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,null,null,0,pageNo,6);
+    Gson gson = new Gson();
+    Handler handler = new Handler();
 
     @Nullable
     @Override
@@ -97,34 +99,32 @@ public class TaoquanDiscoveryFragment extends Fragment {
         initData();
         initEvent();
 
-        mLocationClient = new LocationClient(getActivity().getApplicationContext());     //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);    //注册监听函数
-        initLocation();
-
-        mLocationClient.start();  //开始定位
-
         return v;
     }
 
     void initView(View v){
         ptrFrame = (PtrClassicFrameLayout) v.findViewById(R.id.ultra_ptr_frame);
-        ib = (ImageButton) v.findViewById(R.id.ib_createTaoquan);
-//        ib.setFocusable(true);
-//        ib.setFocusableInTouchMode(true);
-
+        lv_taoquan_discovery = (TaoquanDiscoveryListView) v.findViewById(R.id.lv_taoquan_discovery);
+        //ib = (ImageButton) v.findViewById(R.id.ib_createTaoquan);
         //获取地图控件引用
-        mMapView = (TextureMapView) v.findViewById(R.id.bmapView);
-        mMapView.showZoomControls(false);
-        mBaiduMap = mMapView.getMap();  //获取地图控制器
+        lv_taoquan_discovery.mMapView = (TextureMapView) v.findViewById(R.id.bmapView);
+        lv_taoquan_discovery.mMapView.showZoomControls(false);
+        mBaiduMap = lv_taoquan_discovery.mMapView.getMap();  //获取地图控制器
         mBaiduMap.getUiSettings().setAllGesturesEnabled(false); //设置禁止任何手势
 
-        tv_circle_address = (TextView) v.findViewById(R.id.tv_circle_address);
-        lv_taoquan_nearby = (MyListView) v.findViewById(R.id.lv_taoquan_nearby);
-        tv_taoquan_nearby_more = (TextView) v.findViewById(R.id.tv_taoquan_nearby_more);
-        gv_nomissed = (MyGridView) v.findViewById(R.id.taoquan_nomissed_gridview);
-        tv_nomissedMore = (TextView) v.findViewById(R.id.tv_taoquan_nomissed_more);
-        gv_everyday = (MyGridView) v.findViewById(R.id.taoquan_everyday_gridview);
-        tv_everydayMore = (TextView) v.findViewById(R.id.tv_taoquan_everyday_more);
+//        tv_circle_address = (TextView) v.findViewById(R.id.tv_circle_address);
+//        lv_taoquan_nearby = (MyListView) v.findViewById(R.id.lv_taoquan_nearby);
+//        tv_taoquan_nearby_more = (TextView) v.findViewById(R.id.tv_taoquan_nearby_more);
+//        gv_nomissed = (MyGridView) v.findViewById(R.id.taoquan_nomissed_gridview);
+//        tv_nomissedMore = (TextView) v.findViewById(R.id.tv_taoquan_nomissed_more);
+//        gv_everyday = (MyGridView) v.findViewById(R.id.taoquan_everyday_gridview);
+//        tv_everydayMore = (TextView) v.findViewById(R.id.tv_taoquan_everyday_more);
+
+        mLocationClient = new LocationClient(getActivity().getApplicationContext());     //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);    //注册监听函数
+        initLocation();
+        mLocationClient.start();  //开始定位
+
     }
 
     private void initLocation(){
@@ -145,11 +145,22 @@ public class TaoquanDiscoveryFragment extends Fragment {
     }
 
     void initData(){
-        //设置“不可错过的淘圈”的GridView，参数1表示按人气排序
-        getGridViewData(1,gv_nomissed);
+        //设置“不可错过的淘圈”的GridView，参数1表示按人气排序,降序
+        getGridViewData(1,lv_taoquan_discovery.gv_nomissed);
 
-        //设置“每日精选的淘圈”的GridView，参数2表示按淘圈创建时间排序
-        getGridViewData(2,gv_everyday);
+        //设置“每日精选的淘圈”的GridView，参数2表示按淘圈创建时间排序，降序
+        getGridViewData(2,lv_taoquan_discovery.gv_everyday);
+
+        //设置“猜你喜欢”的GridView，（还没想好，暂时按淘圈创建时间排序，升序）
+        getGridViewData(3,lv_taoquan_discovery.gv_guessYouLike);
+
+        //设置“高冷地带”的GridView，参数4表示按人气排序，升序
+        getGridViewData(4,lv_taoquan_discovery.gv_coldZone);
+
+        //设置商品的ListView
+        pageNo = 1;
+        queryGoodsBean.setPageNo(pageNo);
+        getGoodsData();
     }
 
     //获取“不可错过的淘圈”等等的GridView的数据源并显示,需要的是requirement和GridView对象,显示6个
@@ -157,9 +168,8 @@ public class TaoquanDiscoveryFragment extends Fragment {
         String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
-        requestParams.addQueryStringParameter("pageNo",1+"");
-        requestParams.addQueryStringParameter("pageSize",6+"");
-
+        requestParams.addQueryStringParameter("pageNo",pageNo+"");
+        requestParams.addQueryStringParameter("pageSize",6+""); //只获取6条记录
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -167,35 +177,28 @@ public class TaoquanDiscoveryFragment extends Fragment {
                 Type type = new TypeToken<List<AmoyCircle>>(){}.getType();
                 List<AmoyCircle> amoyCircles = gson.fromJson(result,type);
 
-                CommonAdapter<AmoyCircle> circlesAdapter = null;
                 //设置GridView的数据源
-                if(circlesAdapter==null){
-                    circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles,R.layout.taoquan_gridview_item) {
-                        @Override
-                        public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                            //设置淘圈头像
-                            ImageView iv_nomissed = viewHolder.getViewById(R.id.taoquan_gridview_item_image);
-                            String url = NetUtil.imageUrl+ amoyCircle.getCircleImageUrl();
-                            //设置图片样式
-                            ImageOptions imageOptions = new ImageOptions.Builder()
+                CommonAdapter<AmoyCircle> circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles,R.layout.taoquan_gridview_item) {
+                    @Override
+                    public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
+                        //设置淘圈头像
+                        ImageView iv_nomissed = viewHolder.getViewById(R.id.taoquan_gridview_item_image);
+                        String url = NetUtil.imageUrl+ amoyCircle.getCircleImageUrl();
+                        //设置图片样式
+                        ImageOptions imageOptions = new ImageOptions.Builder()
                                     /*.setCircular(true)  设为圆形*/
-                                    .setFailureDrawableId(R.mipmap.upload_circle_image)
-                                    .setLoadingDrawableId(R.mipmap.upload_circle_image)
-                                    .setCrop(true).build();          //是否裁剪？
-                            x.image().bind(iv_nomissed,url,imageOptions);
-
-                            //设置淘圈名
-                            TextView tv_nomissed_name = viewHolder.getViewById(R.id.taoquan_gridview_item_name);
-                            tv_nomissed_name.setText(amoyCircle.getCircleName());
-
-                            //设置淘圈人气数
-                            TextView tv_nomissed_popularity = viewHolder.getViewById(R.id.taoquan_gridview_item_popularity);
-                            tv_nomissed_popularity.setText("人气 "+ amoyCircle.getCircleNumber());
-
-
+                                .setFailureDrawableId(R.mipmap.upload_circle_image)
+                                .setLoadingDrawableId(R.mipmap.upload_circle_image)
+                                .setCrop(true).build();          //是否裁剪？
+                        x.image().bind(iv_nomissed,url,imageOptions);
+                        //设置淘圈名
+                        TextView tv_nomissed_name = viewHolder.getViewById(R.id.taoquan_gridview_item_name);
+                        tv_nomissed_name.setText(amoyCircle.getCircleName());
+                        //设置淘圈人气数
+                        TextView tv_nomissed_popularity = viewHolder.getViewById(R.id.taoquan_gridview_item_popularity);
+                        tv_nomissed_popularity.setText("人气 "+ amoyCircle.getCircleNumber());
                         }
                     };
-                    //设置适配器
                     myGridView.setAdapter(circlesAdapter);
                     //设置GridView的item点击事件
                     myGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -209,9 +212,166 @@ public class TaoquanDiscoveryFragment extends Fragment {
                             startActivity(intent);
                         }
                     });
-                }else{
-                    circlesAdapter.notifyDataSetChanged();
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    //获取商品信息,并显示在ListView上
+    private void getGoodsData(){
+        String url = NetUtil.url + "QueryGoodsServlet";
+        RequestParams requestParams = new RequestParams(url);
+        String queryGoodsBeanString = gson.toJson(queryGoodsBean);
+        requestParams.addQueryStringParameter("queryGoodsBean", queryGoodsBeanString);
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(final String result) {
+                Type type = new TypeToken<List<Goods>>() {}.getType();
+                List<Goods> newGoodsList = gson.fromJson(result, type);
+                if(newGoodsList.size()<=4){ //商品数量小于等于4，则移除底部布局
+                    lv_taoquan_discovery.removeFootViewIfNeed();
                 }
+                goodsList.clear();
+                goodsList.addAll(newGoodsList);
+                //设置ListView的数据源
+                if (goodsAdapter == null) {
+                    goodsAdapter = new CommonAdapter<Goods>(getActivity(), goodsList, R.layout.each_taoquan_item) {
+                        @Override
+                        public void convert(ViewHolder viewHolder, Goods goods, final int position) {
+                            //显示用户头像
+                            ImageView iv_userImage = viewHolder.getViewById(R.id.each_taoquan_item_userImage);
+                            String url = NetUtil.imageUrl + goods.getGoodsUser().getUserHead();
+                            //设置图片样式
+                            ImageOptions imageOptions = new ImageOptions.Builder()
+                                    .setCircular(true)  /*设为圆形*/
+                                    .setFailureDrawableId(R.mipmap.ic_launcher)
+                                    .setLoadingDrawableId(R.mipmap.ic_launcher)
+                                    .setCrop(true).build();          //是否裁剪？
+                            x.image().bind(iv_userImage, url, imageOptions);
+                            //设置用户名
+                            TextView tv_userName = viewHolder.getViewById(R.id.each_taoquan_item_userName);
+                            tv_userName.setText(goods.getGoodsUser().getUserName());
+                            //设置价格
+                            TextView tv_price = viewHolder.getViewById(R.id.each_taoquan_item_price);
+                            tv_price.setText("￥ " + goods.getGoodsPrice());
+                            //设置商品描述
+                            TextView tv_describe = viewHolder.getViewById(R.id.each_taoquan_item_describe);
+                            if(goods.getGoodsTitle()!=null){
+                                tv_describe.setText(goods.getGoodsTitle()+" "+goods.getGoodsDescribe());
+                            }
+                            //设置商品图片
+                            LinearLayout LL = viewHolder.getViewById(R.id.LL);
+                            LL.setTag(goods);
+                            addLLView(LL,position);
+                            //设置商品所属用户的学校
+                            TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
+                            String goodsUserSchool = goods.getGoodsUser().getUserSchoolName();
+                            if(goodsUserSchool!=null){
+                                tv_goods_user_school.setText("来自 "+goodsUserSchool+"  淘圈|"+goods.getGoodsAmoyCircle().getCircleName());
+                            }
+                            //设置点赞量和浏览量
+                            TextView tv_likes_pageview = viewHolder.getViewById(R.id.tv_likes_pageview);
+                            tv_likes_pageview.setText("点赞 "+goods.getGoodsLikes().size()+" · 浏览 "+goods.getGoodsPV());
+                            //点击跳转详情界面
+                            LinearLayout LL_click_to_details = viewHolder.getViewById(R.id.LL_click_to_details);
+//                            LL_click_to_details.setOnClickListener(new View.OnClickListener() {
+//                                @Override
+//                                public void onClick(View v) {
+//                                    Log.i("EachTaoquanActivity", "onClick: "+position);
+//                                    Intent intent = new Intent(EachTaoquanActivity.this, DetailGoodsActivity.class);
+//                                    intent.putExtra("goodsMessage", result);
+//                                    intent.putExtra("position", position + 1);
+//                                    startActivity(intent);
+//                                }
+//                            });
+                        }
+                    };
+                    lv_taoquan_discovery.setAdapter(goodsAdapter);
+                    //设置Item点击事件，因为LinearLayout不生效，所以单独给里面每个图片也设置了点击事件
+                    lv_taoquan_discovery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if(position<=goodsList.size()){
+                                Log.i("EachTaoquanActivity", "1111onClick: "+position);
+                                Intent intent = new Intent(getActivity(), DetailGoodsActivity.class);
+                                intent.putExtra("goodsMessage", gson.toJson(goodsList));
+                                intent.putExtra("position", position ); //  position+ 1,头部也算位置,区别于346行的position？？为什么不一样
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                } else {
+                    goodsAdapter.notifyDataSetChanged();
+                }
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+    //给ListView的Item的图片位置添加图片
+    public void addLLView(LinearLayout LL, final int position) {
+        LL.removeAllViews(); //加之前要先把之前的remove掉，！！！
+//        Log.i("EachTaoquanActivity", "addLLView: ((EachCircleItem)LL.getTag()).getGoodsImages():"+((EachCircleItem)LL.getTag()).getGoodsImages());
+        for (int i = 0; i < ((Goods) LL.getTag()).getGoodsImages().size(); i++) {
+//                                View view = LayoutInflater.from(EachTaoquanActivity.this).inflate(
+//                                        R.layout.each_taoquan_image_item, LL, false);
+            View view = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.each_taoquan_image_item, null);
+            ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_goods_image_item);
+            iv_goodsImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), DetailGoodsActivity.class);
+                    intent.putExtra("goodsMessage", gson.toJson(goodsList));
+                    intent.putExtra("position", position + 1);
+                    startActivity(intent);
+                }
+            });
+            String url2 = NetUtil.imageUrl + ((Goods) LL.getTag()).getGoodsImages().get(i).getImageAddress();
+            ImageOptions imageOptions2 = new ImageOptions.Builder()
+                    .setFailureDrawableId(R.mipmap.ic_launcher)
+                    .setLoadingDrawableId(R.mipmap.ic_launcher)
+                    .setCrop(true).build();
+            x.image().bind(iv_goodsImage, url2, imageOptions2);
+            LL.addView(view);
+        }
+    }
+
+    //加载更多商品信息
+    private void loadMoreGoodsData(){
+        String url = NetUtil.url + "QueryGoodsServlet";
+        RequestParams requestParams = new RequestParams(url);
+        String queryGoodsBeanString = gson.toJson(queryGoodsBean);
+        requestParams.addQueryStringParameter("queryGoodsBean", queryGoodsBeanString);
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(final String result) {
+                Type type = new TypeToken<List<Goods>>() {}.getType();
+                List<Goods> newGoodsList = gson.fromJson(result, type);
+                if(newGoodsList.size()==0){  //没有更多的数据了
+                    pageNo--; //下一次继续加载这一页
+                    Toast.makeText(getActivity(), "没有更多数据了~", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                goodsList.addAll(newGoodsList);
+                //因为goodsAdapter一定不为null，所以直接调用notifyDataSetChanged()
+                goodsAdapter.notifyDataSetChanged();
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
@@ -227,7 +387,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
 
     void initEvent(){
         ptrFrame.setLastUpdateTimeRelateObject(this);
-
         //下拉刷新的阻力，下拉时，下拉距离和显示头部的距离比例，值越大，则越不容易滑动
         ptrFrame.setRatioOfHeaderHeightToRefresh(1.2f);
 
@@ -238,7 +397,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
         ptrFrame.setPullToRefresh(false);//当下拉到一定距离时，自动刷新（true），显示释放以刷新（false）
 
         ptrFrame.setKeepHeaderWhenRefresh(true);//见名只意
-
         //数据刷新的接口回调
         ptrFrame.setPtrHandler(new PtrHandler() {
             //是否能够刷新
@@ -257,9 +415,11 @@ public class TaoquanDiscoveryFragment extends Fragment {
                     public void run() {
                         initData(); //获取数据并刷新界面
                         if(myLatitude!=0&&myLongitude!=0){
-                            getCirclesData(myLatitude,myLongitude);//刷新地图
+                            getCirclesData(myLatitude,myLongitude);
+                            //刷新地图,这里有个bug，刷新完之后地图消失，解决方案如下
+                            //lv_taoquan_discovery.mMapView.onResume();//bug已经解决,不用这种方式,123-126代码提前,只执行一次
                         }
-                        ptrFrame.refreshComplete();
+                        ptrFrame.refreshComplete();   //完成刷新后，页面恢复
                     }
                 }, 1500);
             }
@@ -295,7 +455,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
         });
 
         //设置ImageButton点击事件，点击后跳转到创建淘圈的页面
-        ib.setOnClickListener(new View.OnClickListener() {
+        lv_taoquan_discovery.ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), CreateTaoquanActivity.class);
@@ -303,8 +463,11 @@ public class TaoquanDiscoveryFragment extends Fragment {
             }
         });
 
+        //设置加载事件的监听
+        lv_taoquan_discovery.setOnLoadChangeListener(this);
+
         //设置“附近的淘圈”的“更多”点击事件：点击后跳转到显示更多附近淘圈的页面
-        tv_taoquan_nearby_more.setOnClickListener(new View.OnClickListener() {
+        lv_taoquan_discovery.tv_taoquan_nearby_more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TaoquanNearbyMoreActivity.class);
@@ -314,7 +477,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
             }
         });
         //设置“不可错过的淘圈”的“更多”点击事件：点击后跳转到显示更多淘圈的页面
-        tv_nomissedMore.setOnClickListener(new View.OnClickListener() {
+        lv_taoquan_discovery.tv_nomissedMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), TaoquanDiscoveryMoreActivity.class);
@@ -323,7 +486,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
             }
         });
         //设置“每日精选”的“更多”点击事件：点击后跳转到显示更多淘圈的页面
-        tv_everydayMore.setOnClickListener(new View.OnClickListener() {
+        lv_taoquan_discovery.tv_everydayMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),TaoquanDiscoveryMoreActivity.class);
@@ -331,7 +494,24 @@ public class TaoquanDiscoveryFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        //设置“猜你喜欢”的“更多”点击事件：点击后跳转到显示更多淘圈的页面
+        lv_taoquan_discovery.tv_guessYouLike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),TaoquanDiscoveryMoreActivity.class);
+                intent.putExtra("title","猜你喜欢");
+                startActivity(intent);
+            }
+        });
+        //设置“高冷地带”的“更多”点击事件：点击后跳转到显示更多淘圈的页面
+        lv_taoquan_discovery.tv_coldZone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),TaoquanDiscoveryMoreActivity.class);
+                intent.putExtra("title","高冷地带");
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -342,7 +522,7 @@ public class TaoquanDiscoveryFragment extends Fragment {
             myLongitude = location.getLongitude(); //经度
             //Receive Location.纬度:location.getLatitude(),经度:location.getLongitude()
 //            Log.i("MyLocationListener", "onReceiveLocation: "+location.getAddress().city);
-            tv_circle_address.setText(location.getAddrStr().substring(2,location.getAddrStr().length()));
+            lv_taoquan_discovery.tv_circle_address.setText(location.getAddrStr().substring(2,location.getAddrStr().length()));
             // 开启定位图层
             mBaiduMap.setMyLocationEnabled(true);
             // 构造定位数据
@@ -351,7 +531,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
                     //此处设置开发者获取到的方向信息，顺时针0-360
                     .direction(location.getDirection()).latitude(location.getLatitude())
                     .longitude(location.getLongitude()).build();
-//        Log.i("MyLocationListener", "纬度: "+location.getLatitude()+"经度:"+location.getLongitude());
             //设置定位数据
             mBaiduMap.setMyLocationData(locData);
             //跳转到当前位置
@@ -366,8 +545,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
                     Gson gson = new Gson();
                     String locationJson = gson.toJson(location);
                     Intent intent = new Intent(getContext(), TaoquanNearbyMapActivity.class);
-                    //intent.putExtra("myLatitude",myLatitude);
-                    //intent.putExtra("myLongitude",myLongitude);
                     intent.putExtra("locationJson",locationJson);
                     startActivity(intent);
                 }
@@ -398,7 +575,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
         requestParams.addQueryStringParameter("precision",0.005+""); //精确度，数值越大，显示淘圈的范围越大
         requestParams.addQueryStringParameter("pageNo",1+"");//第一页
         requestParams.addQueryStringParameter("pageSize",2+""); //最多显示2个
-
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -406,7 +582,6 @@ public class TaoquanDiscoveryFragment extends Fragment {
                 Type type = new TypeToken<List<AmoyCircle>>(){}.getType();
                 List<AmoyCircle> nearbyCircles; //附近的淘圈的集合;
                 nearbyCircles = gson.fromJson(result,type);
-
                 if(nearbyCircles==null){
                     return;
                 }
@@ -480,9 +655,9 @@ public class TaoquanDiscoveryFragment extends Fragment {
                 x.image().bind(taoquan_image, url, imageOptions);
             }
         };
-        lv_taoquan_nearby.setAdapter(nearbyCirclesAdapter);
+        lv_taoquan_discovery.lv_taoquan_nearby.setAdapter(nearbyCirclesAdapter);
         //设置Item点击事件
-        lv_taoquan_nearby.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv_taoquan_discovery.lv_taoquan_nearby.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 AmoyCircle amoyCircle = (AmoyCircle) parent.getItemAtPosition(position);
@@ -495,26 +670,38 @@ public class TaoquanDiscoveryFragment extends Fragment {
         });
     }
 
+    //加载更多商品
+    @Override
+    public void onLoad() {
+        pageNo++;
+        //原来数据基础上增加
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                queryGoodsBean.setPageNo(pageNo);
+                loadMoreGoodsData();
+                lv_taoquan_discovery.completeLoad();  //没获取到数据也要改变界面
+            }
+        },1000);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        mMapView.onDestroy();
+        lv_taoquan_discovery.mMapView.onDestroy();
     }
     @Override
     public void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mMapView.onResume();
+        lv_taoquan_discovery.mMapView.onResume();
     }
     @Override
     public void onPause() {
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mMapView.onPause();
+        lv_taoquan_discovery.mMapView.onPause();
     }
-
-
-
 
 }

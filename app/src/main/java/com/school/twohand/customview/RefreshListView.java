@@ -2,6 +2,7 @@ package com.school.twohand.customview;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -262,6 +263,20 @@ public class RefreshListView extends ListView implements AbsListView.OnScrollLis
     //去掉footView
     public void setFootGONE(){
         removeFooterView(footView);
+    }
+    public void setHeadGONE(){
+        removeHeaderView(headView);
+    }
+
+    //重写onMeasure方法
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        int expandSpec = MeasureSpec.makeMeasureSpec(Integer.MAX_VALUE >> 2,
+                MeasureSpec.AT_MOST);
+
+        super.onMeasure(widthMeasureSpec,expandSpec);
+        //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
 }

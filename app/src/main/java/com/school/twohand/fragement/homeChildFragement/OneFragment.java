@@ -54,8 +54,8 @@ public class OneFragment extends Fragment {
     final int PRICEDOWNTOUP = 2;//价格升序
     final int SUREPRICE = 3;//一口价
     final int NOSUREPRICE = 4;//拍卖
-    //定位学校id
-    Integer schoolId;
+    //定位学校名
+    String schoolName;
     private ArrayList<View> viewPagers = new ArrayList<>();
 
     private ImageHandler handler = new ImageHandler(new WeakReference<OneFragment>(this));
@@ -149,7 +149,7 @@ public class OneFragment extends Fragment {
     //服务器获取商品详情将值赋值给listViewBody
     public void initListBody(){
         final RequestParams requestParams = new RequestParams(NetUtil.url+"QueryGoodsServlet");
-        QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,schoolId,null,SUREPRICE,null,null);
+        QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,schoolName,null,SUREPRICE,null,null);
         Gson gson = new Gson();
         String queryGoodsBeanString = gson.toJson(queryGoodsBean);
         requestParams.addQueryStringParameter("queryGoodsBean",queryGoodsBeanString);
@@ -194,7 +194,7 @@ public class OneFragment extends Fragment {
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
                         goodsPrice.setText("￥"+goods.getGoodsPrice()+"");
-                        userSchool.setText("贵校丶"+goods.getGoodsUser().getUserSchool().getSchoolName());
+                        userSchool.setText("贵校丶"+goods.getGoodsUser().getUserSchoolName());
                         amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
                         like.setText("点赞"+goods.getGoodsLikes().size());
                         messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());

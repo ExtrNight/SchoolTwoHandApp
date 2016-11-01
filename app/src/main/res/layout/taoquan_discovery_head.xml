@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!--淘圈“发现”页面的头布局-->
+
+    <!--点击创建淘圈-->
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ib_createTaoquan"
+        android:src="@mipmap/create_taoquan"
+        android:background="@color/background_transparent" />
+
+    <!-- 引用地图和附近淘圈的布局页面 -->
+    <include android:id="@+id/i_taoquan_nearby"
+        layout="@layout/taoquan_nearby"/>
+
+    <!-- 引用“不可错过的淘圈”的布局页面 -->
+    <include android:id="@+id/i_taoquan_nomissed"
+        layout="@layout/taoquan_nomissed"/>
+
+    <!-- 引用“每日精选”的布局页面 -->
+    <include android:id="@+id/i_taoquan_everyday"
+        layout="@layout/taoquan_everyday"/>
+
+    <!-- 引用“猜你喜欢”的布局页面 -->
+    <include android:id="@+id/i_taoquan_guessyoulike"
+        layout="@layout/taoquan_guessyoulike"/>
+
+    <!-- 引用“高冷地带”的布局页面 -->
+    <include android:id="@+id/i_taoquan_coldzone"
+        layout="@layout/taoquan_coldzone"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/background_gray">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="_________________                          _________________"
+            android:layout_centerHorizontal="true"
+            android:textColor="#bfbfbf"
+            android:layout_marginTop="12dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="淘圈精品"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:textSize="18sp"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

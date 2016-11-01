@@ -4,7 +4,7 @@ package com.school.twohand.query.entity;
 
 public class QueryGoodsBean {
 	private String productName;//商品名
-	private Integer schoolId;//定位学校
+	private String schoolName;//定位学校
 	private String goodsClass;//商品分类
 	private int orderFlag;//查询方式
 	private Integer pageNo;//第几页
@@ -16,11 +16,11 @@ public class QueryGoodsBean {
 	public void setProductName(String productName) {
 		this.productName = productName;
 	}
-	public Integer getSchoolId() {
-		return schoolId;
+	public String getSchoolName() {
+		return schoolName;
 	}
-	public void setSchoolId(Integer schoolId) {
-		this.schoolId = schoolId;
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
 	}
 	public int getOrderFlag() {
 		return orderFlag;
@@ -61,21 +61,21 @@ public class QueryGoodsBean {
 	}
 
 
-	public QueryGoodsBean(String productName, Integer schoolId,
+	public QueryGoodsBean(String productName, String schoolName,
 						  String goodsClass, int orderFlag, Integer pageNo, Integer pageSize,
 						  Integer amoyCircleId) {
 		super();
 		this.productName = productName;
-		this.schoolId = schoolId;
+		this.schoolName = schoolName;
 		this.goodsClass = goodsClass;
 		this.orderFlag = orderFlag;
 		this.pageNo = pageNo;
 		this.pageSize = pageSize;
 		this.amoyCircleId = amoyCircleId;
 	}
-	public QueryGoodsBean(String productName, Integer schoolId, String goodsClass, int orderFlag, Integer pageNo, Integer pageSize) {
+	public QueryGoodsBean(String productName, String schoolName, String goodsClass, int orderFlag, Integer pageNo, Integer pageSize) {
 		this.productName = productName;
-		this.schoolId = schoolId;
+		this.schoolName = schoolName;
 		this.goodsClass = goodsClass;
 		this.orderFlag = orderFlag;
 		this.pageNo = pageNo;

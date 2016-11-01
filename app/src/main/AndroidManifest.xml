@@ -5,6 +5,7 @@
     <permission
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- the following two permissions are required if you want to take photo in selector -->
@@ -43,7 +44,6 @@
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-
     <!-- Required  一些系统要求的权限，如访问网络等 -->
     <uses-permission android:name="${applicationId}.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
@@ -59,7 +59,6 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -67,7 +66,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <!--mob分享所需要的权限-->
+    <!-- mob分享所需要的权限 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -75,8 +74,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:name="com.school.twohand.myApplication.MyApplication"
@@ -102,24 +101,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-            <!--<intent-filter>
+        <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
-        
+            </intent-filter>
+        -->
+
         <activity android:name="com.school.twohand.activity.DetailGoodsActivity" />
-        <activity android:name="com.school.twohand.activity.ChatActivity" android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
-        <activity android:name="com.school.twohand.activity.PublicActivity" android:configChanges="orientation|keyboardHidden"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden" ></activity>
+        <activity
+            android:name="com.school.twohand.activity.ChatActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity
+            android:name="com.school.twohand.activity.PublicActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
             android:name="com.king.photo_library.ImagesSelectorActivity"
             android:configChanges="orientation|screenSize" />
         <activity android:name="com.school.twohand.activity.GoodsClassActivity" />
         <activity android:name="com.school.twohand.activity.GoodsClassDetailActivity" />
         <activity android:name="com.school.twohand.activity.GoodsClassHActivity" />
-        <activity android:name="com.school.twohand.activity.SousuoActivity"></activity>
+        <activity android:name="com.school.twohand.activity.SousuoActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.SearchActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.CreateTaoquanActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.EachTaoquanActivity" />
@@ -130,7 +135,7 @@
         <activity android:name="com.school.twohand.activity.taoquan.TaoquanNearbyMoreActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.ModifyTaoquanInfoActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.TaoquanDynamicDetailsActivity" />
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= -->
+        <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++= -->
         <!-- Required Push SDK核心功能 -->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"
@@ -208,16 +213,10 @@
             android:name="JPUSH_APPKEY"
             android:value="530b86b0928b7315c440867b" />
 
-
-        <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
-        <activity android:name=".MainActivity">
-
-        </activity>
-        <activity android:name=".DemoActivity">
-
-        </activity>
-
-        <activity android:name=".GoPayActivity"></activity>
+        <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".DemoActivity"></activity>
+        <activity android:name=".GoPayActivity" />
         <activity
             android:name="c.b.a.A"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -228,30 +227,30 @@
             android:name="c.b.a.B"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent" />
-        
-        <activity android:name="com.school.twohand.activity.MyAuctionActivity"/>
-        <activity android:name="com.school.twohand.activity.MyBuyActivity"/>
-        <activity android:name="com.school.twohand.activity.MyInforActivity"/>
-        <activity android:name="com.school.twohand.activity.MyPriaseActivity"/>
-        <activity android:name="com.school.twohand.activity.MyReleaseActivity"/>
-        <activity android:name="com.school.twohand.activity.MySellActivity"/>
-        <activity android:name="com.school.twohand.activity.NumberAttentionActivity"/>
-        <activity android:name="com.school.twohand.activity.NumberFansActivity"/>
-        <activity android:name="com.school.twohand.activity.NumberPriaseActivity"/>
-        <activity android:name="com.school.twohand.activity.SecondPageActivity"/>
-        <activity android:name="com.school.twohand.activity.GoPayActivity"/>
+        <activity android:name="com.school.twohand.activity.MyAuctionActivity" />
+        <activity android:name="com.school.twohand.activity.MyBuyActivity" />
+        <activity android:name="com.school.twohand.activity.MyInforActivity" />
+        <activity android:name="com.school.twohand.activity.MyPriaseActivity" />
+        <activity android:name="com.school.twohand.activity.MyReleaseActivity" />
+        <activity android:name="com.school.twohand.activity.MySellActivity" />
+        <activity android:name="com.school.twohand.activity.NumberAttentionActivity" />
+        <activity android:name="com.school.twohand.activity.NumberFansActivity" />
+        <activity android:name="com.school.twohand.activity.NumberPriaseActivity" />
+        <activity android:name="com.school.twohand.activity.SecondPageActivity" />
+        <activity android:name="com.school.twohand.activity.GoPayActivity" />
 
-        <!--mob分享-->
+        <!-- mob分享 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <data android:scheme="tencent100371282" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -259,19 +258,19 @@
             <!-- 调用新浪原生SDK，需要注册的回调activity -->
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <!--微信分享回调 -->
+        <!-- 微信分享回调 -->
         <activity
             android:name="com.school.twohand.wxapi.WXEntryActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
-            android:screenOrientation="portrait" />
-
-        <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity"/>
-
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity" />
+        <activity android:name="com.school.twohand.activity.NearBySchoolActivity"></activity>
     </application>
 
 </manifest>

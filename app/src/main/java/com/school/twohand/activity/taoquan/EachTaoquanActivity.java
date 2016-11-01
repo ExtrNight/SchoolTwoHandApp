@@ -51,38 +51,12 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class EachTaoquanActivity extends AppCompatActivity implements EachTaoquanListView.OnLoadChangeListener,View.OnClickListener{
 
-//    @InjectView(R.id.iv_each_taoquan_image)
-//    ImageView ivEachTaoquanImage;
-//    @InjectView(R.id.tv_each_taoquan_name)
-//    TextView tvEachTaoquanName;
-//    @InjectView(R.id.tv_each_taoquan_goodsNum)
-//    TextView tvEachTaoquanGoodsNum;
-//    @InjectView(R.id.tv_each_taoquan_popularity)
-//    TextView tvEachTaoquanPopularity;
-//    @InjectView(R.id.ll_taoquan_bg)
-//    RelativeLayout llTaoquanBg;
     @InjectView(R.id.lv_each_taoquan_goods)
     EachTaoquanListView lvEachTaoquanGoods;
     @InjectView(R.id.btn_bottom)
     Button btnBottom;
     @InjectView(R.id.btn_bottom_publish)
     Button btnBottomPublish;
-//    @InjectView(R.id.iv_each_taoquan_return)
-//    ImageView ivEachTaoquanReturn;
-//    @InjectView(R.id.iv_each_taoquan_more)
-//    ImageView ivEachTaoquanMore;
-//    @InjectView(R.id.iv_each_taoquan_search)
-//    ImageView ivEachTaoquanSearch;
-//    @InjectView(R.id.iv_each_taoquan_share)
-//    ImageView ivEachTaoquanShare;
-//    @InjectView(R.id.LL_1)
-//    LinearLayout LL_1;
-//    @InjectView(R.id.LL_2)
-//    LinearLayout rl2;
-//    @InjectView(R.id.LL_3)
-//    LinearLayout rl3;
-//    @InjectView(R.id.LL_1_time)
-//    LinearLayout LL_1_Time;
 
     private static final int ModifyTaoquanInfo = 1;
     private static final int PublishGoods = 2;
@@ -286,7 +260,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                             addLLView(LL,position);
                             //设置商品所属用户的学校
                             TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
-                            String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
+                            String goodsUserSchool = goods.getGoodsUser().getUserSchoolName();
                             if(goodsUserSchool!=null){
                                 tv_goods_user_school.setText("来自 "+goodsUserSchool);
                             }
@@ -431,7 +405,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
                             //设置商品所属用户的学校
                             TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
-                            String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
+                            String goodsUserSchool = goods.getGoodsUser().getUserSchoolName();
                             if(goodsUserSchool!=null){
                                 tv_goods_user_school.setText("来自 "+goodsUserSchool);
                             }

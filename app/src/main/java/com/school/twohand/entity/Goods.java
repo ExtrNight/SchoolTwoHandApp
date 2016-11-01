@@ -18,6 +18,7 @@ public class Goods {
 	private List<LikeTbl> goodsLikes;
 	private List<MessageBoard> goodsMessageBoards;
 	private Integer goodsPV;
+	private String goodsUserSchoolName;              //发布该商品的用户的学校名
 
 	public Integer getGoodsId() {
 		return goodsId;
@@ -131,7 +132,25 @@ public class Goods {
 		this.goodsPV = goodsPV;
 	}
 
-	public Goods(Integer goodsId, ClassTbl goodsClass, User goodsUser, AmoyCircle goodsAmoyCircle, String goodsTitle, String goodsDescribe, Float goodsPrice, Timestamp goodsReleaseTime, Integer goodsState, Byte goodsAuction, List<GoodsImage> goodsImages, List<LikeTbl> goodsLikes, List<MessageBoard> goodsMessageBoards, Integer goodsPV) {
+	public Integer getGoodsState() {
+		return goodsState;
+	}
+
+	public void setGoodsState(Integer goodsState) {
+		this.goodsState = goodsState;
+	}
+
+	public String getGoodsUserSchoolName() {
+		return goodsUserSchoolName;
+	}
+
+	public void setGoodsUserSchoolName(String goodsUserSchoolName) {
+		this.goodsUserSchoolName = goodsUserSchoolName;
+	}
+
+	public Goods(Integer goodsId, ClassTbl goodsClass, User goodsUser, AmoyCircle goodsAmoyCircle, String goodsTitle,
+				 String goodsDescribe, Float goodsPrice, Timestamp goodsReleaseTime, Integer goodsState, Byte goodsAuction, List<GoodsImage> goodsImages,
+				 List<LikeTbl> goodsLikes, List<MessageBoard> goodsMessageBoards, Integer goodsPV, String goodsUserSchoolName) {
 		this.goodsId = goodsId;
 		this.goodsClass = goodsClass;
 		this.goodsUser = goodsUser;
@@ -146,6 +165,7 @@ public class Goods {
 		this.goodsLikes = goodsLikes;
 		this.goodsMessageBoards = goodsMessageBoards;
 		this.goodsPV = goodsPV;
+		this.goodsUserSchoolName = goodsUserSchoolName;
 	}
 
 	public Goods() {
