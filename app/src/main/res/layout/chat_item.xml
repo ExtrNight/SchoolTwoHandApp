@@ -11,83 +11,100 @@
         android:background="#ffffff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/leftImage"
-            android:layout_alignParentLeft="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:id="@+id/textA"
-            android:textColor="#000000"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/leftImage"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
-            android:textSize="15sp"
-            android:text="hello A"/>
-        <TextView
-            android:id="@+id/userA"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="用户A"
-            android:textColor="#000000"
-            android:layout_below="@+id/leftImage"
-            android:layout_alignLeft="@+id/leftImage"/>
         <TextView
             android:id="@+id/timeA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="12:0:0"
+            android:textSize="10sp"
             android:textColor="#000000"
-            android:layout_toRightOf="@+id/textA"
-            android:layout_alignTop="@+id/userA"/>
+            android:layout_centerHorizontal="true"/>
+        <com.school.twohand.utils.CircleImageView
+            android:id="@+id/leftImage"
+            android:layout_marginLeft="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@+id/timeA"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/hugh"
+            />
+
+        <TextView
+            android:id="@+id/textA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/leftImage"
+            android:layout_toRightOf="@id/leftImage"
+            android:background="@drawable/bg_msgboxsvip_receive_normal"
+            style="@style/jmui_chat_content_style"
+            android:textColor="#363333"
+            android:text="hello A"
+            android:layout_marginLeft="10dp"
+            android:maxWidth="200dp"
+            />
+
+        <TextView
+            android:id="@+id/userA"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="用户A"
+            android:textColor="#000000"
+            android:layout_below="@+id/leftImage"
+            android:layout_marginTop="3dp"
+            android:layout_alignLeft="@+id/leftImage"/>
+
     </RelativeLayout>
     <RelativeLayout
         android:background="#ffffff"
         android:id="@+id/rightRel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/rightImage"
-            android:layout_alignParentRight="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@mipmap/ic_launcher"/>
-        <TextView
-            android:id="@+id/textB"
-            android:textColor="#000000"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/rightImage"
-            android:layout_marginRight="10dp"
-            android:layout_centerVertical="true"
-            android:gravity="right"
-            android:textSize="15sp"
-            android:text="hello B"/>
-
-        <TextView
-            android:id="@+id/userB"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="用户B"
-            android:textColor="#000000"
-            android:layout_below="@+id/rightImage"
-            android:layout_alignRight="@+id/rightImage"/>
         <TextView
             android:id="@+id/timeB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="12:0:0"
+            android:textSize="10sp"
             android:textColor="#000000"
-            android:layout_toLeftOf="@+id/textB"
-            android:layout_alignTop="@+id/userB"/>
+            android:layout_centerHorizontal="true"/>
+        <com.school.twohand.utils.CircleImageView
+            android:id="@+id/rightImage"
+            android:layout_alignParentRight="true"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/timeB"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/hugh"/>
+        <TextView
+            android:id="@+id/textB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/rightImage"
+            android:background="@drawable/bg_msgboxvip_send_normal"
+            style="@style/jmui_chat_content_style"
+            android:textColor="#363333"
+            android:text="hello B"
+            android:layout_alignTop="@+id/rightImage"
+            android:layout_marginRight="10dp"
+            android:maxWidth="200dp"
+            />
+        <TextView
+            android:id="@+id/userB"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:text="用户B"
+            android:textColor="#000000"
+            android:layout_below="@+id/rightImage"
+            android:layout_marginTop="3dp"
+            android:layout_alignRight="@+id/rightImage"
+            android:gravity="right"/>
+
     </RelativeLayout>
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="20dp"
         android:background="#ffffff"/>
 
 </LinearLayout>

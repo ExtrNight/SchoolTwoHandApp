@@ -18,6 +18,7 @@ public class Goods {
 	private List<LikeTbl> goodsLikes;
 	private List<MessageBoard> goodsMessageBoards;
 	private Integer goodsPV;
+	private String goodsUserSchoolName;
 
 	public Integer getGoodsId() {
 		return goodsId;
@@ -83,7 +84,7 @@ public class Goods {
 		this.goodsReleaseTime = goodsReleaseTime;
 	}
 
-	public Integer getGoodsNumber() {
+	public Integer getGoodsState() {
 		return goodsState;
 	}
 
@@ -123,6 +124,9 @@ public class Goods {
 		this.goodsMessageBoards = goodsMessageBoards;
 	}
 
+
+
+
 	public Integer getGoodsPV() {
 		return goodsPV;
 	}
@@ -131,7 +135,30 @@ public class Goods {
 		this.goodsPV = goodsPV;
 	}
 
-	public Goods(Integer goodsId, ClassTbl goodsClass, User goodsUser, AmoyCircle goodsAmoyCircle, String goodsTitle, String goodsDescribe, Float goodsPrice, Timestamp goodsReleaseTime, Integer goodsState, Byte goodsAuction, List<GoodsImage> goodsImages, List<LikeTbl> goodsLikes, List<MessageBoard> goodsMessageBoards, Integer goodsPV) {
+
+
+
+
+
+	public String getGoodsUserSchoolName() {
+		return goodsUserSchoolName;
+	}
+
+	public void setGoodsUserSchoolName(String goodsUserSchoolName) {
+		this.goodsUserSchoolName = goodsUserSchoolName;
+	}
+
+	public void setGoodsState(Integer goodsState) {
+		this.goodsState = goodsState;
+	}
+
+	public Goods(Integer goodsId, ClassTbl goodsClass, User goodsUser,
+				 AmoyCircle goodsAmoyCircle, String goodsTitle,
+				 String goodsDescribe, Float goodsPrice, Timestamp goodsReleaseTime,
+				 Integer goodsState, Byte goodsAuction,
+				 List<GoodsImage> goodsImages, List<LikeTbl> goodsLikes,
+				 List<MessageBoard> goodsMessageBoards, Integer goodsPV,String goodsUserSchoolName) {
+		super();
 		this.goodsId = goodsId;
 		this.goodsClass = goodsClass;
 		this.goodsUser = goodsUser;
@@ -146,14 +173,17 @@ public class Goods {
 		this.goodsLikes = goodsLikes;
 		this.goodsMessageBoards = goodsMessageBoards;
 		this.goodsPV = goodsPV;
+		this.goodsUserSchoolName = goodsUserSchoolName;
 	}
+
+
 
 	public Goods() {
 		super();
 	}
 
-	
-	
-	
-	
+
+
+
+
 }

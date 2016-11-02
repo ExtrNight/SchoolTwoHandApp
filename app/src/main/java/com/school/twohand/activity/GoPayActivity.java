@@ -1,9 +1,11 @@
 package com.school.twohand.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,7 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.school.twohand.entity.Goods;
 import com.school.twohand.schooltwohandapp.R;
+import com.school.twohand.utils.NetUtil;
+
+import org.xutils.image.ImageOptions;
+import org.xutils.x;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,17 +36,7 @@ import c.b.PListener;
  */
 public class GoPayActivity extends AppCompatActivity {
 
-    @InjectView(R.id.gopay_prodmoney)
-    TextView gopayProdmoney;
-    @InjectView(R.id.gopay_servicemoney)
-    TextView gopayServicemoney;
-    @InjectView(R.id.gopay_yunfumoney)
-    TextView gopayYunfumoney;
-    @InjectView(R.id.gopay_youhuimoney)
-    TextView gopayYouhuimoney;
-    @InjectView(R.id.gopay_shifumoney)
-    TextView gopayShifumoney;
-    @InjectView(R.id.gopay_order_info)
+
     LinearLayout gopayOrderInfo;
     @InjectView(R.id.gopay_weixinpay)
     ImageView gopayWeixinpay;
@@ -45,6 +46,16 @@ public class GoPayActivity extends AppCompatActivity {
     RelativeLayout gopayRlWeixinpay;
     @InjectView(R.id.gopay_pay)
     Button gopayPay;
+    //商品图片
+    @InjectView(R.id.goods_image)
+    ImageView goodsImage;
+    //商品标题
+    @InjectView(R.id.title)
+    TextView title;
+    //商品价格
+    @InjectView(R.id.goodsPrice)
+    TextView goodsPrice;
+
     ProgressDialog dialog;
     String AppId  = "42dab6855427c532053895c9fc3930a7";
     @Override
@@ -53,6 +64,21 @@ public class GoPayActivity extends AppCompatActivity {
         setContentView(R.layout.activity_go_pay);
         ButterKnife.inject(this);
         BP.init(this,AppId);
+        Intent intent = getIntent();
+        String goodsMessage = intent.getStringExtra("goodsMessage");
+        String position = intent.getStringExtra("position");
+        Log.i("position", "onCreate: "+position);
+        Gson gson = new Gson();
+        List<Goods> goodsMessages = gson.fromJson(goodsMessage, new TypeToken<List<Goods>>() {}.getType());
+        Goods goods = goodsMessages.get(Integer.parseInt(position));
+        //给控件赋值
+        String goodsUrl = NetUtil.imageUrl + goods.getGoodsImages().get(0).getImageAddress();
+        Log.i("imageUrl", "onCreate: "+goods.getGoodsImages().get(0).getImageAddress());
+        ImageOptions goodsImageOptions = new ImageOptions.Builder()
+                .build();
+        x.image().bind(goodsImage, goodsUrl, goodsImageOptions);
+        title.setText(goods.getGoodsTitle());
+        goodsPrice.setText("￥ "+goods.getGoodsPrice());
     }
 
 

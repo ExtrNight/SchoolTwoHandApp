@@ -286,7 +286,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                             addLLView(LL,position);
                             //设置商品所属用户的学校
                             TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
-                            String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
+                            String goodsUserSchool = goods.getGoodsUserSchoolName();
                             if(goodsUserSchool!=null){
                                 tv_goods_user_school.setText("来自 "+goodsUserSchool);
                             }
@@ -431,7 +431,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
                             //设置商品所属用户的学校
                             TextView tv_goods_user_school = viewHolder.getViewById(R.id.tv_goods_user_school);
-                            String goodsUserSchool = goods.getGoodsUser().getUserSchool().getSchoolName();
+                            String goodsUserSchool = goods.getGoodsUserSchoolName();
                             if(goodsUserSchool!=null){
                                 tv_goods_user_school.setText("来自 "+goodsUserSchool);
                             }

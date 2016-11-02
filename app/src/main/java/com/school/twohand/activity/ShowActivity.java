@@ -1,6 +1,8 @@
 package com.school.twohand.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,12 +16,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.gson.Gson;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.entity.User;
 
 import com.school.twohand.fragement.HomeFragement;
 import com.school.twohand.fragement.MeFragement;
 import com.school.twohand.fragement.MessageFragement;
 import com.school.twohand.fragement.TaoquanPageFragment;
+import com.school.twohand.myApplication.MyApplication;
+import com.school.twohand.schooltwohandapp.MainActivity;
 import com.school.twohand.schooltwohandapp.R;
 
 import java.util.ArrayList;
@@ -67,7 +73,7 @@ public class ShowActivity extends AppCompatActivity {
     @InjectView(R.id.bottom_navigation)
     LinearLayout bottomNavigation;
     TextView goods_price;
-    User user = new User();
+    MyApplication myApplication;
 
     @Override
 
@@ -77,6 +83,20 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show);
 
         ButterKnife.inject(this);
+        myApplication = (MyApplication) getApplication();
+        //从本地取用户信息
+        /*
+        同样根据Context对象获取SharedPreference对象；
+        直接使用SharedPreference的getXXX(key)方法获取数据。
+         */
+        SharedPreferences sp = ShowActivity.this.getSharedPreferences("USER",MODE_PRIVATE);
+        String userString = sp.getString("user",null);
+        if (userString!=null){
+            Gson gson = new Gson();
+            User user = gson.fromJson(userString,User.class);
+            myApplication.setUser(user);
+        }
+
         //创建fragment存到list中
         homeFragement = new HomeFragement();
 

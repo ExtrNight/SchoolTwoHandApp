@@ -7,39 +7,67 @@
     tools:context=".DemoActivity">
 
     <ListView
-        android:background="#111112"
+        android:background="#ffffff"
         android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
         android:layout_above="@+id/bottom"
+        android:divider="#00000000"
         ></ListView>
-<LinearLayout
-    android:id="@+id/bottom"
-    android:layout_width="match_parent"
-    android:layout_height="56dp"
-    android:background="#000000"
-    android:layout_alignParentBottom="true"
-    android:orientation="horizontal"
-    android:weightSum="1">
-    <EditText
-        android:id="@+id/userInput"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.8"
-        android:textColor="#ffffff"
-        android:textColorHint="#ffffff"
-        android:hint="输入要发送的消息"
-    />
-    <Button
-        android:id="@+id/userSend"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2"
-        android:background="#003333"
-        android:gravity="center"
-        android:textSize="22sp"
-        android:text="发送"/>
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottom">
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="#eeeeee"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <EditText
+                android:layout_marginLeft="10dp"
+                android:id="@+id/userInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.75"
+                android:background="@null"
+                android:textColor="#000000"
+                android:textColorHint="#BFBFBF"
+                android:hint="输入要发送的消息"
+                />
+            <Button
+                android:id="@+id/userSend"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.25"
+                android:background="@drawable/send_botton_select"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="#404040"
+                android:text="弹出"
+                />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/linear"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:id="@+id/pictureImageView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="25dp"
+                android:src="@mipmap/picture"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
 </RelativeLayout>

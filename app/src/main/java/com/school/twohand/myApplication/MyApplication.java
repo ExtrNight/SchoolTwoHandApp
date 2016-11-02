@@ -11,60 +11,36 @@ import cn.jpush.im.android.api.JMessageClient;
  * Created by Administrator on 2016/10/14 0014.
  */
 public class MyApplication extends Application {
-    // 保存当前播放器  数据源 |position (第几首)| 播放状态
-    private List<MusicDataInfro> musicDataInfros ;
-    private int position;
 
-    public User getUser() {
-        return user;
-    }
+    //当前使用者的 User
+    private User user;
+    //被访问对象的name
+    private String otherAccount ;
 
-    private String playState;
-    private User user = new User();
     private ClassTbl classTbl = new ClassTbl();
-    private String userName = "aaaaa";
-    private String otherName = "bbbbb";
+
     @Override
     public void onCreate() {
         super.onCreate();
         x.Ext.init(this);
-        user.setUserId(1);
-        user.setUserName("秦孤寂");
-        user.setUserHead("image/a.jpg");
+        //极光聊天客户端初始化
         JMessageClient.init(getApplicationContext());
         JPushInterface.setDebugMode(true);
         JMessageClient.setNotificationMode(JMessageClient.NOTI_MODE_NO_NOTIFICATION);
     }
-
-    public String getOtherName() {
-        return otherName;
+    //获取和设置被访问对象的
+    public String getOtherAccount() {
+        return otherAccount;
+    }
+    public void setOtherAccount(String otherAccount){
+        this.otherAccount = otherAccount;
     }
 
-    public String getUserName() {
-        return userName;
+    //获取设置当前使用者的User对象
+    public User getUser() {
+        return user;
     }
-
-    public String getState() {
-        return playState;
-    }
-
-    public void setState(String playState) {
-        this.playState = playState;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public List<MusicDataInfro> getMusicDataInfros() {
-        return musicDataInfros;
-    }
-
-    public void setMusicDataInfros(List<MusicDataInfro> musicDataInfros) {
-        this.musicDataInfros = musicDataInfros;
+    public void setUser(User user){
+        this.user = user;
     }
 }

@@ -1,5 +1,4 @@
 package com.school.twohand.entity;
-
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,8 +16,8 @@ public class User implements Parcelable {
 	Float userBalance;
 	Float userAmountEarned;
 	String userAddress;
-	School userSchool;
-	
+	String userSchoolName;
+
 	public Integer getUserId() {
 		return userId;
 	}
@@ -79,25 +78,25 @@ public class User implements Parcelable {
 	public void setUserAmountEarned(Float userAmountEarned) {
 		this.userAmountEarned = userAmountEarned;
 	}
-	
-	
+
+
 	public String getUserAddress() {
 		return userAddress;
 	}
 	public void setUserAddress(String userAddress) {
 		this.userAddress = userAddress;
 	}
-	public School getUserSchool() {
-		return userSchool;
+	public String getUserSchoolName() {
+		return userSchoolName;
 	}
-	public void setUserSchool(School userSchool) {
-		this.userSchool = userSchool;
+	public void setUserSchoolName(String userSchoolName) {
+		this.userSchoolName = userSchoolName;
 	}
 	public User(Integer userId, String userAccount, String userName,
-			String userPassword, String userHead, String userSex,
-			Timestamp userBirthday, String userPersonalProfile,
-			Float userBalance, Float userAmountEarned, String userAddress,
-			School userSchool) {
+				String userPassword, String userHead, String userSex,
+				Timestamp userBirthday, String userPersonalProfile,
+				Float userBalance, Float userAmountEarned, String userAddress,
+				String userSchoolName) {
 		super();
 		this.userId = userId;
 		this.userAccount = userAccount;
@@ -110,7 +109,7 @@ public class User implements Parcelable {
 		this.userBalance = userBalance;
 		this.userAmountEarned = userAmountEarned;
 		this.userAddress = userAddress;
-		this.userSchool = userSchool;
+		this.userSchoolName = userSchoolName;
 	}
 	public User() {
 		super();
@@ -135,7 +134,7 @@ public class User implements Parcelable {
 		dest.writeValue(this.userBalance);
 		dest.writeValue(this.userAmountEarned);
 		dest.writeString(this.userAddress);
-		dest.writeParcelable(this.userSchool, flags);
+		dest.writeString(this.userSchoolName);
 	}
 
 	protected User(Parcel in) {
@@ -150,7 +149,7 @@ public class User implements Parcelable {
 		this.userBalance = (Float) in.readValue(Float.class.getClassLoader());
 		this.userAmountEarned = (Float) in.readValue(Float.class.getClassLoader());
 		this.userAddress = in.readString();
-		this.userSchool = in.readParcelable(School.class.getClassLoader());
+		this.userSchoolName = in.readString();
 	}
 
 	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {

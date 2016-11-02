@@ -27,7 +27,6 @@ import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.ClassTbl;
 import com.school.twohand.entity.Goods;
 import com.school.twohand.entity.GoodsImage;
-import com.school.twohand.entity.School;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
@@ -470,9 +469,7 @@ public class PublicActivity extends AppCompatActivity {
         //获取当前用户对象
         ClassTbl classTbl = new ClassTbl(classid, null);
         User user = ((MyApplication) getApplication()).getUser();
-        School school = new School();
-        school.setSchoolId(1);
-        user.setUserSchool(school);
+        String schoolName = user.getUserSchoolName();
 
         AmoyCircle amoyCircle = new AmoyCircle();
         amoyCircle.setCircleId(amoyId);
@@ -492,7 +489,7 @@ public class PublicActivity extends AppCompatActivity {
             goodsImages.add(goodsImage);
         }
 
-        Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0);
+        Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,schoolName);
         final ProgressDialog dia = new ProgressDialog(this);
         dia.setMessage("加载中....");
         dia.show();

@@ -79,7 +79,7 @@ public class TwoFragment extends Fragment {
             public void onSuccess(final String result) {
                 Gson gson = new Gson();
                 goodsMessage = gson.fromJson(result,new TypeToken<List<Goods>>(){}.getType());
-
+                Log.i("goodsMessage", "onSuccess: "+goodsMessage);
                 //用通用适配器将数据源显示在listView上
                 CommonAdapter<Goods> co = new CommonAdapter<Goods>(getActivity(),goodsMessage,R.layout.goods_message) {
                     @Override
@@ -112,7 +112,7 @@ public class TwoFragment extends Fragment {
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
                         goodsPrice.setText("起拍￥"+goods.getGoodsPrice()+"");
-                        userSchool.setText("贵校丶"+goods.getGoodsUser().getUserSchool().getSchoolName());
+                        userSchool.setText("贵校丶"+goods.getGoodsUserSchoolName());
                         amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
                         like.setText("点赞"+goods.getGoodsLikes().size());
                         messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());
