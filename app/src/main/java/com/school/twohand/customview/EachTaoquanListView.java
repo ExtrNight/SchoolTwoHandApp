@@ -93,7 +93,7 @@ public class EachTaoquanListView extends ListView implements AbsListView.OnScrol
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         //滚动状态改变会执行
-        if(getLastVisiblePosition()==getCount()-1&&isLoading==false){//表示最后一个Item可见，且没有在加载状态
+        if(getLastVisiblePosition()==getCount()-1&&!isLoading){//表示最后一个Item可见，且没有在加载状态
             if(scrollState==OnScrollListener.SCROLL_STATE_TOUCH_SCROLL||scrollState==OnScrollListener.SCROLL_STATE_IDLE){
                 //界面改变（开始加载）--》完成刷新--》界面改变（完成加载）
                 isLoading = true; //改变加载状态

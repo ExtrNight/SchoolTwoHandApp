@@ -42,7 +42,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
     ImageView iv_return;
     List<AmoyCircle> amoyCircles = new ArrayList<>();
     int pageNo = 1; //默认从第一页开始
-    int flag = 1; // 1表示"不可错过的淘圈"，2表示"每日精选"
+    int orderFlag = 1; // 1表示"不可错过的淘圈"，2表示"每日精选"
 
     private PtrClassicFrameLayout mPtrFrame; //PtrClassicFrameLayout
 
@@ -92,29 +92,36 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
 
     //初始化，用来判断该页面是显示"不可错过的淘圈"还是"每日精选"等等
     void init(){
-        if(title.equals("不可错过的淘圈")) {
-            flag=1;
-        }else if(title.equals("每日精选")){
-            flag=2;
+        switch (title){
+            case "不可错过的淘圈":
+                orderFlag=1;
+                break;
+            case "每日精选":
+                orderFlag=2;
+                break;
+            case "猜你喜欢":
+                orderFlag=3;
+                break;
+            case "高冷地带":
+                orderFlag=4;
+                break;
         }
     }
 
     void initData(){
-        if(flag==1) {
-            //参数"1"表示按人气排序（降序）
-            getData(1);
-        }else if(flag==2){
-            //参数"2"表示按时间排序（降序）
-            getData(2);
-        }
+        //orderFlag==1表示 不可错过的淘圈:按人气排序（降序）
+        //orderFlag==2表示 每日精选:按时间排序（降序）
+        //orderFlag==3表示 猜你喜欢:按时间排序（升序）(暂定)
+        //orderFlag==4表示 高冷地带:按人气排序（升序）
+        getData();
     }
 
-    void getData(int orderFlag){
+    void getData(){
         String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",6+"");
+        requestParams.addQueryStringParameter("pageSize",10+"");
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -190,7 +197,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
     }
 
     //加载更多数据
-    void loadMoreData(int orderFlag){
+    void loadMoreData(){
         String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
@@ -294,11 +301,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
         mPtrFrame.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(flag==1){
-                    loadMoreData(1);
-                }else if(flag==2){
-                    loadMoreData(2);
-                }
+                loadMoreData();
                 mLv.refreshComplete();
             }
         },1000);

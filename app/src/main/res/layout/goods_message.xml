@@ -53,8 +53,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        >
+        android:layout_height="50dp">
         <TextView
             android:id="@+id/user_school_t"
             android:layout_width="wrap_content"
@@ -63,7 +62,10 @@
             android:layout_marginLeft="20dp"
             android:gravity="center"
             android:textColor="#FFB6C1"
-            android:text="贵校丶仰恩"/>
+            android:text="贵校丶仰恩"
+            android:ellipsize="end"
+            android:maxEms="10"
+            android:maxLines="1"/>
         <TextView
             android:id="@+id/amoy_circle_t"
             android:layout_width="wrap_content"

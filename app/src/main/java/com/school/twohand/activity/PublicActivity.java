@@ -469,7 +469,6 @@ public class PublicActivity extends AppCompatActivity {
         //获取当前用户对象
         ClassTbl classTbl = new ClassTbl(classid, null);
         User user = ((MyApplication) getApplication()).getUser();
-        String schoolName = user.getUserSchoolName();
 
         AmoyCircle amoyCircle = new AmoyCircle();
         amoyCircle.setCircleId(amoyId);
@@ -489,7 +488,7 @@ public class PublicActivity extends AppCompatActivity {
             goodsImages.add(goodsImage);
         }
 
-        Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,schoolName);
+        Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,user.getUserSchoolName());
         final ProgressDialog dia = new ProgressDialog(this);
         dia.setMessage("加载中....");
         dia.show();

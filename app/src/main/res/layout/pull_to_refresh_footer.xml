@@ -6,6 +6,7 @@
         android:id="@+id/xlistview_footer_content"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:background="#ffffff"
         android:padding="10dp">
         <ProgressBar
             android:id="@+id/footer_progressbar"

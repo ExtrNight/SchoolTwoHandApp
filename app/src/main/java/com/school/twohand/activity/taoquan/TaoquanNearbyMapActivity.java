@@ -81,7 +81,9 @@ public class TaoquanNearbyMapActivity extends AppCompatActivity {
         iv_return = (ImageView) findViewById(R.id.iv_taoquan_discovery_return);
         //获取地图控件引用
         mMapView = (MapView) findViewById(R.id.mv_nearby_taoquan);
-        mBaiduMap = mMapView.getMap();  //获取地图控制器
+        if(mMapView!=null){
+            mBaiduMap = mMapView.getMap();  //获取地图控制器
+        }
         UiSettings uiSettings = mBaiduMap.getUiSettings();
         uiSettings.setOverlookingGesturesEnabled(false);//不允许允许俯视手势
         uiSettings.setRotateGesturesEnabled(false); //不允许旋转手势

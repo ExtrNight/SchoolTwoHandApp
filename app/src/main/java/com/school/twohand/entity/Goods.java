@@ -18,7 +18,7 @@ public class Goods {
 	private List<LikeTbl> goodsLikes;
 	private List<MessageBoard> goodsMessageBoards;
 	private Integer goodsPV;
-	private String goodsUserSchoolName;
+	private String goodsUserSchoolName;              //发布该商品的用户的学校名
 
 	public Integer getGoodsId() {
 		return goodsId;

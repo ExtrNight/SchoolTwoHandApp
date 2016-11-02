@@ -129,7 +129,7 @@
                 android:layout_marginBottom="10dp"
                 android:text="来自苏州"
                 android:textSize="13sp"
-                android:maxEms="10"
+                android:maxEms="14"
                 android:maxLines="1"
                 android:textColor="@color/myTheme_color"
                 android:ellipsize="end"/>

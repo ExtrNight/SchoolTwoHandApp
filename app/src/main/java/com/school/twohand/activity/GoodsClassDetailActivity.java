@@ -34,8 +34,8 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
 
     @InjectView(R.id.goodsList)
     ListView goodsList;//显示商品信息的listView
-    //定位学校id
-    Integer schoolId;
+    //定位的学校
+    String userSchoolName;
     //分类id
     String classId;
     List<Goods> goodsMessage = new ArrayList<>();//服务器获取到的数据源
@@ -54,9 +54,9 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
         final RequestParams requestParams = new RequestParams(NetUtil.url+"QueryGoodsServlet");
         QueryGoodsBean queryGoodsBean = null;
         if (sousuo!=null&&classId==null){
-            queryGoodsBean = new QueryGoodsBean(sousuo,schoolId,null,0,null,null);
+            queryGoodsBean = new QueryGoodsBean(sousuo,userSchoolName,null,0,null,null);
         }else if (sousuo==null&&classId!=null){
-             queryGoodsBean = new QueryGoodsBean(null,schoolId,classId,0,null,null);
+             queryGoodsBean = new QueryGoodsBean(null,userSchoolName,classId,0,null,null);
         }
 
         Gson gson = new Gson();

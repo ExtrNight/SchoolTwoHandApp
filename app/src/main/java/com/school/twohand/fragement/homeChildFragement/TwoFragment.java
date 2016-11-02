@@ -48,7 +48,7 @@ public class TwoFragment extends Fragment {
     final int SUREPRICE = 3;//一口价
     final int NOSUREPRICE = 4;//拍卖
     //定位学校id
-    Integer schoolId;
+    String schoolName;
     private ArrayList<View> viewPagers = new ArrayList<>();
     @Nullable
     @Override
@@ -69,7 +69,7 @@ public class TwoFragment extends Fragment {
      */
     public void initListBody(){
         final RequestParams requestParams = new RequestParams(NetUtil.url+"QueryGoodsServlet");
-        QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,schoolId,null,NOSUREPRICE,null,null);
+        QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,schoolName,null,NOSUREPRICE,null,null);
         Gson gson = new Gson();
         String queryGoodsBeanString = gson.toJson(queryGoodsBean);
         requestParams.addQueryStringParameter("queryGoodsBean",queryGoodsBeanString);
@@ -112,7 +112,7 @@ public class TwoFragment extends Fragment {
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
                         goodsPrice.setText("起拍￥"+goods.getGoodsPrice()+"");
-                        userSchool.setText("贵校丶"+goods.getGoodsUserSchoolName());
+                        userSchool.setText("贵校丶"+goods.getGoodsUser().getUserSchoolName());
                         amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
                         like.setText("点赞"+goods.getGoodsLikes().size());
                         messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());

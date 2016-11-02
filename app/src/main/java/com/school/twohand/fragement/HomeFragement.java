@@ -9,11 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 
 
 import com.school.twohand.activity.GoodsClassActivity;
 import com.school.twohand.activity.GoodsClassHActivity;
+import com.school.twohand.activity.NearBySchoolActivity;
 import com.school.twohand.activity.SousuoActivity;
 import com.school.twohand.fragement.homeChildFragement.TwoFragment;
 import com.school.twohand.fragement.homeChildFragement.OneFragment;
@@ -35,6 +37,7 @@ public class HomeFragement extends Fragment {
     RadioButton newest;
     Button  fenlei;
     Button sousuo;
+    ImageView iv_location_school;    //定位到学校
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,6 +49,7 @@ public class HomeFragement extends Fragment {
         newest = (RadioButton) view.findViewById(R.id.radio2);
         fenlei = (Button) view.findViewById(R.id.fenlei);
         sousuo = (Button) view.findViewById(R.id.sousuo);
+        iv_location_school = (ImageView) view.findViewById(R.id.iv_location_school);
         oneFragment = new OneFragment();
         twoFragment = new TwoFragment();
         //将推荐页面的Fragment和最新页面的Fragment加入FragmentList
@@ -109,6 +113,14 @@ public class HomeFragement extends Fragment {
                 Intent intent = new Intent(getActivity(), GoodsClassHActivity.class);
                 startActivity(intent);
 
+            }
+        });
+        //点击跳转到定位附近学校的页面
+        iv_location_school.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), NearBySchoolActivity.class);
+                startActivity(intent);
             }
         });
         return view;

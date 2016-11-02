@@ -1,4 +1,5 @@
 package com.school.twohand.entity;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -78,8 +79,8 @@ public class User implements Parcelable {
 	public void setUserAmountEarned(Float userAmountEarned) {
 		this.userAmountEarned = userAmountEarned;
 	}
-
-
+	
+	
 	public String getUserAddress() {
 		return userAddress;
 	}
@@ -115,7 +116,7 @@ public class User implements Parcelable {
 		super();
 	}
 
-
+	//--------------Parcelable序列化-------------
 	@Override
 	public int describeContents() {
 		return 0;
@@ -152,7 +153,7 @@ public class User implements Parcelable {
 		this.userSchoolName = in.readString();
 	}
 
-	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+	public static final Creator<User> CREATOR = new Creator<User>() {
 		@Override
 		public User createFromParcel(Parcel source) {
 			return new User(source);
@@ -163,4 +164,7 @@ public class User implements Parcelable {
 			return new User[size];
 		}
 	};
+
+
+
 }
