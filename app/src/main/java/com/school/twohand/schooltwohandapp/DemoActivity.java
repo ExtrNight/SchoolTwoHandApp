@@ -2,6 +2,7 @@ package com.school.twohand.schooltwohandapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,7 +60,7 @@ public class DemoActivity extends AppCompatActivity {
     MyApplication myApplication;
     CommonAdapter<Message> commonAdapter;
     List<Message> messages=new ArrayList<>();
-
+    //String otherUserId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,10 +68,16 @@ public class DemoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_demo);
         ButterKnife.inject(this);
 
+        /*//获取上个界面聊天对象id
+        Intent intent = getIntent();
+        otherUserId = intent.getStringExtra("userId");
+        Log.i("converDe", "onCreate: "+otherUserId);*/
         //获取application对象
         myApplication = (MyApplication) getApplication();
+
         //获取对象单聊记录，如果不为空就将所有的messages得到
         Log.i("converDe", "onCreate: "+ JMessageClient.getMyInfo());
+        Log.i("converDe", "onCreate111: "+myApplication.getOtherAccount());
         Conversation conversation = JMessageClient.getSingleConversation(myApplication.getOtherAccount());
         if (conversation != null) {
             messages = conversation.getAllMessage();
@@ -200,7 +207,7 @@ public class DemoActivity extends AppCompatActivity {
                 String content = userInput.getText().toString();
                 if (content.trim().length()!=0){
                     //发送用户输入的内容到指定用户
-                    Message message = JMessageClient.createSingleTextMessage(myApplication.getOtherAccount(), "ca0553f78e499fcf3bee3982", content);
+                    Message message = JMessageClient.createSingleTextMessage(myApplication.getOtherAccount(), "530b86b0928b7315c440867b", content);
                     JMessageClient.sendMessage(message);
                     messages.add(message);
                     initMessage();

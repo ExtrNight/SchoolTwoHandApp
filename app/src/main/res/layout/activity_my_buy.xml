@@ -38,7 +38,7 @@
         android:background="@color/view"
         android:layout_below="@+id/rl_toolbar"/>
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/iv_backgd"
         android:layout_width="100dp"
         android:layout_height="100dp"
@@ -50,7 +50,15 @@
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="亲，这里是空的哦~"/>
+        android:text="亲，这里是空的哦~"/>-->
+
+    <ListView
+        android:id="@+id/lv_buy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1">
+
+    </ListView>
 
 
 </RelativeLayout>

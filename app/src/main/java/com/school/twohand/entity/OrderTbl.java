@@ -10,6 +10,7 @@ public class OrderTbl {
 	Receipt orderReceipt;
 	Timestamp orderTime;
 	Float orderPrice;
+	String orderNumber;
 	public Integer getOrderId() {
 		return orderId;
 	}
@@ -52,11 +53,21 @@ public class OrderTbl {
 	public void setOrderPrice(Float orderPrice) {
 		this.orderPrice = orderPrice;
 	}
-	public OrderTbl(Integer orderId, User orderUser, Goods orderGoods,
-			Integer orderStatusId, Receipt orderReceipt, Timestamp orderTime,
-			Float orderPrice) {
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public OrderTbl(Integer orderId, String orderNumber, User orderUser, Goods orderGoods,
+					Integer orderStatusId, Receipt orderReceipt, Timestamp orderTime,
+					Float orderPrice) {
 		super();
 		this.orderId = orderId;
+		this.orderNumber = orderNumber;
 		this.orderUser = orderUser;
 		this.orderGoods = orderGoods;
 		this.orderStatusId = orderStatusId;

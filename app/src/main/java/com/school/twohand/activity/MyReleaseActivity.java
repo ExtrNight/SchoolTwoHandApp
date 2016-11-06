@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+
 import com.school.twohand.fragement.homeChildFragement.BabyFragment;
 import com.school.twohand.fragement.homeChildFragement.TopicFragment;
 import com.school.twohand.schooltwohandapp.R;
@@ -111,6 +112,6 @@ public class MyReleaseActivity extends AppCompatActivity implements View.OnClick
 
     @OnClick(R.id.goback)
     public void onClick() {
-     finish();
+        finish();
     }
 }

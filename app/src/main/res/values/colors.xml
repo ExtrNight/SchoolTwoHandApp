@@ -27,4 +27,12 @@
     <color name="default_cursor_color">#8db4eb</color>
     <color name="finish_btn_unclickable_color">#b9ebb8</color>
     <color name="finish_btn_clickable_color">#6fd66b</color>
+    <!--首页标题下划线的颜色-->
+    <color name="text_color_before">#888888</color>
+    <color name="text_color_after">#222222</color>
+
+
+    <color name="button">#898888</color>
+    <color name="mainColor">#d9f904</color>
+    <color name="red">#f92525</color>
 </resources>

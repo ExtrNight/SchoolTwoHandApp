@@ -542,7 +542,9 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                 goodsAdapter = null;
                 getGoodsData(queryGoodsBean);
                 break;
-            case R.id.LL_2:
+            case R.id.LL_2://跳转到聊天室
+                Intent intent22 = new Intent(EachTaoquanActivity.this,QunLiaoActivity.class);
+                startActivity(intent22);
                 break;
             case R.id.LL_3: //跳转到动态页面
                 Intent intent2 = new Intent(this, TaoquanDynamicActivity.class);

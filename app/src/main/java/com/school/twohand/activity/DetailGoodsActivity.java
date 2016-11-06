@@ -1,6 +1,7 @@
 package com.school.twohand.activity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -300,11 +302,19 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
                     startActivity(intent);
                 }else{
+
+                    //弹出键盘
+                    say.setFocusable(true);
+                    say.setFocusableInTouchMode(true);
+                    say.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(say,InputMethodManager.SHOW_FORCED);
+
+
                     if (position==0){
-                        say.setHint("");
+                        say.setHint("输入你想对TA说的话");
                     }else{
                         say.setHint("@"+messageBoards.get(position-1).getMessageBoardUserMe().getUserName());
-
                     }
                     send.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -339,6 +349,12 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                             messageBoards.clear();
                                             messageBoards.addAll(newMessageBoards);
                                             initData();
+                                            //listView定位到你发送的那一条
+                                            listView.setSelection(1);
+                                            //关闭键盘
+                                            InputMethodManager imm =
+                                                    (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
                                         }
                                         @Override
                                         public void onError(Throwable ex, boolean isOnCallback) {
@@ -384,11 +400,24 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 }else{
                     relativeLayout.setVisibility(View.INVISIBLE);
                     sayLinearLayout.setVisibility(View.VISIBLE);
+
+                    say.setHint("输入你想对TA说的话");
+                    //弹出键盘
+                    say.setFocusable(true);
+                    say.setFocusableInTouchMode(true);
+                    say.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(say,InputMethodManager.SHOW_FORCED);
+
                 }
                 break;
             case R.id.returnRel:
                 relativeLayout.setVisibility(View.VISIBLE);
                 sayLinearLayout.setVisibility(View.INVISIBLE);
+                //关闭键盘的方法
+                InputMethodManager imm =
+                        (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
                 break;
             case R.id.send:
                 if (myApplication.getUser()==null){
@@ -424,6 +453,13 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         messageBoards.addAll(newMessageBoards);
 
                                         initData();
+                                        //listView定位到你发送的那一条
+                                        listView.setSelection(1);
+                                        //关闭键盘
+                                        InputMethodManager imm =
+                                                (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
+
                                     }
                                     @Override
                                     public void onError(Throwable ex, boolean isOnCallback) {
@@ -474,6 +510,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                 x.http().get(requestParams2, new CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
+                                        Toast.makeText(DetailGoodsActivity.this, "居然不爱我了，好受伤", Toast.LENGTH_SHORT).show();
                                         likeMessage.setSelected(false);
                                         //点赞人的头像
                                         Gson gson = new Gson();
@@ -540,6 +577,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                 x.http().get(requestParams2, new CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
+                                        Toast.makeText(DetailGoodsActivity.this, "您慷慨大方的送出一枚赞", Toast.LENGTH_SHORT).show();
                                         likeMessage.setSelected(true);
 
                                         //点赞人的头像

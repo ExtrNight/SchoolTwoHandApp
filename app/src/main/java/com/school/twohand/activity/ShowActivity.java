@@ -1,6 +1,5 @@
 package com.school.twohand.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.google.gson.Gson;
@@ -34,6 +32,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 
 public class ShowActivity extends AppCompatActivity {
     List<Fragment> fragmentLists = new ArrayList<>();
@@ -95,6 +95,12 @@ public class ShowActivity extends AppCompatActivity {
             Gson gson = new Gson();
             User user = gson.fromJson(userString,User.class);
             myApplication.setUser(user);
+            JMessageClient.login(user.getUserAccount(), user.getUserPassword(), new BasicCallback() {
+                @Override
+                public void gotResult(int i, String s) {
+
+                }
+            });
         }
 
         //创建fragment存到list中
@@ -172,7 +178,6 @@ public class ShowActivity extends AppCompatActivity {
             fragmentTransaction.add(R.id.fragmentContent,currentFragment);
         }
         fragmentTransaction.commit();
-
     }
 
 }

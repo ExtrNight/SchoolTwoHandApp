@@ -27,6 +27,8 @@ public class MyApplication extends Application {
         JMessageClient.init(getApplicationContext());
         JPushInterface.setDebugMode(true);
         JMessageClient.setNotificationMode(JMessageClient.NOTI_MODE_NO_NOTIFICATION);
+
+
     }
     //获取和设置被访问对象的
     public String getOtherAccount() {

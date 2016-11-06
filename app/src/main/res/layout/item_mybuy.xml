@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorViewpage">
+
+    <RelativeLayout
+        android:id="@+id/rl_buyDetail"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_margin="9dp"
+        android:background="#f9f3f3"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rl_top"
+            android:layout_width="match_parent"
+            android:layout_height="126dp">
+
+
+        <ImageView
+            android:id="@+id/iv_buyImage"
+            android:layout_width="95dp"
+            android:layout_height="95dp"
+            android:layout_margin="9dp"
+            android:scaleType="fitXY"/>
+
+        <TextView
+            android:id="@+id/tv_buyTitle"
+            android:layout_width="250dp"
+            android:layout_height="65dp"
+            android:text="#鞋子集合版#性感女鞋!"
+            android:gravity="center|left"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:layout_margin="3dp"
+            android:layout_toRightOf="@+id/iv_buyImage"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="9dp"/>
+
+        <TextView
+            android:id="@+id/tv_buyPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="￥70.00"
+            android:textSize="14dp"
+            android:textColor="#fa0505"
+            android:layout_toRightOf="@+id/iv_buyImage"
+            android:layout_marginTop="70dp"/>
+
+
+        <ImageView
+            android:id="@+id/iv_time"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:src="@mipmap/time"
+            android:layout_marginTop="92dp"
+            android:layout_toRightOf="@+id/iv_buyImage" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="等待买家付款"
+            android:textSize="12dp"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@+id/iv_time"
+            android:layout_marginTop="92dp"
+            android:layout_marginLeft="5dp"/>
+
+
+            <TextView
+                android:id="@+id/tv_time1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="还剩2天22时"
+                android:textSize="12dp"
+                android:layout_marginTop="92dp"
+                android:textColor="@color/black"
+                android:layout_toRightOf="@+id/iv_buyImage"
+                android:layout_marginLeft="148dp"/>
+
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="#d9d5d5"
+            android:layout_below="@+id/rl_top"
+            />
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_below="@+id/view1"
+            android:background="#f9f3f3"
+            >
+
+            <ImageView
+                android:id="@+id/iv_say"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/say"/>
+            <TextView
+                android:id="@+id/tv_say"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="联系卖家"
+                android:textSize="12dp"
+                android:textColor="@color/view"
+                android:layout_toRightOf="@+id/iv_say"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"/>
+
+            <TextView
+                android:id="@+id/btn_close"
+                android:layout_width="80dp"
+                android:layout_height="26dp"
+                android:background="@drawable/setbar_bg"
+                android:gravity="center"
+                android:text="关闭交易"
+                android:textSize="13dp"
+                android:textColor="@color/black"
+                android:layout_alignBottom="@+id/btn_pay"
+                android:layout_marginLeft="250dp">
+
+            </TextView>
+
+            <TextView
+                android:gravity="center"
+                android:id="@+id/btn_pay"
+                android:layout_width="80dp"
+                android:layout_height="26dp"
+                android:background="@drawable/setbar_bg"
+                android:text="我要付款"
+                android:textSize="13dp"
+                android:textColor="@color/black"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                >
+
+            </TextView>
+
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

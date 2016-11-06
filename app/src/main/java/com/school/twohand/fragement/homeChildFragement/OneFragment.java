@@ -302,7 +302,6 @@ public class OneFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.i("aaa", "receive message " + msg.what);
             OneFragment fragment = weakReference.get();
             if (fragment==null){
                 //Activity已经回收，无需再处理UI了
