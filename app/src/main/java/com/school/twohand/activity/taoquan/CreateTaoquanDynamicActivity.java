@@ -94,7 +94,6 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
 
         init();
         initEvent();
-
     }
 
     private void init() {
