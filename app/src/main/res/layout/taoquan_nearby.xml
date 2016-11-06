@@ -37,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_circle_address"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:ellipsize="end"/>
         </RelativeLayout>
 
         <com.baidu.mapapi.map.TextureMapView

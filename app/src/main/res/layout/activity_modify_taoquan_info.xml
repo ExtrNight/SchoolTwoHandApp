@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.school.twohand.activity.taoquan.ModifyTaoquanInfoActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="48dp"
         android:background="@color/myTheme_color">
 
         <ImageView
@@ -25,47 +26,106 @@
             android:text="修改淘圈资料"
             android:textColor="#000000"
             android:layout_centerInParent="true"
-            android:textSize="23dp" />
+            android:textSize="18dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:id="@+id/tv_confirm"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="确认"
-            android:layout_marginRight="6dp"
-            android:textSize="20sp"/>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
+        android:layout_height="250dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:id="@+id/iv_modify_circle_bg"
+            android:src="@mipmap/each_taoquan_bg"
+            android:scaleType="fitXY"/>
 
         <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@mipmap/add_photo"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:id="@+id/iv_modify_circle_image"
-            android:scaleType="fitCenter" />
+            android:src="@mipmap/upload_circle_image"
+            android:layout_centerHorizontal="true"
+            android:padding="2dp"
+            android:background="#ffffff"
+            android:scaleType="fitXY"
+            android:layout_above="@+id/tv_taoquan_name"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:id="@+id/tv_taoquan_name"
+            android:text="淘圈名"
+            android:textColor="#00bb9c"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:layout_alignParentBottom="true"
+            android:ellipsize="end"/>
+    </RelativeLayout>
 
-    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="@color/background_gray"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_modity_circle_image"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="30dp"
-        android:text="点击修改头像"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tv_modify_circle_image"
+        android:text="修改淘圈头像"
+        android:textSize="17sp"
         android:textColor="#000000"
-        android:textSize="20sp"
-        android:background="@color/myTheme_color"/>
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
+        android:drawableLeft="@mipmap/vertical_line"
+        android:drawableRight="@mipmap/right_arrow"
+        android:paddingRight="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/tv_modify_circle_bg"
+        android:text="修改淘圈背景"
+        android:textSize="17sp"
+        android:textColor="#000000"
+        android:gravity="center_vertical"
+        android:paddingLeft="6dp"
+        android:drawableLeft="@mipmap/vertical_line"
+        android:drawableRight="@mipmap/right_arrow"
+        android:paddingRight="8dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"/>
+
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_confirm_modify"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:layout_marginTop="30dp"-->
+        <!--android:text="保存"-->
+        <!--android:textColor="#000000"-->
+        <!--android:textSize="20sp"-->
+        <!--android:background="@drawable/curved_button"/>-->
+
+    <com.school.twohand.customview.SubmitButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:id="@+id/btn_confirm_modify"
+        app:sub_btn_tick_color="@color/white"
+        android:text="保存"
+        android:textSize="15sp"
+        android:textColor="@color/white"
+        app:sub_btn_duration="2000"
+        android:layout_marginTop="15dp"/>
 
 </LinearLayout>

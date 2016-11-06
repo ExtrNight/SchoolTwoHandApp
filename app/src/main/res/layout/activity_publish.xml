@@ -270,10 +270,11 @@
             android:id="@+id/publicSure"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ff461f"
+            android:background="@color/myTheme_color"
             android:text="确定发布"
             android:textSize="20sp"
             android:textColor="#ffffff"/>
+        <!--android:background="#ff461f"-->
 
     </LinearLayout>
 

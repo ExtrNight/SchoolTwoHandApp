@@ -45,6 +45,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
 
     MyApplication myApplication;
     User user;
+    int userId;
     CommonAdapter<AmoyCircle> circlesAdapter;
     List<AmoyCircle> amoyCircles = new ArrayList<>();
     UltraRefreshListView mLv;
@@ -59,6 +60,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         myApplication = (MyApplication) getActivity().getApplication();
         user = myApplication.getUser();
+        userId = user.getUserId();
         View v = inflater.inflate(R.layout.taoquan_mine_fragment,null);
         initView(v);
         initData();
@@ -94,7 +96,6 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
 
     //获取数据
     void getData(){
-        final int userId = user.getUserId();
         String url = NetUtil.url+"QueryCirclesServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("userId",userId+"");
@@ -191,7 +192,6 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
     }
 
     private void loadMoreData(){
-        final int userId = user.getUserId();
         String url = NetUtil.url+"QueryCirclesServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("userId",userId+"");

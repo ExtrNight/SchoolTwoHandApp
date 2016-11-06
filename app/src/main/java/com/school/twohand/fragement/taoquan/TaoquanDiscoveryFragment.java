@@ -85,7 +85,7 @@ public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscove
     CommonAdapter<Goods> goodsAdapter;
     List<Goods> goodsList = new ArrayList<>();
     int pageNo = 1;
-    QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,null,null,0,pageNo,6);
+    QueryGoodsBean queryGoodsBean = new QueryGoodsBean(null,null,null,6,pageNo,6);//只查询从淘圈发布的商品，按照商品的浏览量来查询,每页6条
     Gson gson = new Gson();
     Handler handler = new Handler();
 
@@ -168,7 +168,7 @@ public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscove
         String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
+        requestParams.addQueryStringParameter("pageNo",1+"");   //只获取第一页的
         requestParams.addQueryStringParameter("pageSize",6+""); //只获取6条记录
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override

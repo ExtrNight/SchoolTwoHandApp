@@ -84,14 +84,6 @@ public class Goods {
 		this.goodsReleaseTime = goodsReleaseTime;
 	}
 
-	public Integer getGoodsNumber() {
-		return goodsState;
-	}
-
-	public void setGoodsNumber(Integer goodsState) {
-		this.goodsState = goodsState;
-	}
-
 	public Byte getGoodsAuction() {
 		return goodsAuction;
 	}

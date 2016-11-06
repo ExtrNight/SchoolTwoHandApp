@@ -28,7 +28,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         x.Ext.init(this);
-        user.setUserId(1);
+        user.setUserId(2);
         user.setUserName("秦孤寂");
         user.setUserHead("image/a.jpg");
         JMessageClient.init(getApplicationContext());

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.school.twohand.activity.taoquan.SelectTaoquanBgActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/background_gray">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_return"
+            android:src="@mipmap/btn_return"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="选择淘圈背景"
+            android:textColor="#000000"
+            android:layout_centerInParent="true"
+            android:textSize="20dp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/LL_albumOrCamera"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" 相册或相机选取"
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_marginLeft="2dp"
+            android:drawableLeft="@mipmap/vertical_line"
+            android:drawableRight="@mipmap/right_arrow"
+            android:paddingRight="8dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" 系统图片："
+            android:gravity="center_vertical"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_marginLeft="2dp"
+            android:drawableLeft="@mipmap/vertical_line"
+            android:paddingRight="8dp"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/lv_select_system_bg"/>
+
+</LinearLayout>

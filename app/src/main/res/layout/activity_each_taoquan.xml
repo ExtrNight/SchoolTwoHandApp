@@ -1,45 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.school.twohand.activity.taoquan.EachTaoquanActivity">
 
+
     <com.school.twohand.customview.EachTaoquanListView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:id="@+id/lv_each_taoquan_goods"
-        android:layout_weight="1"/>
+        android:layout_above="@+id/btn_bottom"/>
+    <!--android:layout_above="@+id/btn_bottom"-->
+    <!--android:descendantFocusability="blocksDescendants"-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/RL_top"
+        android:background="#00bb9b">
+        <!--android:background="#e6e6e6"-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_each_taoquan_return"
+            android:src="@mipmap/return_ffffff"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_each_taoquan_share"
+            android:src="@mipmap/share_ffffff"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_each_taoquan_search"
+            android:src="@mipmap/search_ffffff"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_each_taoquan_share"
+            android:layout_marginRight="15dp"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_each_taoquan_more"
+            android:src="@mipmap/exit_ffffff_64"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_each_taoquan_search"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_each_taoquan_setting"
+            android:src="@mipmap/setting_ffffff_64"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/iv_each_taoquan_search"
+            android:layout_marginRight="20dp"
+            android:visibility="gone"/>
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:id="@+id/btn_bottom"
         android:orientation="horizontal"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
         android:layout_marginBottom="1dp"
-        android:background="#ffffff">
+        android:background="#ffffff"
+        android:layout_alignParentBottom="true">
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_bottom"
+            android:id="@+id/btn_bottom_joinCircle"
             android:background="@color/myTheme_color"
             android:text="加入淘圈"
             android:textColor="#ffffff"
-            android:textSize="18sp"/>
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_bottom_publish"
-            android:background="@color/myTheme_color"
-            android:visibility="gone"
-            android:text="发 布"
-            android:textColor="#ffffff"
-            android:textSize="18sp"/>
+            android:textSize="18sp" />
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/myTheme_color"-->
+            <!--android:text="发 布"-->
+            <!--android:textColor="#ffffff"-->
+            <!--android:textSize="18sp"-->
+            <!--android:visibility="gone"/>-->
     </LinearLayout>
 
-</LinearLayout>
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/btn_bottom_publish"-->
+        <!--android:drawableTop="@mipmap/publish_button2"-->
+        <!--android:background="@drawable/transparent"-->
+        <!--android:paddingTop="2dp"-->
+        <!--android:paddingBottom="2dp"-->
+        <!--android:onClick="publish"-->
+        <!--android:text="发布"-->
+        <!--android:textColor="@color/main_button_text_color"-->
+        <!--android:textSize="@dimen/bottom_bar_text_size"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
+    <ImageView
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:src="@mipmap/publish_button1"
+        android:id="@+id/btn_bottom_publish"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="60dp"
+        android:scaleType="fitCenter"
+        android:visibility="gone"/>
+
+</RelativeLayout>

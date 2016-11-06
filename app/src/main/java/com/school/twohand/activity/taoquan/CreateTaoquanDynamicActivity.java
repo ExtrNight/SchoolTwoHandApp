@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.king.photo_library.ImagesSelectorActivity;
 import com.king.photo_library.SelectorSettings;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircleDynamic;
 import com.school.twohand.entity.AmoyCircleDynamicImage;
 import com.school.twohand.entity.User;
@@ -74,7 +75,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
     ImageView ivPhoto5;
     @InjectView(R.id.iv_add_photo)
     ImageView ivAddPhoto;
-
+    private ShapeLoadingDialog shapeLoadingDialog; //带有动画效果的加载
 
     private User user;
     private int circleId;
@@ -107,6 +108,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
     }
 
     private void initEvent(){
+        shapeLoadingDialog = new ShapeLoadingDialog(this);//shapeLoadingDialog对象
         //设置长按删除选择的图片
         longClickToRemovePhoto(ivPhoto1,0);
         longClickToRemovePhoto(ivPhoto2,1);
@@ -306,15 +308,14 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
             //初始化选择图片后的图片控件
             initPhotoView();
             //选择图片的保存
-            final ProgressDialog dia = new ProgressDialog(CreateTaoquanDynamicActivity.this);
-            dia.setMessage("图片压缩处理中....");
-            dia.show();
+            shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等...");
+            shapeLoadingDialog.show();
             Thread thread = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     //压缩保存
                     initSaveImage();
-                    dia.cancel();
+                    shapeLoadingDialog.dismiss();
                 }
             });
             thread.start();

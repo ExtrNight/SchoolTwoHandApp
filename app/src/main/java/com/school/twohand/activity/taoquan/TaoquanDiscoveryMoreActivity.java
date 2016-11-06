@@ -42,6 +42,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
     ImageView iv_return;
     List<AmoyCircle> amoyCircles = new ArrayList<>();
     int pageNo = 1; //默认从第一页开始
+    int pageSize = 10;
     int orderFlag = 1; // 1表示"不可错过的淘圈"，2表示"每日精选"
 
     private PtrClassicFrameLayout mPtrFrame; //PtrClassicFrameLayout
@@ -58,7 +59,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
 
 
 
-    void initView(){
+    private void initView(){
         tv_title = (TextView) findViewById(R.id.tv_taoquan_discovery_name);
         mLv = (UltraRefreshListView) findViewById(R.id.ultra_lv);
         iv_return = (ImageView) findViewById(R.id.iv_taoquan_discovery_return);
@@ -91,7 +92,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
     }
 
     //初始化，用来判断该页面是显示"不可错过的淘圈"还是"每日精选"等等
-    void init(){
+    private void init(){
         switch (title){
             case "不可错过的淘圈":
                 orderFlag=1;
@@ -108,7 +109,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
         }
     }
 
-    void initData(){
+    private void initData(){
         //orderFlag==1表示 不可错过的淘圈:按人气排序（降序）
         //orderFlag==2表示 每日精选:按时间排序（降序）
         //orderFlag==3表示 猜你喜欢:按时间排序（升序）(暂定)
@@ -116,12 +117,12 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
         getData();
     }
 
-    void getData(){
+    private void getData(){
         String url = NetUtil.url+"QueryCirclesByServlet";
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",10+"");
+        requestParams.addQueryStringParameter("pageSize",pageSize+"");
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -202,7 +203,7 @@ public class TaoquanDiscoveryMoreActivity extends AppCompatActivity implements U
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderFlag",orderFlag+"");
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",6+"");
+        requestParams.addQueryStringParameter("pageSize",pageSize+"");
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override

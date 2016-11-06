@@ -134,20 +134,14 @@ public class TwoFragment extends Fragment {
                     }
                 });
             }
-
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Log.i("oneFragment", "onError: ");
             }
-
             @Override
             public void onCancelled(CancelledException cex) {
-
             }
-
             @Override
             public void onFinished() {
-                Log.i("oneFragment", "onFinished: ");
             }
         });
     }

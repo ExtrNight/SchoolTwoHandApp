@@ -214,8 +214,8 @@
             android:value="530b86b0928b7315c440867b" />
 
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".DemoActivity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".DemoActivity" />
         <activity android:name=".GoPayActivity" />
         <activity
             android:name="c.b.a.A"
@@ -270,7 +270,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity" />
-        <activity android:name="com.school.twohand.activity.NearBySchoolActivity"></activity>
+        <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
+        <activity android:name="com.school.twohand.activity.taoquan.SelectTaoquanBgActivity"></activity>
     </application>
 
 </manifest>

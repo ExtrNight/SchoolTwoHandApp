@@ -6,7 +6,7 @@ public class QueryGoodsBean {
 	private String productName;//商品名
 	private String schoolName;//定位学校
 	private String goodsClass;//商品分类
-	private int orderFlag;//查询方式
+	private int orderFlag;//排序方式
 	private Integer pageNo;//第几页
 	private Integer pageSize;//一页显示几个商品
 	private Integer amoyCircleId;

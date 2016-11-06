@@ -35,7 +35,6 @@ import java.util.List;
 
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 
-
 /**
  * “附近的淘圈”点击“更多”后的页面，包含有附近的所有淘圈
  */

@@ -372,7 +372,7 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(circleImageFile); //获得文件输出流
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 80, fos);//将bitmap写入输出流
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);//将bitmap写入输出流
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {

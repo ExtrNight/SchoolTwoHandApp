@@ -106,15 +106,13 @@ public class PublicActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         //查询用户对应淘圈
         RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
-
         requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 //将淘圈弄到列表中
                 Gson gson = new Gson();
-                amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {
-                }.getType());
+                amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {}.getType());
                 CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
                     @Override
                     public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {

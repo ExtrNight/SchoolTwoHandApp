@@ -55,7 +55,6 @@ public class MyAuctionActivity extends AppCompatActivity implements View.OnClick
         RelativeLayoutList.add(rl_end);
         RelativeLayoutList.add(rl_order);
 
-
         fragmentList.add(joinFragment);
         fragmentList.add(endFragment);
         fragmentList.add(orderFragment);
