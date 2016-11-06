@@ -194,7 +194,7 @@ public class OneFragment extends Fragment {
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
                         goodsPrice.setText("￥"+goods.getGoodsPrice()+"");
-                        userSchool.setText("贵校丶"+goods.getGoodsUser().getUserSchoolName());
+                        userSchool.setText("贵校丶"+goods.getGoodsUserSchoolName());
                         amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
                         like.setText("点赞"+goods.getGoodsLikes().size());
                         messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());
@@ -302,7 +302,6 @@ public class OneFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            Log.i("aaa", "receive message " + msg.what);
             OneFragment fragment = weakReference.get();
             if (fragment==null){
                 //Activity已经回收，无需再处理UI了

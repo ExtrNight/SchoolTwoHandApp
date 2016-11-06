@@ -18,7 +18,7 @@ public class User implements Parcelable {
 	Float userAmountEarned;
 	String userAddress;
 	String userSchoolName;
-	
+
 	public Integer getUserId() {
 		return userId;
 	}
@@ -94,10 +94,10 @@ public class User implements Parcelable {
 		this.userSchoolName = userSchoolName;
 	}
 	public User(Integer userId, String userAccount, String userName,
-			String userPassword, String userHead, String userSex,
-			Timestamp userBirthday, String userPersonalProfile,
-			Float userBalance, Float userAmountEarned, String userAddress,
-			String userSchoolName) {
+				String userPassword, String userHead, String userSex,
+				Timestamp userBirthday, String userPersonalProfile,
+				Float userBalance, Float userAmountEarned, String userAddress,
+				String userSchoolName) {
 		super();
 		this.userId = userId;
 		this.userAccount = userAccount;

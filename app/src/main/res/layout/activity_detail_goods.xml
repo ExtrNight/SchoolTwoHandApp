@@ -96,6 +96,9 @@
             android:layout_weight="0.8"
             android:id="@+id/say"
             android:layout_width="0dp"
+            android:hint="输入你想对TA说的话"
+            android:background="@null"
+            android:layout_marginLeft="5dp"
             android:layout_height="match_parent" />
         <Button
             android:layout_weight="0.2"

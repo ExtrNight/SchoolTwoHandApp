@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<RelativeLayout
+    android:id="@+id/relative"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <com.school.twohand.utils.CircleImageView
+        android:layout_marginLeft="5dp"
+        android:id="@+id/messageUserHead"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/hugh"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:text="表表客服"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:textStyle="bold"
+        android:id="@+id/messageUserName"
+        android:layout_alignTop="@+id/messageUserHead"
+        android:layout_toRightOf="@+id/messageUserHead"
+        />
+    <TextView
+        android:id="@+id/lastMessageContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/messageUserName"
+        android:layout_alignLeft="@+id/messageUserName"
+        android:layout_marginTop="15dp"
+        android:text="@string/moren"/>
+
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="21分钟前"
+        android:layout_marginRight="10dp"
+        android:layout_alignTop="@+id/messageUserName"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#33333333"
+        android:layout_below="@+id/relative"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"/>
+
+    <com.school.twohand.utils.CircleImageView
+        android:id="@+id/circle"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@mipmap/red"
+        android:layout_above="@+id/line"
+        android:layout_alignRight="@+id/line"
+        android:layout_marginBottom="15dp"
+        />
+    <TextView
+        android:id="@+id/messageNumber"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:text="5"
+        android:layout_above="@+id/line"
+        android:layout_alignRight="@+id/line"
+        android:layout_marginBottom="15dp"
+        />
+</RelativeLayout>

@@ -6,6 +6,7 @@
         android:name="${applicationId}.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- the following two permissions are required if you want to take photo in selector -->
@@ -218,6 +219,10 @@
         <activity android:name=".DemoActivity" />
         <activity android:name=".GoPayActivity" />
         <activity
+            android:name=".DemoActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+        <activity
             android:name="c.b.a.A"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
@@ -272,6 +277,21 @@
         <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity" />
         <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.SelectTaoquanBgActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity" />
+
+        <!-- 登录界面 -->
+        <activity android:name="com.school.twohand.activity.login.LoginActivity"></activity>
+        <activity android:name="com.school.twohand.activity.login.FixProfileActivity" />
+        <activity android:name="com.school.twohand.activity.login.RegisterActivity" />
+        <activity android:name="com.school.twohand.activity.login.MessageListActivity" />
+        android:screenOrientation="portrait"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
+        <activity android:name="com.school.twohand.activity.OrderDetailActivity" />
+        <activity android:name="com.school.twohand.activity.IntroduceActivity" />
+        <activity android:name="com.school.twohand.activity.GetAddressActivity" />
+        <activity android:name="com.school.twohand.activity.taoquan.QunLiaoActivity"></activity>
     </application>
 
 </manifest>

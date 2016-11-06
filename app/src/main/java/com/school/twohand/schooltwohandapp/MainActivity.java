@@ -18,7 +18,7 @@ import cn.jpush.im.api.BasicCallback;
 
 public class MainActivity extends AppCompatActivity {
 
-    String TAG = "JPush";
+    /*String TAG = "JPush";
     MyApplication exampleApplication ;
     Button login;
     @Override
@@ -58,6 +58,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
+*/
 
 }

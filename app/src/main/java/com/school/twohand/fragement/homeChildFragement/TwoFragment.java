@@ -79,7 +79,7 @@ public class TwoFragment extends Fragment {
             public void onSuccess(final String result) {
                 Gson gson = new Gson();
                 goodsMessage = gson.fromJson(result,new TypeToken<List<Goods>>(){}.getType());
-
+                Log.i("goodsMessage", "onSuccess: "+goodsMessage);
                 //用通用适配器将数据源显示在listView上
                 CommonAdapter<Goods> co = new CommonAdapter<Goods>(getActivity(),goodsMessage,R.layout.goods_message) {
                     @Override

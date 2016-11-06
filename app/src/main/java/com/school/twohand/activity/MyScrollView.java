@@ -48,7 +48,7 @@ public class MyScrollView extends ScrollView {
                 onScrollListener.onScroll(scrollY);
             }
 
-        };
+        }
 
     };
 
@@ -65,7 +65,7 @@ public class MyScrollView extends ScrollView {
         }
         switch(ev.getAction()){
             case MotionEvent.ACTION_UP:
-                handler.sendMessageDelayed(handler.obtainMessage(), 4);
+                handler.sendMessageDelayed(handler.obtainMessage(),5);
                 break;
         }
         return super.onTouchEvent(ev);
@@ -87,7 +87,5 @@ public class MyScrollView extends ScrollView {
          */
         public void onScroll(int scrollY);
     }
-
-
 
 }

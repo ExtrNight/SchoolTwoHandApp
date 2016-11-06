@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
-    tools:context="com.school.twohand.activity.ChatActivity">
+    tools:context="com.school.twohand.activity.message.ChatActivity">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_height="56dp"
         android:background="@drawable/border_style_bottom"
         android:id="@+id/view">
         <TextView
@@ -36,19 +33,22 @@
             />
     </android.support.v7.widget.Toolbar>
     <RelativeLayout
+        android:id="@+id/relaItem"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_height="70dp"
+        android:layout_below="@id/view"
         android:background="@drawable/border_style_bottom"
+        android:gravity="center_vertical"
         >
         <ImageView
             android:id="@+id/chatGoodsImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
-
+            android:scaleType="fitXY"
+            android:src="@mipmap/ic_launcher"
             />
         <TextView
             android:id="@+id/chatGoodsPrice"
@@ -56,26 +56,28 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/chatGoodsImage"
             android:layout_toRightOf="@+id/chatGoodsImage"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
             android:text=" ￥ 60"/>
         <TextView
             android:id="@+id/chatText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/chatGoodsPrice"
-            android:layout_below="@+id/chatGoodsPrice"
-            android:layout_marginTop="10dp"
+            android:layout_alignBottom="@+id/chatGoodsImage"
+            android:layout_toRightOf="@+id/chatGoodsImage"
+            android:textSize="10sp"
+            android:layout_marginLeft="10dp"
             android:text="交易前聊一聊"/>
         <TextView
             android:id="@+id/iWantTo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="38dp"
             android:layout_alignParentRight="true"
             android:layout_marginRight="8dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:background="#ff461f"
             android:textSize="14dp"
-            android:layout_alignTop="@id/chatGoodsPrice"
             android:layout_alignBottom="@+id/chatText"
             android:textColor="#ffffff"
             android:gravity="center"
@@ -85,32 +87,47 @@
     <ListView
         android:id="@+id/chatContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relaItem"
+        android:layout_above="@+id/lineItem"
+        android:divider="#00000000"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"></ListView>
     <LinearLayout
+        android:id="@+id/lineItem"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.1"
+        android:layout_height="56dp"
         android:orientation="horizontal"
         android:background="@drawable/border_style_top"
         android:weightSum="1"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
         >
         <EditText
             android:id="@+id/chatInput"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:hint="想对TA说点什么？"
+            android:background="@null"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.8"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.015"
+            />
         <Button
             android:id="@+id/chatSend"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2"
+            android:layout_weight="0.185"
+            android:background="@drawable/send_botton_select"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:text="发送"
             />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

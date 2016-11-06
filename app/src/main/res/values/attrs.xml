@@ -17,4 +17,11 @@
         <attr name="loadingTextAppearance" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="CircleImageView">
+        <attr name="border_width" format="dimension" />
+        <attr name="border_color" format="color" />
+        <attr name="border_overlay" format="boolean" />
+        <attr name="outCircleColor" format="color"/>
+        <attr name="outCircleWidth" format="dimension"/>
+    </declare-styleable>
 </resources>

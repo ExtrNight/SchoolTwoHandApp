@@ -50,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/little_ft"
-     android:background="@color/colorViewpage"
-      >
+        android:background="@color/colorViewpage"
+        >
     </FrameLayout>
 </RelativeLayout>
