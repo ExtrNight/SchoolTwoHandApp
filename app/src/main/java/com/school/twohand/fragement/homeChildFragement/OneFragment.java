@@ -222,7 +222,7 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                                     public void onClick(View v) {
                                         Log.i("OneFragment", "onClick: ￥￥￥￥￥"+position);
                                         Intent intent = new Intent(getContext(),DetailGoodsActivity.class);
-                                        intent.putExtra("goodsMessage",result);
+                                        intent.putExtra("goodsMessage",gson.toJson(goodsMessage));
                                         intent.putExtra("position",position+1);  //这里要加1，否则数据会错乱？？？
                                         startActivity(intent);
                                     }
@@ -263,8 +263,8 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(getContext(),DetailGoodsActivity.class);
-                                    intent.putExtra("goodsMessage",result);
-                                    intent.putExtra("position",position);
+                                    intent.putExtra("goodsMessage",gson.toJson(goodsMessage));
+                                    intent.putExtra("position",position+1);
                                     startActivity(intent);
                                 }
                             });
@@ -272,16 +272,16 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                     };
                     listViewBody.setAdapter(co);
                     //点击跳转详情界面
-                    listViewBody.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            Log.i("OneFragment", "onItemClick: @@@@@@@@@@@@"+position);
-                            Intent intent = new Intent(getContext(),DetailGoodsActivity.class);
-                            intent.putExtra("goodsMessage",result);
-                            intent.putExtra("position",position);
-                            startActivity(intent);
-                        }
-                    });
+//                    listViewBody.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            Log.i("OneFragment", "onItemClick: @@@@@@@@@@@@"+position);
+//                            Intent intent = new Intent(getContext(),DetailGoodsActivity.class);
+//                            intent.putExtra("goodsMessage",gson.toJson(goodsMessage));
+//                            intent.putExtra("position",position+1);
+//                            startActivity(intent);
+//                        }
+//                    });
                 }else{
                     co.notifyDataSetChanged();
                 }

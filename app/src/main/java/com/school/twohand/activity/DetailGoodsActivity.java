@@ -93,11 +93,9 @@ public class DetailGoodsActivity extends AppCompatActivity {
     MyApplication myApplication;
     String goodsMessageString;
 
-
     //判断用户相对应的按钮显示影藏
     TextView shengLueHao;
     TextView iWantTo;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,10 +152,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
             }
         });
 
-
-
-        initHeadView();
-        listView.addHeaderView(headView);
 
         //有可能用户没有登录myApplication 中User对象wei null
         //判断当前商品是否是自己发布的，如果是显示三个省略号，（可进行的操作，跳到发布界面编辑，删除商品，取消）；
@@ -237,14 +231,12 @@ public class DetailGoodsActivity extends AppCompatActivity {
     //3、创建文件夹
     public static void makeRootDirectory(String filePath) {
         File file = null;
-        try {
-            file = new File(filePath);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-        } catch (Exception e) {
 
+        file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdir();
         }
+
     }
 
 
@@ -360,7 +352,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     }
                 })
                 .show();
-
 
     }
 
