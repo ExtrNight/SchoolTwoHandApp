@@ -6,14 +6,20 @@
     android:orientation="vertical"
     tools:context="com.school.twohand.activity.taoquan.EachTaoquanActivity">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_bottom">
 
     <com.school.twohand.customview.EachTaoquanListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lv_each_taoquan_goods"
-        android:layout_above="@+id/btn_bottom"/>
+        android:id="@+id/lv_each_taoquan_goods" />
     <!--android:layout_above="@+id/btn_bottom"-->
     <!--android:descendantFocusability="blocksDescendants"-->
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

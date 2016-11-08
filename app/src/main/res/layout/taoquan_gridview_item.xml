@@ -29,6 +29,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/taoquan_gridview_item_popularity"
         android:layout_marginTop="5dp"
+        android:textSize="12sp"
         android:text="人气 1234"/>
 
 </LinearLayout>

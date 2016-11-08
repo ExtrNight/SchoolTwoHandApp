@@ -32,7 +32,8 @@
             android:gravity="center"
             android:src="@mipmap/more_000000_64"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="12dp" />
+            android:layout_marginRight="12dp"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <ScrollView

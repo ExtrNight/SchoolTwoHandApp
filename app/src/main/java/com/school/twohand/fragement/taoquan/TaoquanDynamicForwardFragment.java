@@ -13,10 +13,10 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicDetailsActivity;
 import com.school.twohand.entity.AmoyCircleDynamic;
-import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.ultra.CustomUltraRefreshHeader;
@@ -39,21 +39,30 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 
-/** "我评论的"页面的Fragment
+/**
+ * "我评论的"页面的Fragment
  * Created by yang on 2016/10/19 0019.
  */
 public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implements UltraRefreshListener {
 
     MyApplication myApplication;
-    User user;
+    public static final int RequestCode = 20;
 
     @InjectView(R.id.ultra_lv_dynamic)
     public UltraRefreshListView mLv_dynamic_all;
     @InjectView(R.id.ultra_ptr_dynamic)
     PtrClassicFrameLayout mPtrFrame_dynamic_all;
+    @InjectView(R.id.tv_login)
+    TextView tvLogin;
+    @InjectView(R.id.LL_no_user)
+    LinearLayout LLNoUser;
 
     private int pageNo = 1;
-    public void setPageNo(int pageNo) {this.pageNo = pageNo;}
+
+    public void setPageNo(int pageNo) {
+        this.pageNo = pageNo;
+    }
+
     private int pageSize = 10;
     private int circleId;
     private String circleName;
@@ -82,11 +91,8 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
 
     @Override
     public void initView() {
-        myApplication = (MyApplication) getActivity().getApplication();
-        user = myApplication.getUser();
-
         Bundle bundle = getArguments();
-        if(bundle!=null){
+        if (bundle != null) {
             circleId = bundle.getInt("circleId");
             circleName = bundle.getString("circleName");
         }
@@ -95,82 +101,91 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
 
     @Override
     public void initData() {
-        getData();
+        myApplication = (MyApplication) getActivity().getApplication();
+        if (myApplication.getUser() == null) {
+            LLNoUser.setVisibility(View.VISIBLE);   //显示出登录,把ListView隐藏
+            mPtrFrame_dynamic_all.setVisibility(View.GONE);
+        } else {
+            LLNoUser.setVisibility(View.GONE);
+            mPtrFrame_dynamic_all.setVisibility(View.VISIBLE);
+            getData();
+        }
     }
 
     //获取该淘圈的所有我评论的动态
-    public void getData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
-        requestParams.addQueryStringParameter("circleId",circleId+"");
-        requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
-        requestParams.addBodyParameter("requirement",2+""); //表示只查出我评论的动态
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",pageSize+"");
+    public void getData() {
+        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryCircleDynamicServlet");
+        requestParams.addQueryStringParameter("circleId", circleId + "");
+        requestParams.addQueryStringParameter("currentUserId", myApplication.getUser().getUserId() + "");
+        requestParams.addBodyParameter("requirement", 2 + ""); //表示只查出我评论的动态
+        requestParams.addQueryStringParameter("pageNo", pageNo + "");
+        requestParams.addQueryStringParameter("pageSize", pageSize + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type type = new TypeToken<List<AmoyCircleDynamic>>(){}.getType();
-                List<AmoyCircleDynamic> newDynamicList = gson.fromJson(result,type);
-                if(newDynamicList.size()<=4){
+                Type type = new TypeToken<List<AmoyCircleDynamic>>() {
+                }.getType();
+                List<AmoyCircleDynamic> newDynamicList = gson.fromJson(result, type);
+                if (newDynamicList.size() <= 4) {
                     mLv_dynamic_all.removeFootIfNeed();//这一页如果只有4条数据，就把底部布局去掉
                 }
                 dynamicList.clear();
                 dynamicList.addAll(newDynamicList);
 
-                if(dynamicAdapter==null){
-                    dynamicAdapter = new CommonAdapter<AmoyCircleDynamic>(getActivity(),dynamicList,R.layout.taoquan_dynamic_item) {
+                if (dynamicAdapter == null) {
+                    dynamicAdapter = new CommonAdapter<AmoyCircleDynamic>(getActivity(), dynamicList, R.layout.taoquan_dynamic_item) {
                         @Override
                         public void convert(ViewHolder viewHolder, final AmoyCircleDynamic amoyCircleDynamic, int position) {
                             //设置用户头像
                             ImageView iv_user_image = viewHolder.getViewById(R.id.iv_taoquan_dynamic_item_userImage);
-                            String user_image_url = NetUtil.imageUrl+amoyCircleDynamic.getUser().getUserHead();
+                            String user_image_url = NetUtil.imageUrl + amoyCircleDynamic.getUser().getUserHead();
                             ImageOptions imageOptions = new ImageOptions.Builder().setCircular(true)
                                     .setFailureDrawableId(R.mipmap.ic_launcher)
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();
-                            x.image().bind(iv_user_image,user_image_url,imageOptions);
+                            x.image().bind(iv_user_image, user_image_url, imageOptions);
                             //设置用户名
                             TextView tv_user_name = viewHolder.getViewById(R.id.tv_taoquan_dynamic_item_userName);
                             tv_user_name.setText(amoyCircleDynamic.getUser().getUserName());
                             //设置动态的图片，只显示第一张图片
                             ImageView iv_dynamic_image = viewHolder.getViewById(R.id.iv_taoquan_dynamic_item_image);
                             iv_dynamic_image.setVisibility(View.VISIBLE);//每次让ImageView显示，然后再判断是否去掉ImageView
-                            if(amoyCircleDynamic.getImageList().size()!=0){  //如果有图片的话，显示第一张
-                                String real_dynamic_image_url = NetUtil.imageUrl+amoyCircleDynamic.getImageList().get(0).getCircleDynamicImageUrl();
+                            if (amoyCircleDynamic.getImageList().size() != 0) {  //如果有图片的话，显示第一张
+                                String real_dynamic_image_url = NetUtil.imageUrl + amoyCircleDynamic.getImageList().get(0).getCircleDynamicImageUrl();
                                 ImageOptions imageOptions1 = new ImageOptions.Builder().setCrop(true).build();
-                                x.image().bind(iv_dynamic_image,real_dynamic_image_url,imageOptions1);
-                            }else{ //若没有图片，就将ImageView去掉
+                                x.image().bind(iv_dynamic_image, real_dynamic_image_url, imageOptions1);
+                            } else { //若没有图片，就将ImageView去掉
                                 iv_dynamic_image.setVisibility(View.GONE);
                             }
                             //设置动态的文字内容
                             TextView tv_dynamic_content = viewHolder.getViewById(R.id.tv_taoquan_dynamic_content);
-                            tv_dynamic_content.setText(amoyCircleDynamic.getAmoyCircleDynamicTitle()+"  "+amoyCircleDynamic.getAmoyCircleDynamicContent());
+                            tv_dynamic_content.setText(amoyCircleDynamic.getAmoyCircleDynamicTitle() + "  " + amoyCircleDynamic.getAmoyCircleDynamicContent());
                             //设置淘圈名
                             TextView tv_dynamic_circle_name = viewHolder.getViewById(R.id.tv_taoquan_dynamic_item_circleName);
-                            tv_dynamic_circle_name.setText("淘圈 | "+circleName);
+                            tv_dynamic_circle_name.setText("淘圈 | " + circleName);
                             //设置点击事件：跳转到动态详情页面
                             LinearLayout LL_dynamic_content = viewHolder.getViewById(R.id.LL_dynamic_content);
                             LL_dynamic_content.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(getActivity(), TaoquanDynamicDetailsActivity.class);
-                                    intent.putExtra("amoyCircleDynamic",amoyCircleDynamic);
-                                    intent.putExtra("circleName",circleName);
+                                    intent.putExtra("amoyCircleDynamic", amoyCircleDynamic);
+                                    intent.putExtra("circleName", circleName);
                                     getActivity().startActivityForResult(intent, TaoquanDynamicActivity.RequestCode);
                                 }
                             });
                             //设置点赞
                             TextView tv_likes = viewHolder.getViewById(R.id.tv_likes);
-                            tv_likes.setText(amoyCircleDynamic.getLikesList().size()+"");
+                            tv_likes.setText(amoyCircleDynamic.getLikesList().size() + "");
                             //设置浏览量
                             TextView tv_pv = viewHolder.getViewById(R.id.tv_pv);
-                            tv_pv.setText(amoyCircleDynamic.getAmoyCircleDynamicPageviews()+"");
+                            tv_pv.setText(amoyCircleDynamic.getAmoyCircleDynamicPageviews() + "");
 
                         }
                     };
                     mLv_dynamic_all.setAdapter(dynamicAdapter);
-                }else{
+                } else {
                     dynamicAdapter.notifyDataSetChanged();
                 }
             }
@@ -186,82 +201,83 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
         });
     }
 
-    private void loadMoreData(){
-        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
-        requestParams.addQueryStringParameter("circleId",circleId+"");
-        requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
-        requestParams.addBodyParameter("requirement",2+""); //表示只查出我评论的动态
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",pageSize+"");
+    private void loadMoreData() {
+        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryCircleDynamicServlet");
+        requestParams.addQueryStringParameter("circleId", circleId + "");
+        requestParams.addQueryStringParameter("currentUserId", myApplication.getUser().getUserId() + "");
+        requestParams.addBodyParameter("requirement", 2 + ""); //表示只查出我评论的动态
+        requestParams.addQueryStringParameter("pageNo", pageNo + "");
+        requestParams.addQueryStringParameter("pageSize", pageSize + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                if(result==null){
+                if (result == null) {
                     return;
                 }
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type type = new TypeToken<List<AmoyCircleDynamic>>(){}.getType();
-                List<AmoyCircleDynamic> newDynamicList = gson.fromJson(result,type);
-                if(newDynamicList.size()==0){//服务器没有返回新的数据
+                Type type = new TypeToken<List<AmoyCircleDynamic>>() {
+                }.getType();
+                List<AmoyCircleDynamic> newDynamicList = gson.fromJson(result, type);
+                if (newDynamicList.size() == 0) {//服务器没有返回新的数据
                     pageNo--; //下一次继续加载这一页
                     //mLv.completeLoad();//没获取到数据也要改变界面
                     return;
                 }
                 dynamicList.addAll(newDynamicList);
 
-                if(dynamicAdapter==null){
-                    dynamicAdapter = new CommonAdapter<AmoyCircleDynamic>(getActivity(),dynamicList,R.layout.taoquan_dynamic_item) {
+                if (dynamicAdapter == null) {
+                    dynamicAdapter = new CommonAdapter<AmoyCircleDynamic>(getActivity(), dynamicList, R.layout.taoquan_dynamic_item) {
                         @Override
                         public void convert(ViewHolder viewHolder, final AmoyCircleDynamic amoyCircleDynamic, int position) {
                             //设置用户头像
                             ImageView iv_user_image = viewHolder.getViewById(R.id.iv_taoquan_dynamic_item_userImage);
-                            String user_image_url = NetUtil.imageUrl+amoyCircleDynamic.getUser().getUserHead();
+                            String user_image_url = NetUtil.imageUrl + amoyCircleDynamic.getUser().getUserHead();
                             ImageOptions imageOptions = new ImageOptions.Builder().setCircular(true)
                                     .setFailureDrawableId(R.mipmap.ic_launcher)
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();
-                            x.image().bind(iv_user_image,user_image_url,imageOptions);
+                            x.image().bind(iv_user_image, user_image_url, imageOptions);
                             //设置用户名
                             TextView tv_user_name = viewHolder.getViewById(R.id.tv_taoquan_dynamic_item_userName);
                             tv_user_name.setText(amoyCircleDynamic.getUser().getUserName());
                             //设置动态的图片，只显示第一张图片
                             ImageView iv_dynamic_image = viewHolder.getViewById(R.id.iv_taoquan_dynamic_item_image);
                             iv_dynamic_image.setVisibility(View.VISIBLE);//每次让ImageView显示，然后再判断是否去掉ImageView
-                            if(amoyCircleDynamic.getImageList().size()!=0){  //如果有图片的话，显示第一张
-                                String real_dynamic_image_url = NetUtil.imageUrl+amoyCircleDynamic.getImageList().get(0).getCircleDynamicImageUrl();
+                            if (amoyCircleDynamic.getImageList().size() != 0) {  //如果有图片的话，显示第一张
+                                String real_dynamic_image_url = NetUtil.imageUrl + amoyCircleDynamic.getImageList().get(0).getCircleDynamicImageUrl();
                                 ImageOptions imageOptions1 = new ImageOptions.Builder().setCrop(true).build();
-                                x.image().bind(iv_dynamic_image,real_dynamic_image_url,imageOptions1);
-                            }else{ //若没有图片，就将ImageView去掉
+                                x.image().bind(iv_dynamic_image, real_dynamic_image_url, imageOptions1);
+                            } else { //若没有图片，就将ImageView去掉
                                 iv_dynamic_image.setVisibility(View.GONE);
                             }
                             //设置动态的文字内容
                             TextView tv_dynamic_content = viewHolder.getViewById(R.id.tv_taoquan_dynamic_content);
-                            tv_dynamic_content.setText(amoyCircleDynamic.getAmoyCircleDynamicTitle()+"  "+amoyCircleDynamic.getAmoyCircleDynamicContent());
+                            tv_dynamic_content.setText(amoyCircleDynamic.getAmoyCircleDynamicTitle() + "  " + amoyCircleDynamic.getAmoyCircleDynamicContent());
                             //设置淘圈名
                             TextView tv_dynamic_circle_name = viewHolder.getViewById(R.id.tv_taoquan_dynamic_item_circleName);
-                            tv_dynamic_circle_name.setText("淘圈 | "+circleName);
+                            tv_dynamic_circle_name.setText("淘圈 | " + circleName);
                             //设置点击事件：跳转到动态详情页面
                             LinearLayout LL_dynamic_content = viewHolder.getViewById(R.id.LL_dynamic_content);
                             LL_dynamic_content.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Intent intent = new Intent(getActivity(), TaoquanDynamicDetailsActivity.class);
-                                    intent.putExtra("amoyCircleDynamic",amoyCircleDynamic);
-                                    intent.putExtra("circleName",circleName);
+                                    intent.putExtra("amoyCircleDynamic", amoyCircleDynamic);
+                                    intent.putExtra("circleName", circleName);
                                     getActivity().startActivityForResult(intent, TaoquanDynamicActivity.RequestCode);
                                 }
                             });
                             //设置点赞
                             TextView tv_likes = viewHolder.getViewById(R.id.tv_likes);
-                            tv_likes.setText(amoyCircleDynamic.getLikesList().size()+"");
+                            tv_likes.setText(amoyCircleDynamic.getLikesList().size() + "");
                             //设置浏览量
                             TextView tv_pv = viewHolder.getViewById(R.id.tv_pv);
-                            tv_pv.setText(amoyCircleDynamic.getAmoyCircleDynamicPageviews()+"");
+                            tv_pv.setText(amoyCircleDynamic.getAmoyCircleDynamicPageviews() + "");
 
                         }
                     };
                     mLv_dynamic_all.setAdapter(dynamicAdapter);
-                }else{
+                } else {
                     dynamicAdapter.notifyDataSetChanged();
                 }
             }
@@ -279,7 +295,16 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
 
     @Override
     public void initEvent() {
-
+        if(myApplication.getUser()==null){
+            tvLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
+                }
+            });
+        }
     }
 
     @Override
@@ -297,7 +322,7 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
                 mLv_dynamic_all.refreshComplete();
                 initData(); //在再次获取数据并刷新ListView
             }
-        },1000);
+        }, 1000);
     }
 
     @Override
@@ -307,14 +332,12 @@ public class TaoquanDynamicForwardFragment extends TaoquanBaseFragment implement
             @Override
             public void run() {
                 loadMoreData();
-                if(mLv_dynamic_all!=null){
+                if (mLv_dynamic_all != null) {
                     mLv_dynamic_all.refreshComplete();
                 }
-
             }
-        },1000);
+        }, 1000);
     }
-
 
 
 }

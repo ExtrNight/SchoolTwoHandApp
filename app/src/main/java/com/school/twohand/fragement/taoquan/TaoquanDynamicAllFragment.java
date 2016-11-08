@@ -49,6 +49,8 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
     public UltraRefreshListView mLv_dynamic_all;
     @InjectView(R.id.ultra_ptr_dynamic)
     PtrClassicFrameLayout mPtrFrame_dynamic_all;
+    @InjectView(R.id.LL_no_user)
+    LinearLayout LLNoUser;
 
     private int pageNo = 1;
     public void setPageNo(int pageNo) {this.pageNo = pageNo;}
@@ -75,6 +77,8 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
         //设置数据刷新回调接口
         mLv_dynamic_all.setUltraRefreshListener(this);
 
+        LLNoUser.setVisibility(View.GONE);
+        mPtrFrame_dynamic_all.setVisibility(View.VISIBLE);
 
         return view;
     }

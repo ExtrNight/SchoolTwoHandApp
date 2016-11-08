@@ -28,6 +28,10 @@ public class MyApplication extends Application {
         JPushInterface.setDebugMode(true);
         JMessageClient.setNotificationMode(JMessageClient.NOTI_MODE_NO_NOTIFICATION);
 
+//        user = new User();
+//        user.setUserId(1);
+//        user.setUserName("Jack");
+//        user.setUserHead("1/1475660662253user.jpg");
 
     }
     //获取和设置被访问对象的

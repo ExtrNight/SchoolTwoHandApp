@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.customview.MyListView;
 import com.school.twohand.entity.AmoyCircleDynamic;
 import com.school.twohand.entity.AmoyCircleDynamicComment;
@@ -54,7 +55,6 @@ import butterknife.OnClick;
 public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
 
     MyApplication myApplication;
-    User user;
 
     @InjectView(R.id.dynamic_finish)
     ImageView dynamicFinish;
@@ -72,18 +72,12 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
     TextView tvLikesPv;
     @InjectView(R.id.tv_message_number)
     TextView tvMessageNumber;
-    @InjectView(R.id.tv_click_leave_message)
-    TextView tvClickLeaveMessage;
     @InjectView(R.id.tv_click_like)
     TextView tvClickLike;
     @InjectView(R.id.LL_bottom)
     LinearLayout LLBottom;
-    @InjectView(R.id.iv_keyboard)
-    ImageView ivKeyboard;
     @InjectView(R.id.et_message_content)
     EditText etMessageContent;
-    @InjectView(R.id.btn_send_message)
-    Button btnSendMessage;
     @InjectView(R.id.LL_input_box)
     LinearLayout LLInputBox;
     @InjectView(R.id.LL_dynamic_image)
@@ -97,13 +91,13 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
     @InjectView(R.id.tv_click_like_isTrue)
     TextView tvClickLikeIsTrue;
 
+    private static final int RequestCode = 10;
     AmoyCircleDynamic amoyCircleDynamic;
     String circleName;
     int likesNumber;  //点赞者的数量，有可能不是数据库获取的数据，当用户点赞后又取消时
     private CommonAdapter<AmoyCircleDynamicComment> commentAdapter;
     private List<AmoyCircleDynamicComment> commentList = new ArrayList<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    Handler handler = new Handler();
     Integer fatherCommentId = null; //全局变量用来记录评论的父评论Id，在发送评论的时候会用到
 
     @Override
@@ -117,21 +111,23 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
     }
 
     private void init() {
-        myApplication = (MyApplication) getApplication();
-        user = myApplication.getUser();
         Intent intent = getIntent();
         if (intent != null) {
             amoyCircleDynamic = intent.getParcelableExtra("amoyCircleDynamic");
             circleName = intent.getStringExtra("circleName");
         }
 
-
     }
 
     private void initData() {
+        myApplication = (MyApplication) getApplication();
         RLCircle.setFocusableInTouchMode(true);
-        if(amoyCircleDynamic.getUser().getUserId()!=user.getUserId()){
-            tvDynamicMore.setVisibility(View.GONE);
+        if(myApplication.getUser()!=null){
+            if(amoyCircleDynamic.getUser().getUserId()!=myApplication.getUser().getUserId()){
+                tvDynamicMore.setVisibility(View.GONE);
+            }else{
+                tvDynamicMore.setVisibility(View.VISIBLE);
+            }
         }
         tvCircleName.setText(circleName);//给淘圈名赋值
         //设置用户头像
@@ -167,12 +163,14 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
         tvLikesPv.setText("点赞" + likesNumber
                 + " · 浏览" + (amoyCircleDynamic.getAmoyCircleDynamicPageviews() + 1));
         addAmoyCircleDynamicPv();   //界面上先把浏览量加1，然后将数据传到服务器
-        //设置下面的点赞图标是显示没点赞还是已点赞
-        if(likesNumber>0){ //表示该条动态有点赞的
-            if(amoyCircleDynamic.getLikesList().contains(user.getUserId())){
-                //如果点赞用户id的集合里有当前正在操作的用户Id，则设为已点赞
-                tvClickLike.setVisibility(View.GONE);
-                tvClickLikeIsTrue.setVisibility(View.VISIBLE);
+        //设置下面的点赞图标是显示没点赞还是已点赞,前提是用户已登录
+        if(myApplication.getUser()!=null){
+            if(likesNumber>0){ //表示该条动态有点赞的
+                if(amoyCircleDynamic.getLikesList().contains(myApplication.getUser().getUserId())){
+                    //如果点赞用户id的集合里有当前正在操作的用户Id，则设为已点赞
+                    tvClickLike.setVisibility(View.GONE);
+                    tvClickLikeIsTrue.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -248,53 +246,54 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                                     return false;
                                 }
                             });
-                            if(amoyCircleDynamicComment.getUser().getUserId()==user.getUserId()){ //是自己的评论
-                                RL_click_comment.setOnLongClickListener(new View.OnLongClickListener() {
-                                    @Override
-                                    public boolean onLongClick(View v) {//长按
-                                        if(amoyCircleDynamicComment.getIsEnd()==1){//如果有子评论，则不能删除
-                                            Toast.makeText(TaoquanDynamicDetailsActivity.this, "已有子评论，不能删除哦~", Toast.LENGTH_SHORT).show();
-                                        }else{//弹出“删除”弹框
-                                            String[] items = {"删除评论"};
-                                            new AlertDialog.Builder(TaoquanDynamicDetailsActivity.this).setItems(items, new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    new AlertDialog.Builder(TaoquanDynamicDetailsActivity.this).setMessage("确定删除该评论？")
-                                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                                                @Override
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    deleteComment(amoyCircleDynamicComment.getCircleDynamicCommentId(),
-                                                                            amoyCircleDynamicComment.getCircleDynamicCommentFatherId(),amoyCircleDynamicComment.getIsEnd());
-                                                                }
-                                                            }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                        }
-                                                    }).show();
-                                                }
-                                            }).show();
+                            if(myApplication.getUser()!=null){ //只有当前是登录状态才能评论别人
+                                if(amoyCircleDynamicComment.getUser().getUserId()==myApplication.getUser().getUserId()){ //是自己的评论
+                                    RL_click_comment.setOnLongClickListener(new View.OnLongClickListener() {
+                                        @Override
+                                        public boolean onLongClick(View v) {//长按
+                                            if(amoyCircleDynamicComment.getIsEnd()==1){//如果有子评论，则不能删除
+                                                Toast.makeText(TaoquanDynamicDetailsActivity.this, "已有子评论，不能删除哦~", Toast.LENGTH_SHORT).show();
+                                            }else{//弹出“删除”弹框
+                                                String[] items = {"删除评论"};
+                                                new AlertDialog.Builder(TaoquanDynamicDetailsActivity.this).setItems(items, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        new AlertDialog.Builder(TaoquanDynamicDetailsActivity.this).setMessage("确定删除该评论？")
+                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+                                                                        deleteComment(amoyCircleDynamicComment.getCircleDynamicCommentId(),
+                                                                                amoyCircleDynamicComment.getCircleDynamicCommentFatherId(),amoyCircleDynamicComment.getIsEnd());
+                                                                    }
+                                                                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                            @Override
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                            }
+                                                        }).show();
+                                                    }
+                                                }).show();
+                                            }
+                                            return false;
                                         }
-                                        return false;
-                                    }
-                                });
-                            }else{
-                                RL_click_comment.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        //fatherCommentId = amoyCircleDynamicComment.getCircleDynamicCommentFatherId();
-                                        fatherCommentId = amoyCircleDynamicComment.getCircleDynamicCommentId();//注意：上面是错的，其本身Id就是需要增加的评论的父评论Id
-                                        LLBottom.setVisibility(View.GONE);
-                                        LLInputBox.setVisibility(View.VISIBLE); //显示出输入框
-                                        //弹出软键盘
-                                        etMessageContent.requestFocus();
-                                        etMessageContent.setHint("回复@"+amoyCircleDynamicComment.getUser().getUserName()+": ");
-                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                        imm.showSoftInput(etMessageContent, InputMethodManager.RESULT_SHOWN);
-                                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                    }
-                                });
+                                    });
+                                }else{
+                                    RL_click_comment.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            //fatherCommentId = amoyCircleDynamicComment.getCircleDynamicCommentFatherId();
+                                            fatherCommentId = amoyCircleDynamicComment.getCircleDynamicCommentId();//注意：上面是错的，其本身Id就是需要增加的评论的父评论Id
+                                            LLBottom.setVisibility(View.GONE);
+                                            LLInputBox.setVisibility(View.VISIBLE); //显示出输入框
+                                            //弹出软键盘
+                                            etMessageContent.requestFocus();
+                                            etMessageContent.setHint("回复@"+amoyCircleDynamicComment.getUser().getUserName()+": ");
+                                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.showSoftInput(etMessageContent, InputMethodManager.RESULT_SHOWN);
+                                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                                        }
+                                    });
+                                }
                             }
-
 
                         }
                     };
@@ -340,7 +339,7 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
         RequestParams requestParams = new RequestParams(NetUtil.url+"InsertOrCancelCircleDynamicLikesServlet");
         requestParams.addQueryStringParameter("requirement",requirement+"");
         requestParams.addQueryStringParameter("circleDynamicId",amoyCircleDynamic.getAmoyCirlceDynamicId()+"");
-        requestParams.addQueryStringParameter("circleDynamicLikesUserId",user.getUserId()+"");
+        requestParams.addQueryStringParameter("circleDynamicLikesUserId",myApplication.getUser().getUserId()+"");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -367,7 +366,10 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_dynamic_more:
-                if(amoyCircleDynamic.getUser().getUserId()!=user.getUserId()){
+                if(myApplication.getUser()==null){
+                    return;
+                }
+                if(amoyCircleDynamic.getUser().getUserId()!=myApplication.getUser().getUserId()){
                     return;
                 }
                 String[] items = {"删除动态"};
@@ -391,36 +393,48 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
             case R.id.RL_circle:
                 break;
             case R.id.tv_click_leave_message: //点击给这条动态留言
-                fatherCommentId = null;
-                LLBottom.setVisibility(View.GONE);
-                //etMessageContent.setFocusable(true);
-                etMessageContent.requestFocus();
+                if(myApplication.getUser()!=null){
+                    fatherCommentId = null;
+                    LLBottom.setVisibility(View.GONE);
+                    //etMessageContent.setFocusable(true);
+                    etMessageContent.requestFocus();
 //                Timer timer = new Timer();
 //                timer.schedule(new TimerTask() {
 //                    @Override
 //                    public void run() {
 //                    }
 //                },300);
-                //弹出软键盘，如果不行可以用上面的方式，开一个定时器进行操作，但是必须设置EditText获取焦点
-                InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm1.showSoftInput(etMessageContent, InputMethodManager.RESULT_SHOWN);
-                imm1.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                etMessageContent.setHint("想对该动态说些什么...");
-                LLInputBox.setVisibility(View.VISIBLE); //显示出输入框
+                    //弹出软键盘，如果不行可以用上面的方式，开一个定时器进行操作，但是必须设置EditText获取焦点
+                    InputMethodManager imm1 = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm1.showSoftInput(etMessageContent, InputMethodManager.RESULT_SHOWN);
+                    imm1.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                    etMessageContent.setHint("想对该动态说些什么...");
+                    LLInputBox.setVisibility(View.VISIBLE); //显示出输入框
+                }else{
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(TaoquanDynamicDetailsActivity.this, LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
+                }
                 break;
             case R.id.tv_click_like: //没点赞状态
-                if(amoyCircleDynamic.getUser().getUserId()==user.getUserId()){
-                    //如果当前正在操作的用户是这条动态的发布者本身，则不能点赞
-                    Toast.makeText(TaoquanDynamicDetailsActivity.this, "您不能给自己点赞噢", Toast.LENGTH_SHORT).show();
+                if(myApplication.getUser()!=null){
+                    if(amoyCircleDynamic.getUser().getUserId()==myApplication.getUser().getUserId()){
+                        //如果当前正在操作的用户是这条动态的发布者本身，则不能点赞
+                        Toast.makeText(TaoquanDynamicDetailsActivity.this, "您不能给自己点赞噢", Toast.LENGTH_SHORT).show();
+                    }else{
+                        tvClickLike.setVisibility(View.GONE);
+                        tvClickLikeIsTrue.setVisibility(View.VISIBLE);
+                        //界面上设置点赞数量加一
+                        likesNumber++;
+                        tvLikesPv.setText("点赞" + likesNumber
+                                + " · 浏览" + (amoyCircleDynamic.getAmoyCircleDynamicPageviews() + 1));
+                        //将数据上传服务器，数据库里增加一条点赞记录
+                        insertOrCancelCircleDynamicLikes(1);
+                    }
                 }else{
-                    tvClickLike.setVisibility(View.GONE);
-                    tvClickLikeIsTrue.setVisibility(View.VISIBLE);
-                    //界面上设置点赞数量加一
-                    likesNumber++;
-                    tvLikesPv.setText("点赞" + likesNumber
-                            + " · 浏览" + (amoyCircleDynamic.getAmoyCircleDynamicPageviews() + 1));
-                    //将数据上传服务器，数据库里增加一条点赞记录
-                    insertOrCancelCircleDynamicLikes(1);
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(TaoquanDynamicDetailsActivity.this, LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
                 }
                 break;
             case R.id.tv_click_like_isTrue: //已点赞状态
@@ -442,6 +456,9 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                 LLBottom.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_send_message:
+                if(myApplication.getUser()==null){
+                    return;
+                }
                 String contentStr = etMessageContent.getText().toString();
                 if(contentStr.equals("")){
                     Toast.makeText(TaoquanDynamicDetailsActivity.this, "评论内容不能为空哦", Toast.LENGTH_SHORT).show();
@@ -449,7 +466,7 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                 }
                 //上传数据给服务器，添加一条评论
                 AmoyCircleDynamicComment amoyCircleDynamicComment = new AmoyCircleDynamicComment(
-                        amoyCircleDynamic.getAmoyCirlceDynamicId(),contentStr,fatherCommentId,user);
+                        amoyCircleDynamic.getAmoyCirlceDynamicId(),contentStr,fatherCommentId,myApplication.getUser());
                 insertComment(amoyCircleDynamicComment);
                 break;
         }
@@ -515,7 +532,7 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
 
     //删除该动态
     public void deleteDynamic(){
-        if(amoyCircleDynamic.getUser().getUserId()==user.getUserId()){
+        if(amoyCircleDynamic.getUser().getUserId()==myApplication.getUser().getUserId()){
             RequestParams requestParams = new RequestParams(NetUtil.url+"DeleteCircleDynamicServlet");
             requestParams.addQueryStringParameter("circleDynamicId",amoyCircleDynamic.getAmoyCirlceDynamicId()+"");
             x.http().get(requestParams, new Callback.CommonCallback<String>() {
@@ -538,5 +555,11 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==RequestCode&&resultCode==LoginActivity.ResultCode){
+            initData();
+        }
+    }
 }

@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
     String passwordString;
     MyApplication myApplication;
     static final int CODE = 10;//去注册界面的请求码
+    public static final int ResultCode = 100;   //登录成功的结果码
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -186,6 +187,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 }
                                             });
+                                            setResult(ResultCode);
                                             finish();
                                         }
                                     }
@@ -216,4 +218,6 @@ public class LoginActivity extends AppCompatActivity {
             userName.setText(name);
         }
     }
+
+
 }

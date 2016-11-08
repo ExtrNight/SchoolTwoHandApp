@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,6 +37,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.customview.EachTaoquanListView;
 import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircle;
@@ -83,11 +85,14 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
     private ImageView iv_exit;     //退出淘圈
     private ImageView iv_setting; //淘圈设置
 
+    SwipeRefreshLayout swipe_container;     //刷新的布局控件
+
     private static final int ModifyTaoquanInfo = 1;
     private static final int PublishGoods = 2;
+    private static final int RequestCode = 3;
 
     MyApplication myApplication;
-    User user;
+
     AmoyCircle amoyCircle;    //所在的淘圈对象
     boolean isCircleMember = false;  //是否是淘圈成员
     boolean isCircleMaster = false;  //是否是淘圈圈主
@@ -116,6 +121,15 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
         init();
         initView();
+        myApplication = (MyApplication) getApplication();
+        if(myApplication.getUser()==null){
+            //将“发布”隐藏，显示“加入淘圈”
+            btnBottom.setVisibility(View.VISIBLE);
+            btnBottomPublish.setVisibility(View.GONE);
+        }else{
+            //判断淘圈是否存在此人，并改变isCircleMember和isCircleMaster的值
+            isCircleMemberExists(myApplication.getUser().getUserId(), amoyCircle.getCircleId());
+        }
         initData();
         initAnimation();
         initEvent();
@@ -123,15 +137,11 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
     }
 
     private void init() {
-        myApplication = (MyApplication) getApplication();
-        user = myApplication.getUser();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         amoyCircle = bundle.getParcelable("amoyCircle"); //获取到上个页面传来的AmoyCircle对象
         orderFlag = 0;
         pageNo = 1;
-        //判断淘圈是否存在此人，并改变isCircleMember和isCircleMaster的值
-        isCircleMemberExists(user.getUserId(), amoyCircle.getCircleId());
 
         //初始化头部控件
         RL_top = (RelativeLayout) findViewById(R.id.RL_top);
@@ -140,10 +150,15 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
         iv_search = (ImageView) findViewById(R.id.iv_each_taoquan_search);
         iv_exit = (ImageView) findViewById(R.id.iv_each_taoquan_more);
         iv_setting = (ImageView) findViewById(R.id.iv_each_taoquan_setting);
+
+        swipe_container = (SwipeRefreshLayout) findViewById(R.id.swipe_container);//刷新的布局控件
+        //设置刷新的动画的颜色，最多四个
+        swipe_container.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light,
+                android.R.color.holo_orange_light, android.R.color.holo_green_light);
+
         RL_top.getBackground().setAlpha(0);
 
-        lvEachTaoquanGoods.iv_taoquan_bg.setImageResource(R.drawable.taoquan_bg_15);
-//        setBgImageAlpha(lvEachTaoquanGoods.iv_taoquan_bg);
+        //lvEachTaoquanGoods.iv_taoquan_bg.setImageResource(R.drawable.taoquan_bg_15);
         lvEachTaoquanGoods.setOnTouchListener(this);   //注册OnTouch监听
 
         shapeLoadingDialog = new ShapeLoadingDialog(this);//shapeLoadingDialog对象
@@ -163,7 +178,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                     btnBottom.setVisibility(View.GONE);
                     btnBottomPublish.setVisibility(View.VISIBLE);
                     iv_exit.setVisibility(View.VISIBLE);//显示退出按钮
-                    if (user.getUserId() == amoyCircle.getCircleUserId()) {
+                    if (myApplication.getUser().getUserId() == amoyCircle.getCircleUserId()) {
                         isCircleMaster = true;  //是淘圈圈主,圈主不可退出淘圈
                         iv_exit.setVisibility(View.INVISIBLE);
                         iv_setting.setVisibility(View.VISIBLE);
@@ -304,6 +319,21 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                     intent.putExtra("position", position); //  position+ 1,头部也算位置,区别于346行的position？？为什么不一样
                     startActivity(intent);
                 }
+            }
+        });
+
+        //刷新的布局控件的刷新监听
+        swipe_container.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        pageNo = 1;
+                        initData();
+                        swipe_container.setRefreshing(false); //完成刷新
+                    }
+                }, 1000);
             }
         });
 
@@ -553,7 +583,14 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_bottom_joinCircle:  //加入淘圈
-                joinCircle(user.getUserId(), amoyCircle.getCircleId());
+                if(myApplication.getUser()==null){
+                    Toast.makeText(EachTaoquanActivity.this, "请先登录哦~", Toast.LENGTH_SHORT).show();
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(EachTaoquanActivity.this, LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
+                }else{
+                    joinCircle(myApplication.getUser().getUserId(), amoyCircle.getCircleId());
+                }
                 break;
             case R.id.btn_bottom_publish: //发布
                 btnBottomPublish.startAnimation(animationSetPublish);//点击发布后开始动画，然后跳转到发布页面
@@ -580,7 +617,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        quitCircle(user.getUserId(), amoyCircle.getCircleId());
+                                        quitCircle(myApplication.getUser().getUserId(), amoyCircle.getCircleId());
                                     }
                                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -736,9 +773,21 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
             queryGoodsBean = new QueryGoodsBean(null, null, null, orderFlag, pageNo, pageSize, amoyCircle.getCircleId());
             goodsAdapter = null;
             getGoodsData(queryGoodsBean);
+        } else if(requestCode == RequestCode && resultCode == LoginActivity.ResultCode){
+            //登录成功返回
+            myApplication = (MyApplication) getApplication();
+            if(myApplication.getUser()==null){
+                //将“发布”隐藏，显示“加入淘圈”
+                btnBottom.setVisibility(View.VISIBLE);
+                btnBottomPublish.setVisibility(View.GONE);
+            }else{
+                //判断淘圈是否存在此人，并改变isCircleMember和isCircleMaster的值
+                isCircleMemberExists(myApplication.getUser().getUserId(), amoyCircle.getCircleId());
+            }
         }
     }
 
+    //分享
     private void showShare() {
         ShareSDK.initSDK(this);
         OnekeyShare oks = new OnekeyShare();
@@ -818,7 +867,10 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (lvEachTaoquanGoods.getCount() <= 3) { //总Item数量小于3，则不执行
+        if(lvEachTaoquanGoods.getChildAt(0)==null){  //头布局还没加载出来滑动的时候就不执行
+            return false;
+        }
+        if (lvEachTaoquanGoods.getCount() <= 2) { //总Item数量小于3，则不执行
             return false;
         }
         switch (event.getAction()) {

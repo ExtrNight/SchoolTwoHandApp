@@ -36,7 +36,7 @@
                 android:minLines="1"
                 android:maxLines="1"
                 android:maxEms="10"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textColor="#444"
                 android:text="淘圈名"
                 android:ellipsize="marquee"/>
@@ -45,31 +45,32 @@
                 android:id="@+id/taoquan_mine_item_describe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="11sp"
                 android:layout_marginTop="7dp"
                 android:textColor="@color/border_clo"
                 android:layout_below="@+id/taoquan_mine_item_name"
-                android:text="快进入淘圈看看吧" />
+                android:text="快进入淘圈看看吧~" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/isCircleManager"
-                android:textSize="15sp"
-
+                android:textSize="7sp"
                 android:textColor="@color/myTheme_color"
-                android:layout_alignBottom="@id/taoquan_mine_item_name"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="100dp"/>
+                android:layout_alignTop="@id/taoquan_mine_item_name"
+                android:layout_toRightOf="@+id/taoquan_mine_item_name"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="1dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/taoquan_mine_item_popularity"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#ff0000"
                 android:layout_alignBottom="@id/taoquan_mine_item_name"
-                android:layout_alignParentRight="true" />
+                android:layout_alignParentRight="true"
+                android:text="人气+ 45"/>
             <!--android:text="人气+ 45"-->
 
         </RelativeLayout>

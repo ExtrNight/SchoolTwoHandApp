@@ -35,6 +35,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.activity.taoquan.CreateTaoquanActivity;
 import com.school.twohand.activity.taoquan.EachTaoquanActivity;
 import com.school.twohand.activity.taoquan.TaoquanDiscoveryMoreActivity;
@@ -45,6 +46,7 @@ import com.school.twohand.customview.MyGridView;
 import com.school.twohand.customview.TaoquanDiscoveryListView;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.Goods;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryGoodsBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -73,6 +75,8 @@ import in.srain.cube.views.ptr.indicator.PtrIndicator;
  */
 public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscoveryListView.OnLoadChangeListener {
 
+    MyApplication myApplication;
+    private static final int RequestCode = 10;
     private PtrClassicFrameLayout ptrFrame;
     TaoquanDiscoveryListView lv_taoquan_discovery;
 
@@ -94,6 +98,8 @@ public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscove
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SDKInitializer.initialize(getActivity().getApplicationContext());//在使用SDK各组件之前初始化context信息，传入ApplicationContext
         View v = inflater.inflate(R.layout.taoquan_discovery_fragment,null);
+
+        myApplication = (MyApplication) getActivity().getApplication();
 
         initView(v);
         initData();
@@ -458,8 +464,14 @@ public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscove
         lv_taoquan_discovery.ib.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), CreateTaoquanActivity.class);
-                startActivity(intent);
+                if (myApplication.getUser()==null){
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
+                }else{
+                    Intent intent = new Intent(getContext(), CreateTaoquanActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -683,6 +695,21 @@ public class TaoquanDiscoveryFragment extends Fragment implements TaoquanDiscove
                 lv_taoquan_discovery.completeLoad();  //没获取到数据也要改变界面
             }
         },1000);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==RequestCode&&resultCode==LoginActivity.ResultCode){
+            lv_taoquan_discovery.ib.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getContext(), CreateTaoquanActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
     }
 
     @Override

@@ -9,7 +9,8 @@
        android:id="@+id/backGround"
        android:layout_width="match_parent"
        android:layout_height="350dp"
-       android:background="@mipmap/bg">
+       android:background="#00bb9c">
+      <!--android:background="@mipmap/bg"-->
       <com.school.twohand.utils.CircleImageView
           android:layout_width="80dp"
           android:layout_height="80dp"

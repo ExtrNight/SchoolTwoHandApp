@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,6 +25,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.king.photo_library.ImagesSelectorActivity;
 import com.king.photo_library.SelectorSettings;
+import com.school.twohand.activity.login.LoginActivity;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.ClassTbl;
 import com.school.twohand.entity.Goods;
@@ -75,71 +78,103 @@ public class PublicActivity extends AppCompatActivity {
     ImageView publicPhoto4;
     @InjectView(R.id.public_photo5)
     ImageView publicPhoto5;
-    @InjectView(R.id.publicAuction1)
-    RadioButton publicAuction1;
-    @InjectView(R.id.publicAuction2)
-    RadioButton publicAuction2;
-    @InjectView(R.id.publicSure)
-    Button publicSure;
     @InjectView(R.id.publicPrice)
     EditText publicPrice;
     @InjectView(R.id.publicClass)
     TextView publicClass;
     @InjectView(R.id.publicCircle)
     Spinner publicCircle;
-    @InjectView(R.id.publish_finish)
-    ImageView publishFinish;
-    @InjectView(R.id.tv_publish_taoquan_name)
-    TextView tvPublishTaoquanName;
+    private ShapeLoadingDialog shapeLoadingDialog;
 
     private ArrayList<String> mResults = new ArrayList<>();
     List<File> files = new ArrayList<>();
     private static final int REQUEST_CODE = 732;
     private static final int REQUEST_CODE_CLASS = 1;
     Integer classid = 0;
-    List<AmoyCircle> amoyCircles;//淘圈数据源
+    List<AmoyCircle> amoyCircles = new ArrayList<>();//淘圈数据源
     Integer amoyId = 0;//选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
+
+    MyApplication myApplication;
+    private static final int LoginRequestCode = 30;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
-        //查询用户对应淘圈
-        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
-        requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //将淘圈弄到列表中
-                Gson gson = new Gson();
-                amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {}.getType());
-                CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
-                    @Override
-                    public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                        TextView textView = viewHolder.getViewById(R.id.amoyItem);
-                        textView.setText(amoyCircle.getCircleName());
-                        amoyId = amoyCircle.getCircleId();
-                    }
-                };
-                publicCircle.setAdapter(commonAdapter);
-            }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
 
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
-
-            @Override
-            public void onFinished() {
-            }
-        });
+        init();
 
     }
 
+    private void init(){
+        myApplication = (MyApplication) getApplication();
+        if(myApplication.getUser()==null){
+            //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+            Intent intent = new Intent(PublicActivity.this, LoginActivity.class);
+            startActivityForResult(intent,LoginRequestCode);
+        }else{
+            initTaoquan();
+        }
+    }
+
+    private void initTaoquan(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                //查询用户对应淘圈
+                RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
+                requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
+                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+                        //将淘圈弄到列表中
+                        Gson gson = new Gson();
+                        List<AmoyCircle> newAmoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {}.getType());
+                        amoyCircles.add(new AmoyCircle());  //第一个，也是默认的，不选择淘圈
+                        amoyCircles.addAll(newAmoyCircles);
+                        CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
+                            @Override
+                            public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
+                                TextView textView = viewHolder.getViewById(R.id.amoyItem);
+                                if(position==0){
+                                    textView.setText(" 无 ");
+                                }else{
+                                    textView.setText("< "+amoyCircle.getCircleName()+" >");
+                                }
+                            }
+                        };
+                        publicCircle.setAdapter(commonAdapter);
+                        publicCircle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                if(position==0){
+                                    amoyId = null;
+                                }else{
+                                    amoyId = amoyCircles.get(position).getCircleId();
+                                }
+                            }
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
+                        });
+                    }
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+                    }
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+                    }
+                    @Override
+                    public void onFinished() {
+                    }
+                });
+            }
+        }.start();
+    }
 
     //回调请求码是REQUEST_CODE就请求图库，请求码是REQUEST_CODE_CLASS就请求分类界面返回分类结果
     @Override
@@ -155,15 +190,14 @@ public class PublicActivity extends AppCompatActivity {
                 //初始化选择图片后的图片控件
                 initPhotoView();
                 //选择图片的保存
-                final ProgressDialog dia = new ProgressDialog(PublicActivity.this);
-                dia.setMessage("图片压缩处理中....");
-                dia.show();
+                shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
+                shapeLoadingDialog.show();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         //压缩保存
                         initSaveImage();
-                        dia.cancel();
+                        shapeLoadingDialog.dismiss();
                     }
                 });
                 thread.start();
@@ -171,6 +205,9 @@ public class PublicActivity extends AppCompatActivity {
         }
         //请求分类界面
         if (requestCode == REQUEST_CODE_CLASS) {
+            if(data==null){
+                return;
+            }
             switch (data.getStringExtra("result")) {
                 case "1":
                     publicClass.setText("校园代步");
@@ -222,6 +259,10 @@ public class PublicActivity extends AppCompatActivity {
                     break;
 
             }
+        }
+        if(requestCode==LoginRequestCode&&resultCode==LoginActivity.ResultCode){
+            //登录成功页面返回的
+            init();
         }
     }
 
@@ -327,8 +368,6 @@ public class PublicActivity extends AppCompatActivity {
                 if (is != null) {
                     is.close();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -354,7 +393,7 @@ public class PublicActivity extends AppCompatActivity {
         int i = 1;
         Log.i("LAG", "压缩前的长度: " + baos.toByteArray().length);
         while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            options -= 10;//每次都减少10
+            options -= 45;//每次都减少10
             if (options == 10) {
                 break;
             }
@@ -448,13 +487,15 @@ public class PublicActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.publicSure:
+                if(myApplication.getUser()==null){
+                    return;
+                }
                 if (publicTitle.getText().toString().trim().length() == 0 || publicContent.getText().toString().trim().length() == 0
                         || files.size() < 1 || publicPrice.getText().toString().trim().length() == 0 || publicClass.getText().toString().trim().length() == 0) {
-                    Toast.makeText(PublicActivity.this, "信息不全", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PublicActivity.this, "请完善信息哦~", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadAll();
                 }
-
                 break;
             case R.id.publicClass:
                 Intent intent = new Intent(this, GoodsClassActivity.class);
@@ -467,7 +508,7 @@ public class PublicActivity extends AppCompatActivity {
         //Goods对象：
         //获取当前用户对象
         ClassTbl classTbl = new ClassTbl(classid, null);
-        User user = ((MyApplication) getApplication()).getUser();
+        User user = myApplication.getUser();
 
         AmoyCircle amoyCircle = new AmoyCircle();
         amoyCircle.setCircleId(amoyId);
@@ -475,11 +516,12 @@ public class PublicActivity extends AppCompatActivity {
         String describe = publicContent.getText().toString();
         Float goodsPrice = Float.parseFloat(publicPrice.getText().toString());
         Byte auction = -1;
-        if (publicAuction1.isChecked()) {
-            auction = 0;//一口价
-        } else if (publicAuction2.isChecked()) {
-            auction = 1;//拍卖
-        }
+//        if (publicAuction1.isChecked()) {
+//            auction = 0;//一口价
+//        } else if (publicAuction2.isChecked()) {
+//            auction = 1;//拍卖
+//        }
+        auction = 0; //一口价，拍卖去掉
         List<GoodsImage> goodsImages = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             String address = files.get(i).toString().substring(files.get(i).toString().lastIndexOf("/") + 1, files.get(i).toString().length());
@@ -489,7 +531,7 @@ public class PublicActivity extends AppCompatActivity {
 
         Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,user.getUserSchoolName());
         final ProgressDialog dia = new ProgressDialog(this);
-        dia.setMessage("加载中....");
+        dia.setMessage("发布中...");
         dia.show();
 
         RequestParams params = new RequestParams(NetUtil.url + "UploadImages");

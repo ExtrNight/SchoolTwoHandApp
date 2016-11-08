@@ -35,7 +35,7 @@
             android:text="用户名"
             android:maxLines="1"
             android:maxEms="6"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textColor="#000000"
             android:ellipsize="end" />
 
@@ -128,7 +128,7 @@
                 android:id="@+id/tv_goods_user_school"
                 android:layout_marginBottom="10dp"
                 android:text="来自苏州"
-                android:textSize="13sp"
+                android:textSize="11sp"
                 android:maxEms="14"
                 android:maxLines="1"
                 android:textColor="@color/myTheme_color"
@@ -140,7 +140,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:text="点赞 1 · 留言 1"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:maxEms="12"
                 android:maxLines="1"
                 android:ellipsize="end"/>

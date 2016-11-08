@@ -4,7 +4,7 @@ public class LikeTbl {
 	Integer likeId;
 	User likeUserMe;
 	User likeUserOther;
-	Goods likeGoods;
+	Goods likeGoodsId;
 	public Integer getLikeId() {
 		return likeId;
 	}
@@ -23,11 +23,11 @@ public class LikeTbl {
 	public void setLikeUserOther(User likeUserOther) {
 		this.likeUserOther = likeUserOther;
 	}
-	public Goods getLikeGoodsId() {
-		return likeGoods;
+	public Goods getLikeGoods() {
+		return likeGoodsId;
 	}
-	public void setLikeGoodsId(Goods likeGoods) {
-		this.likeGoods = likeGoods;
+	public void setLikeGoods(Goods likeGoods) {
+		this.likeGoodsId = likeGoodsId;
 	}
 	public LikeTbl(Integer likeId, User likeUserMe, User likeUserOther,
 			Goods likeGoods) {
@@ -35,7 +35,7 @@ public class LikeTbl {
 		this.likeId = likeId;
 		this.likeUserMe = likeUserMe;
 		this.likeUserOther = likeUserOther;
-		this.likeGoods = likeGoods;
+		this.likeGoodsId = likeGoods;
 	}
 	public LikeTbl() {
 		super();

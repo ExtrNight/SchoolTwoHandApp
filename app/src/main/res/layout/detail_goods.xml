@@ -1,51 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical">
+        android:layout_height="80dp"
+        android:gravity="center_vertical"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp">
         <ImageView
             android:id="@+id/user_head_m"
-            android:layout_marginLeft="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"/>
         <TextView
             android:id="@+id/user_name_m"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:textSize="20sp"
             android:gravity="center"
+            android:textColor="#000000"
             android:layout_toRightOf="@+id/user_head_m"
-            android:layout_alignBottom="@+id/user_head_m"
+            android:layout_alignTop="@+id/user_head_m"
             android:text="用户名"
-            />
+            android:layout_marginLeft="10dp"/>
         <TextView
             android:id="@+id/goods_price_m"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginRight="25dp"
+            android:layout_height="wrap_content"
             android:textColor="#ff0015"
             android:layout_alignParentRight="true"
             android:gravity="center"
-            android:textSize="17sp"
-            android:text="￥500"/>
+            android:textSize="18sp"
+            android:layout_marginRight="2dp"
+            android:text="￥500"
+            android:layout_marginTop="2dp"/>
     </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
+        android:paddingStart="15dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp">
         <TextView
             android:id="@+id/detail_m"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
-            android:text="我是详情"/>
+            android:text="我是详情"
+            android:textColor="#000000"
+            android:layout_marginBottom="5dp"/>
+
         <ImageView
             android:id="@+id/image_a_m"
             android:layout_width="match_parent"
@@ -53,8 +67,7 @@
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
             android:layout_marginTop="10dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
         <ImageView
             android:layout_marginTop="10dp"
@@ -75,21 +88,28 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"
+        android:layout_marginTop="8dp"/>
 
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
+        android:gravity="center_vertical">
 
-        >
         <TextView
             android:id="@+id/readNumber_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:text="浏览：777"
-            />
+            android:text="浏览：777" />
 
         <TextView
             android:id="@+id/point"
@@ -98,14 +118,16 @@
             android:layout_toLeftOf="@+id/readNumber_m"
             android:layout_alignTop="@+id/readNumber_m"
             android:text="  "/>
+
         <TextView
             android:id="@+id/likeNumber_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/point"
             android:layout_alignTop="@+id/point"
-            android:textColor="#FFB6C1"
             android:text="点赞：323"/>
+        <!--android:textColor="#FFB6C1"-->
+
         <ImageView
             android:id="@+id/image_h_c_m"
             android:layout_width="35dp"
@@ -132,10 +154,48 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/likeNumber_m"
-            android:layout_marginLeft="10dp"
             android:textSize="12sp"
-            android:textColor="#FFB6C1"
-            android:text="淘圈|微淘"/>
+            android:textColor="@color/myTheme_color"
+            android:text="淘圈 | 微淘"/>
+
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:background="#eeeeee"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="15dp"
+        android:paddingStart="15dp"
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/view"
+        android:id="@+id/LL_message">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_message_number"
+            android:text="热门留言 (0)"
+            android:textSize="17sp"
+            android:textColor="#000000"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/iv_no_comment"
+        android:src="@mipmap/no_comment"
+        android:visibility="gone"/>
 
 </LinearLayout>

@@ -106,7 +106,6 @@ public class ShowActivity extends AppCompatActivity {
         //创建fragment存到list中
         homeFragement = new HomeFragement();
 
-
         groupFragement = new TaoquanPageFragment();
         messageFragement = new MessageFragement();
         meFragement = new MeFragement();
@@ -179,5 +178,7 @@ public class ShowActivity extends AppCompatActivity {
         }
         fragmentTransaction.commit();
     }
+
+
 
 }

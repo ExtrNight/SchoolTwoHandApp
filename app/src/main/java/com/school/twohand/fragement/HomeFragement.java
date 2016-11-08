@@ -3,9 +3,11 @@ package com.school.twohand.fragement;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,7 @@ public class HomeFragement extends Fragment {
         fenlei = (Button) view.findViewById(R.id.fenlei);
         sousuo = (Button) view.findViewById(R.id.sousuo);
         iv_location_school = (ImageView) view.findViewById(R.id.iv_location_school);
+
         oneFragment = new OneFragment();
         twoFragment = new TwoFragment();
         //初始化下划线长为屏幕的二分之一
@@ -171,6 +174,7 @@ public class HomeFragement extends Fragment {
                 startActivity(intent);
             }
         });
+
     }
 
 

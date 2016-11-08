@@ -112,7 +112,7 @@
 
         <activity android:name="com.school.twohand.activity.DetailGoodsActivity" />
         <activity
-            android:name="com.school.twohand.activity.ChatActivity"
+            android:name="com.school.twohand.activity.message.ChatActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
@@ -216,8 +216,7 @@
 
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
         <activity android:name=".MainActivity" />
-        <activity android:name=".DemoActivity" />
-        <activity android:name=".GoPayActivity" />
+        <activity android:name="com.school.twohand.activity.GoPayActivity" />
         <activity
             android:name=".DemoActivity"
             android:configChanges="orientation|keyboardHidden"
@@ -242,7 +241,6 @@
         <activity android:name="com.school.twohand.activity.NumberFansActivity" />
         <activity android:name="com.school.twohand.activity.NumberPriaseActivity" />
         <activity android:name="com.school.twohand.activity.SecondPageActivity" />
-        <activity android:name="com.school.twohand.activity.GoPayActivity" />
 
         <!-- mob分享 -->
         <activity
@@ -278,7 +276,6 @@
         <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.SelectTaoquanBgActivity"></activity>
             android:screenOrientation="portrait" />
-        <activity android:name="com.school.twohand.activity.taoquan.TaoquanPublishActivity" />
 
         <!-- 登录界面 -->
         <activity android:name="com.school.twohand.activity.login.LoginActivity"></activity>
@@ -287,7 +284,6 @@
         <activity android:name="com.school.twohand.activity.login.MessageListActivity" />
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
         <activity android:name="com.school.twohand.activity.OrderDetailActivity" />
         <activity android:name="com.school.twohand.activity.IntroduceActivity" />
         <activity android:name="com.school.twohand.activity.GetAddressActivity" />

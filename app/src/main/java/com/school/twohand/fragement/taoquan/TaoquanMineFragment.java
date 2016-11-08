@@ -10,14 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.activity.taoquan.EachTaoquanActivity;
 import com.school.twohand.entity.AmoyCircle;
-import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.ultra.CustomUltraRefreshHeader;
@@ -36,16 +37,24 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 
-/** 淘圈页面的“我的”的fragment
+/**
+ * 淘圈页面的“我的”的fragment
  * Created by yang on 2016/9/28 0028.
  */
 public class TaoquanMineFragment extends Fragment implements UltraRefreshListener {
 
+    @InjectView(R.id.tv_login)
+    TextView tvLogin;
+    @InjectView(R.id.LL_no_user)
+    LinearLayout LLNoUser;
+    private PtrClassicFrameLayout mPtrFrame; //PtrClassicFrameLayout
+
     MyApplication myApplication;
-    User user;
-    int userId;
+
     CommonAdapter<AmoyCircle> circlesAdapter;
     List<AmoyCircle> amoyCircles = new ArrayList<>();
     UltraRefreshListView mLv;
@@ -53,23 +62,39 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
     int pageNo = 1;
     int pageSize = 8;
 
-    private PtrClassicFrameLayout mPtrFrame; //PtrClassicFrameLayout
+    private static final int RequestCode = 11;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        myApplication = (MyApplication) getActivity().getApplication();
-        user = myApplication.getUser();
-        userId = user.getUserId();
-        View v = inflater.inflate(R.layout.taoquan_mine_fragment,null);
+        View v = inflater.inflate(R.layout.taoquan_mine_fragment, null);
+
+        ButterKnife.inject(this, v);
         initView(v);
-        initData();
+
+        myApplication = (MyApplication) getActivity().getApplication();
+        if (myApplication.getUser() == null) {
+            LLNoUser.setVisibility(View.VISIBLE);
+            mPtrFrame.setVisibility(View.GONE);
+            tvLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(intent,RequestCode);
+                }
+            });
+        } else {
+            LLNoUser.setVisibility(View.GONE);
+            mPtrFrame.setVisibility(View.VISIBLE);
+            initData();
+        }
 
         return v;
     }
 
     //初始化界面
-    void initView(View v){
+    void initView(View v) {
         mLv = (UltraRefreshListView) v.findViewById(R.id.ultra_lv);
 
         mPtrFrame = (PtrClassicFrameLayout) v.findViewById(R.id.ultra_ptr);
@@ -90,34 +115,33 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
     }
 
     //初始化数据
-    void initData(){
+    void initData() {
         getData();
     }
 
     //获取数据
-    void getData(){
-        String url = NetUtil.url+"QueryCirclesServlet";
+    void getData() {
+        String url = NetUtil.url + "QueryCirclesServlet";
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("userId",userId+"");
-        requestParams.addQueryStringParameter("orderFlag",0+"");//按照淘圈人气排序
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",pageSize+"");
-
+        requestParams.addQueryStringParameter("userId", myApplication.getUser().getUserId() + "");
+        requestParams.addQueryStringParameter("orderFlag", 0 + "");//按照淘圈人气排序
+        requestParams.addQueryStringParameter("pageNo", pageNo + "");
+        requestParams.addQueryStringParameter("pageSize", pageSize + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<AmoyCircle>>(){}.getType();
-                List<AmoyCircle> newAmoyCircles = gson.fromJson(result,type);
-                if(newAmoyCircles.size()<=6){
+                Type type = new TypeToken<List<AmoyCircle>>() {}.getType();
+                List<AmoyCircle> newAmoyCircles = gson.fromJson(result, type);
+                if (newAmoyCircles.size() <= 6) {
                     mLv.removeFootIfNeed(); //淘圈小于等于6个，就去掉底部布局
                 }
                 amoyCircles.clear(); //清空数据
                 amoyCircles.addAll(newAmoyCircles); //将一个集合所有数据添加到集合
 
                 //设置listView的数据源
-                if(circlesAdapter==null){
-                    circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles,R.layout.taoquan_mine_item) {
+                if (circlesAdapter == null) {
+                    circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles, R.layout.taoquan_mine_item) {
                         @Override
                         public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
                             //设置淘圈名
@@ -126,11 +150,11 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
 
                             //设置淘圈人气
                             TextView taoquan_mine_item_popularity = viewHolder.getViewById(R.id.taoquan_mine_item_popularity);
-                            taoquan_mine_item_popularity.setText("人气+ "+ amoyCircle.getCircleNumber());
+                            taoquan_mine_item_popularity.setText("人气+ " + amoyCircle.getCircleNumber());
 
                             //设置淘圈头像
                             ImageView taoquan_image = viewHolder.getViewById(R.id.taoquan_mine_item_image);
-                            String url = NetUtil.imageUrl+ amoyCircle.getCircleImageUrl();
+                            String url = NetUtil.imageUrl + amoyCircle.getCircleImageUrl();
 
                             //设置图片样式
                             ImageOptions imageOptions = new ImageOptions.Builder()
@@ -138,13 +162,13 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                                     .setFailureDrawableId(R.mipmap.upload_circle_image)
                                     .setLoadingDrawableId(R.mipmap.upload_circle_image)
                                     .setCrop(true).build();          //是否裁剪？
-                            x.image().bind(taoquan_image,url,imageOptions);
+                            x.image().bind(taoquan_image, url, imageOptions);
 
                             //设置是否显示为圈主
                             TextView isCircleManager = viewHolder.getViewById(R.id.isCircleManager);
                             isCircleManager.setText("");
-                            if(amoyCircle.getCircleUserId()==userId){//若该淘圈userId等于该用户id，则设置显示为圈主
-                                isCircleManager.setText("主");
+                            if (amoyCircle.getCircleUserId() == myApplication.getUser().getUserId()) {//若该淘圈userId等于该用户id，则设置显示为圈主
+                                isCircleManager.setText("圈主");
                             }
                         }
                     };
@@ -155,7 +179,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                             //Log.i("Taoquan", "position: "+position+"---"+parent.getCount());
-                            if(position>=0&&position<parent.getCount()&&amoyCircles.size()<=6){ //没有底部布局
+                            if (position >= 0 && position < parent.getCount() && amoyCircles.size() <= 6) { //没有底部布局
                                 AmoyCircle amoyCircle = (AmoyCircle) parent.getItemAtPosition(position);
                                 Intent intent = new Intent(getActivity(), EachTaoquanActivity.class);
                                 Bundle bundle = new Bundle();
@@ -163,7 +187,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             }
-                            if(position>=0&&position<parent.getCount()-1&&amoyCircles.size()>6) { //当出现底部布局的时候，底部布局也占一个位置
+                            if (position >= 0 && position < parent.getCount() - 1 && amoyCircles.size() > 6) { //当出现底部布局的时候，底部布局也占一个位置
                                 AmoyCircle amoyCircle = (AmoyCircle) parent.getItemAtPosition(position);
                                 Intent intent = new Intent(getActivity(), EachTaoquanActivity.class);
                                 Bundle bundle = new Bundle();
@@ -173,11 +197,12 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                             }
                         }
                     });
-                }else{
+                } else {
                     //只有当数据改变而不是引用改变才会执行该方法，因此不能改变引用，只改变数据内容，将list提为全局变量
                     circlesAdapter.notifyDataSetChanged();
                 }
             }
+
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
                 Toast.makeText(getActivity(), "无法获取网络数据，请检查网络连接", Toast.LENGTH_SHORT).show();
@@ -191,21 +216,22 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
         });
     }
 
-    private void loadMoreData(){
-        String url = NetUtil.url+"QueryCirclesServlet";
+    private void loadMoreData() {
+        String url = NetUtil.url + "QueryCirclesServlet";
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("userId",userId+"");
-        requestParams.addQueryStringParameter("orderFlag",0+"");//按照淘圈人气排序
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize",pageSize+"");
+        requestParams.addQueryStringParameter("userId", myApplication.getUser().getUserId() + "");
+        requestParams.addQueryStringParameter("orderFlag", 0 + "");//按照淘圈人气排序
+        requestParams.addQueryStringParameter("pageNo", pageNo + "");
+        requestParams.addQueryStringParameter("pageSize", pageSize + "");
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                Type type = new TypeToken<List<AmoyCircle>>(){}.getType();
-                List<AmoyCircle> newAmoyCircles = gson.fromJson(result,type);
-                if(newAmoyCircles.size()==0){//服务器没有返回新的数据
+                Type type = new TypeToken<List<AmoyCircle>>() {
+                }.getType();
+                List<AmoyCircle> newAmoyCircles = gson.fromJson(result, type);
+                if (newAmoyCircles.size() == 0) {//服务器没有返回新的数据
                     pageNo--; //下一次继续加载这一页
                     return;
                 }
@@ -213,8 +239,8 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                 amoyCircles.addAll(newAmoyCircles); //将一个集合所有数据添加到集合
 
                 //设置listView的数据源
-                if(circlesAdapter==null){
-                    circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles,R.layout.taoquan_mine_item) {
+                if (circlesAdapter == null) {
+                    circlesAdapter = new CommonAdapter<AmoyCircle>(getActivity(), amoyCircles, R.layout.taoquan_mine_item) {
                         @Override
                         public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
                             //设置淘圈名
@@ -223,12 +249,12 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
 
                             //设置淘圈人气
                             TextView taoquan_mine_item_popularity = viewHolder.getViewById(R.id.taoquan_mine_item_popularity);
-                            taoquan_mine_item_popularity.setText("人气+ "+ amoyCircle.getCircleNumber());
+                            taoquan_mine_item_popularity.setText("人气+ " + amoyCircle.getCircleNumber());
                             //taoquan_mine_item_popularity.setText(amoyCircle.getCircleCreateTime().toString());
 
                             //设置淘圈头像
                             ImageView taoquan_image = viewHolder.getViewById(R.id.taoquan_mine_item_image);
-                            String url = NetUtil.imageUrl+ amoyCircle.getCircleImageUrl();
+                            String url = NetUtil.imageUrl + amoyCircle.getCircleImageUrl();
 
                             //设置图片样式
                             ImageOptions imageOptions = new ImageOptions.Builder()
@@ -236,13 +262,13 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                                     .setFailureDrawableId(R.mipmap.upload_circle_image)
                                     .setLoadingDrawableId(R.mipmap.upload_circle_image)
                                     .setCrop(true).build();          //是否裁剪？
-                            x.image().bind(taoquan_image,url,imageOptions);
+                            x.image().bind(taoquan_image, url, imageOptions);
 
                             //设置是否显示为圈主
                             TextView isCircleManager = viewHolder.getViewById(R.id.isCircleManager);
                             isCircleManager.setText("");
-                            if(amoyCircle.getCircleUserId()==userId){//若该淘圈userId等于该用户id，则设置显示为圈主
-                                isCircleManager.setText("主");
+                            if (amoyCircle.getCircleUserId() == myApplication.getUser().getUserId()) {//若该淘圈userId等于该用户id，则设置显示为圈主
+                                isCircleManager.setText("圈主");
                             }
                         }
                     };
@@ -262,7 +288,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                             startActivity(intent);
                         }
                     });
-                }else{
+                } else {
                     //只有当数据改变而不是引用改变才会执行该方法，因此不能改变引用，只改变数据内容，将list提为全局变量
                     circlesAdapter.notifyDataSetChanged();
                 }
@@ -290,7 +316,7 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                 mLv.refreshComplete();
                 initData(); //在再次获取数据并刷新ListView
             }
-        },1000);
+        }, 1000);
     }
 
     //上拉加载
@@ -303,10 +329,25 @@ public class TaoquanMineFragment extends Fragment implements UltraRefreshListene
                 loadMoreData();
                 mLv.refreshComplete();
             }
-        },1000);
+        }, 1000);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.reset(this);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==RequestCode&&resultCode==LoginActivity.ResultCode){
+            myApplication = (MyApplication) getActivity().getApplication();
+            LLNoUser.setVisibility(View.GONE);
+            mPtrFrame.setVisibility(View.VISIBLE);
+            initData();
+        }
+    }
 
 
 }

@@ -17,28 +17,30 @@
             android:layout_height="match_parent">
         <TextView
             android:id="@+id/tv_nameTop"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="jnvptlup"
-            android:textSize="20dp"
+            android:textSize="24sp"
             android:layout_centerInParent="true"
             android:gravity="center_vertical|left"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             android:layout_marginTop="27dp"
-            />
+            android:textColor="#000000"
+            android:maxLines="1"
+            android:ellipsize="end"/>
             <TextView
                 android:id="@+id/tv_tv_nameSecond"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
-                android:layout_marginTop="57dp"
-                android:text="虽然没挣到钱，但是闲鱼开心就好"
+                android:layout_marginTop="70dp"
+                android:text="虽然没挣到钱，但是开心就好"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:textColor="#c3b5b5"/>
         </FrameLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_weight="3"
             android:layout_height="match_parent">
@@ -47,17 +49,21 @@
                 android:layout_width="47dp"
                 android:layout_height="47dp"
                 android:layout_marginTop="28dp"
-                android:background="@mipmap/head"
-                android:src="@drawable/layerlist_circle_mask"
-                />
-            <ImageView
-                android:id="@+id/go"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/go"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="13dp"/>
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:scaleType="fitCenter"/>
+            <!--android:src="@drawable/layerlist_circle_mask"-->
+            <!--android:background="@mipmap/head"-->
+
+            <!--<ImageView-->
+                <!--android:id="@+id/go"-->
+                <!--android:layout_width="20dp"-->
+                <!--android:layout_height="20dp"-->
+                <!--android:src="@mipmap/go"-->
+                <!--android:layout_marginTop="40dp"-->
+                <!--android:layout_marginLeft="13dp"/>-->
+        </RelativeLayout>
     </LinearLayout>
 
     <View

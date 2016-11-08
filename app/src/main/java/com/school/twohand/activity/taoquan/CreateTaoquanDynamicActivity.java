@@ -307,7 +307,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
             //初始化选择图片后的图片控件
             initPhotoView();
             //选择图片的保存
-            shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等...");
+            shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
             shapeLoadingDialog.show();
             Thread thread = new Thread(new Runnable() {
                 @Override

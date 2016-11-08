@@ -1,281 +1,303 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:weightSum="1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="#eeeeee">
 
-    <LinearLayout
-        android:layout_weight="0.92"
-        android:layout_width="match_parent"
-        android:layout_height="0dp">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/border_style_bottom">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/publish_finish"
-            android:src="@mipmap/btn_return"
-            android:layout_centerVertical="true" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center"
-            android:text="发布"
-            android:textColor="#000000"
-            android:textSize="22sp"
-            android:textStyle="bold" />
-    </android.support.v7.widget.Toolbar>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/border_style_bottom"
-        android:paddingLeft="15dp">
-
-        <EditText
-            android:id="@+id/public_title"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/LL_bottom">
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="标题"
-            android:background="@null"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:lines="1"
-            android:maxLength="40"
-            android:layout_marginTop="15dp" />
+            android:layout_height="wrap_content">
+            <!--<android.support.v7.widget.Toolbar-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="@drawable/border_style_bottom">-->
+            <!--<ImageView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/publish_finish"-->
+            <!--android:src="@mipmap/btn_return"-->
+            <!--android:layout_centerVertical="true" />-->
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_gravity="center"-->
+            <!--android:text="发布"-->
+            <!--android:textColor="#000000"-->
+            <!--android:textSize="22sp"-->
+            <!--android:textStyle="bold" />-->
+            <!--</android.support.v7.widget.Toolbar>-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/background_gray">
+                <!--android:background="@drawable/border_style_bottom"-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="15dp"
-            android:background="#eeeeee"/>/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/publish_finish"
+                    android:src="@mipmap/btn_return"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="发布"
+                    android:textColor="#000000"
+                    android:layout_centerInParent="true"
+                    android:textSize="22dp" />
+            </RelativeLayout>
 
-        <EditText
-            android:id="@+id/public_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:gravity="top"
-            android:layout_marginTop="20dp"
-            android:hint="描述下你的闲置"
-            android:textSize="16sp"
-            android:lines="5"
-            android:maxLines="10"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_alignParentLeft="true"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/public_photo1"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            />
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/public_photo2"
-            android:scaleType="fitXY"
-            android:layout_toRightOf="@id/public_photo1"
-            android:layout_marginLeft="5dp"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            />
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_toRightOf="@id/public_photo2"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/public_photo3"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_toRightOf="@id/public_photo3"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/public_photo4"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            />
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_below="@id/public_photo4"
-            android:layout_alignParentLeft="true"
-            android:id="@+id/public_photo5"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone"
-            />
-
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@mipmap/add_photo"
-            android:layout_toRightOf="@id/public_photo5"
-            android:layout_alignTop="@+id/public_photo5"
-            android:layout_marginLeft="5dp"
-            android:id="@+id/public_photo"
-            android:scaleType="fitCenter"
-            android:layout_marginBottom="15dp"/>
-    </RelativeLayout>
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:background="@drawable/border_style_bottom">
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/publicAuction1"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="一口价"
-                android:checked="true"
-                android:layout_marginRight="25dp"/>
+                android:orientation="vertical"
+                android:background="@drawable/border_style_bottom"
+                android:paddingLeft="15dp">
 
-            <RadioButton
-                android:id="@+id/publicAuction2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="拍卖"/>
+                <EditText
+                    android:id="@+id/public_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="标题"
+                    android:background="@null"
+                    android:textSize="16sp"
+                    android:textColor="#000000"
+                    android:lines="1"
+                    android:maxLength="40"
+                    android:layout_marginTop="15dp" />
 
-        </RadioGroup>
-    </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="#eeeeee"/>/>
+
+                <EditText
+                    android:id="@+id/public_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:layout_marginTop="20dp"
+                    android:hint="描述下你的闲置"
+                    android:textSize="16sp"
+                    android:lines="5"
+                    android:maxLines="10"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_alignParentLeft="true"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:id="@+id/public_photo1"
+                        android:scaleType="fitXY"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone"
+                        />
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:id="@+id/public_photo2"
+                        android:scaleType="fitXY"
+                        android:layout_toRightOf="@id/public_photo1"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone"
+                        />
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_toRightOf="@id/public_photo2"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/public_photo3"
+                        android:scaleType="fitXY"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone"
+                        />
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_toRightOf="@id/public_photo3"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/public_photo4"
+                        android:scaleType="fitXY"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone"
+                        />
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_below="@id/public_photo4"
+                        android:layout_alignParentLeft="true"
+                        android:id="@+id/public_photo5"
+                        android:scaleType="fitXY"
+                        android:layout_marginBottom="15dp"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:src="@mipmap/add_photo"
+                        android:layout_toRightOf="@id/public_photo5"
+                        android:layout_alignTop="@+id/public_photo5"
+                        android:layout_marginLeft="5dp"
+                        android:id="@+id/public_photo"
+                        android:scaleType="fitCenter"
+                        android:layout_marginBottom="15dp"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+            <!--<LinearLayout-->
+            <!--android:layout_marginTop="15dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:gravity="center"-->
+            <!--android:background="@drawable/border_style_bottom">-->
+            <!--<RadioGroup-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal">-->
+            <!--<RadioButton-->
+            <!--android:id="@+id/publicAuction1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="一口价"-->
+            <!--android:checked="true"-->
+            <!--android:layout_marginRight="25dp"/>-->
+
+            <!--<RadioButton-->
+            <!--android:id="@+id/publicAuction2"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="拍卖"/>-->
+
+            <!--</RadioGroup>-->
+            <!--</LinearLayout>-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border_style_bottom"
+                android:weightSum="1">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="价格"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_weight="0.2"
+                    android:textColor="#000000"/>
+                <EditText
+                    android:layout_gravity="center_vertical"
+                    android:inputType="phone|number"
+                    android:id="@+id/publicPrice"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:textColor="#000000"
+                    android:hint="￥ 0.00"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border_style_bottom"
+                android:weightSum="1">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="分类"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_weight="0.2"
+                    android:textColor="#000000"/>
+                <TextView
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/publicClass"
+                    android:textSize="16sp"
+                    android:background="@null"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:hint="请选择分类"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:background="@drawable/border_style_bottom"
+                android:weightSum="1">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:text="淘圈"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:layout_weight="0.2"
+                    android:textColor="#000000"/>
+                <Spinner
+                    android:id="@+id/publicCircle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:textSize="16sp"
+                    android:gravity="center_vertical"
+                    android:layout_weight="0.8"
+                    android:layout_marginRight="15dp" />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/tv_publish_taoquan_name"
+                    android:text="淘圈名"
+                    android:layout_weight="0.8"
+                    android:gravity="center_vertical"
+                    android:textSize="16dp"
+                    android:textColor="#000000"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/border_style_bottom"
-        android:weightSum="1">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="价格"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:layout_weight="0.2"/>
-        <EditText
-            android:layout_gravity="center_vertical"
-            android:inputType="phone|number"
-            android:id="@+id/publicPrice"
-            android:textSize="20sp"
-            android:background="@null"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/border_style_bottom"
-        android:weightSum="1">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="分类"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:layout_weight="0.2"/>
-        <TextView
-            android:layout_gravity="center_vertical"
-            android:id="@+id/publicClass"
-            android:textSize="20sp"
-            android:background="@null"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"/>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal"
-        android:background="@drawable/border_style_bottom"
-        android:weightSum="1">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:text="淘圈"
-            android:gravity="center"
-            android:textSize="15sp"
-            android:layout_weight="0.2"/>
-        <Spinner
-            android:id="@+id/publicCircle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:layout_weight="0.8" />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:id="@+id/tv_publish_taoquan_name"
-            android:text="淘圈名"
-            android:layout_weight="0.8"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="40dp"
-            android:textSize="18dp"
-            android:textColor="#000000"
-            android:visibility="gone"/>
-
-    </LinearLayout>
-
-</LinearLayout>
-
-</ScrollView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.08"
+        android:layout_height="60dp"
+        android:id="@+id/LL_bottom"
         android:layout_alignParentBottom="true"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:paddingTop="3dp"
-        android:paddingBottom="8dp">
+        android:paddingTop="12dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:background="#ffffff">
         <Button
             android:id="@+id/publicSure"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:background="@color/myTheme_color"
             android:text="确定发布"
             android:textSize="20sp"
             android:textColor="#ffffff"/>
-        <!--android:background="#ff461f"-->
+        <!--android:background="#FD4442"-->
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
