@@ -104,6 +104,20 @@
             android:textSize="14dp"
             android:textColor="#ffffff"
             android:text="@string/wantTo"/>
+        <TextView
+            android:id="@+id/shengLueHao"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="30dp"
+            android:paddingRight="15dp"
+            android:background="#00ff461f"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            android:text="· · ·"
+            android:visibility="invisible"/>
     </RelativeLayout>
 
     <LinearLayout

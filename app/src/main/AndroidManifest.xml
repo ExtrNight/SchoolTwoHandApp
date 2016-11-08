@@ -114,7 +114,7 @@
 
         <activity android:name="com.school.twohand.activity.DetailGoodsActivity" />
         <activity
-            android:name="com.school.twohand.activity.ChatActivity"
+            android:name="com.school.twohand.activity.message.ChatActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity
@@ -218,8 +218,7 @@
 
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
         <activity android:name=".MainActivity" />
-        <activity android:name=".DemoActivity" />
-        <activity android:name=".GoPayActivity" />
+        <activity android:name="com.school.twohand.activity.GoPayActivity" />
         <activity
             android:name=".DemoActivity"
             android:configChanges="orientation|keyboardHidden"

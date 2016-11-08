@@ -1,6 +1,5 @@
 package com.school.twohand.fragement.homeChildFragement;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,8 +39,6 @@ import org.xutils.x;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 /**
  * Created by Administrator on 2016/9/25 0025.
@@ -261,6 +258,16 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                             like.setText("点赞"+goods.getGoodsLikes().size());
                             messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());
                             goodsText.setText(goods.getGoodsTitle()+"  "+goods.getGoodsDescribe());
+                            LinearLayout LL_bottom = viewHolder.getViewById(R.id.LL_bottom);
+                            LL_bottom.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent intent = new Intent(getContext(),DetailGoodsActivity.class);
+                                    intent.putExtra("goodsMessage",result);
+                                    intent.putExtra("position",position);
+                                    startActivity(intent);
+                                }
+                            });
                         }
                     };
                     listViewBody.setAdapter(co);

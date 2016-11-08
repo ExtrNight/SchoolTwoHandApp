@@ -317,61 +317,16 @@ public class PublicActivity extends AppCompatActivity {
         }
         //请求分类界面
         if (requestCode == REQUEST_CODE_CLASS) {
-            if(data==null){
+            if (data == null) {
                 return;
             }
-            switch (data.getStringExtra("result")) {
-                case "1":
-                    publicClass.setText("校园代步");
-                    classid = 1;
-                    break;
-                case "2":
-                    publicClass.setText("手机");
-                    classid = 2;
-                    break;
-                case "3":
-                    publicClass.setText("电脑");
-                    classid = 3;
-                    break;
-                case "4":
-                    publicClass.setText("数码配件");
-                    classid = 4;
-                    break;
-                case "5":
-                    publicClass.setText("数码");
-                    classid = 5;
-                    break;
-                case "6":
-                    publicClass.setText("电器");
-                    classid = 6;
-                    break;
-                case "7":
-                    publicClass.setText("运动健身");
-                    classid = 7;
-                    break;
-                case "8":
-                    publicClass.setText("衣物伞帽");
-                    classid = 8;
-                    break;
-                case "9":
-                    publicClass.setText("图书教材");
-                    classid = 9;
-                    break;
-                case "10":
-                    publicClass.setText("租赁");
-                    classid = 10;
-                    break;
-                case "11":
-                    publicClass.setText("生活娱乐");
-                    classid = 11;
-                    break;
-                case "12":
-                    publicClass.setText("其他");
-                    classid = 12;
-                    break;
             Integer classId = Integer.parseInt(data.getStringExtra("result"));
             classid = classId;
             publicClass.setText(classIdConvertString(classId));
+        }
+        if(requestCode==LoginRequestCode&&resultCode==LoginActivity.ResultCode){
+            //登录成功页面返回的
+            init();
         }
     }
 
@@ -382,10 +337,6 @@ public class PublicActivity extends AppCompatActivity {
         }
         if (classId == 2){
             return "手机";
-        }
-        if(requestCode==LoginRequestCode&&resultCode==LoginActivity.ResultCode){
-            //登录成功页面返回的
-            init();
         }
         if (classId == 3){
             return "电脑";
@@ -417,7 +368,6 @@ public class PublicActivity extends AppCompatActivity {
         if (classId == 12){
             return "其他";
         }
-
         return null;
     }
 

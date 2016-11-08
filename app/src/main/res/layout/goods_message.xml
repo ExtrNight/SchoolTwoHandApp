@@ -60,6 +60,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:id="@+id/LL_bottom">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp">
@@ -139,6 +145,7 @@
 
     </RelativeLayout>
 
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="12dp"

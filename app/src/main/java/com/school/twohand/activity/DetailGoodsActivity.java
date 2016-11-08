@@ -561,11 +561,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
                     Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
                     startActivity(intent);
-                } else {
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
-                    startActivityForResult(intent,0);
-                }else{
-
+                } else{
                     //弹出键盘
                     say.setFocusable(true);
                     say.setFocusableInTouchMode(true);
@@ -648,7 +644,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.message_detail, R.id.returnRel, R.id.send, R.id.like_message, R.id.iWantTo, R.id.goods_detail_finish})
-    @OnClick({R.id.message_detail, R.id.returnRel,R.id.send,R.id.like_message})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.goods_detail_finish:
@@ -658,11 +653,8 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
                     Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else{
+                } else{
                     relativeLayout.setVisibility(View.INVISIBLE);
                     sayLinearLayout.setVisibility(View.VISIBLE);
 
@@ -687,11 +679,8 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
                     Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else{
+                } else{
                     //如果输入框不为空
                     if (say.getText().toString().trim().length() != 0) {
                         say.setHint("");
@@ -763,11 +752,8 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
                     Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else {
+                } else {
                     //取消赞
                     if (likeMessage.isSelected()) {
                         RequestParams requestParams2 = new RequestParams(NetUtil.url + "ZZZZZZServlet");
