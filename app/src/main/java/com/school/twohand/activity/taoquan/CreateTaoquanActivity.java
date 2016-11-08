@@ -48,6 +48,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.CreateGroupCallback;
 
 /**
  * 创建淘圈的页面
@@ -91,14 +93,14 @@ public class CreateTaoquanActivity extends AppCompatActivity {
         ButterKnife.inject(this);
         myApplication = (MyApplication) getApplication();
         user = myApplication.getUser();
-        poiFlag=0;
+        poiFlag = 0;
 
         mLocationClient = new LocationClient(getApplicationContext());     //声明LocationClient类
         mLocationClient.registerLocationListener(myListener);    //注册监听函数
         initLocation();
     }
 
-    private void initLocation(){
+    private void initLocation() {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系
@@ -119,90 +121,141 @@ public class CreateTaoquanActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.button:  //点击提交按钮
-                String circleName = etCircleName.getText().toString();
-                String circleLabel = etCircleLabel.getText().toString();
-                String circleAddress = etCircleAddress.getText().toString();
-                if(bitmap == null){
+                final String circleName = etCircleName.getText().toString();
+                final String circleLabel = etCircleLabel.getText().toString();
+                final String circleAddress = etCircleAddress.getText().toString();
+
+
+                if (bitmap == null) {
                     Toast.makeText(CreateTaoquanActivity.this, "你还没有选择头像哦", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(circleName.equals("")){
+                if (circleName.equals("")) {
                     Toast.makeText(CreateTaoquanActivity.this, "你还没有输入淘圈名哦", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(myLatitude==0 || myLongitude==0){
+                if (myLatitude == 0 || myLongitude == 0) {
                     Toast.makeText(CreateTaoquanActivity.this, "请定位哦", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                String url = NetUtil.url + "InsertCircleServlet";
-                RequestParams requestParams = new RequestParams(url);
-                requestParams.addBodyParameter("circleUserId", user.getUserId() + "");
-                requestParams.addBodyParameter("circleName", circleName);
-                requestParams.addBodyParameter("circleLabel", circleLabel);
-                requestParams.addBodyParameter("circleAddress", circleAddress);
-                if (bitmap != null) {
-                    //如果用户设置了图片，就上传信息给服务器，若没有设置图片，则不发送图片地址的信息，服务器端会进行判断
-                    requestParams.addBodyParameter("circleImageUrl", circleImageUrl);
-                }
-                requestParams.addBodyParameter("latitude", myLatitude+"");
-                requestParams.addBodyParameter("longitude", myLongitude+"");
-
-                x.http().post(requestParams, new Callback.CommonCallback<String>() {
+                /**
+                 * 创建群的方法
+                 * groupName - 群组名称
+                 groupDesc - 群组描述
+                 callback - 回调接口
+                 */
+                JMessageClient.createGroup(circleName, circleLabel, new CreateGroupCallback() {
                     @Override
-                    public void onSuccess(final String result) {
-                        if (result.equals("default.png")) {//如果图片地址为默认地址，即用户没有选择淘圈图片，则不上传图片
-                            return;
-                        }
-                        //如果添加到服务器数据库成功，则把头像上传到服务器,服务器返回的result就是图片的服务器url地址
-                        //开子线程进行耗时操作
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                super.run();
-                                String url = NetUtil.url + "CircleImageServlet";
-                                RequestParams requestParams = new RequestParams(url);
-//                              //1、获取sd卡目录
-//                              File sdFile = Environment.getExternalStorageDirectory();
-//                              //2、获取文件完整目录
-//                              File imageFile = new File(sdFile+"/xiaoyuanershou/image/circleImage.png");
+                    public void gotResult(int i, String s, long l) {
+                        if (i == 0) {
+                            //存入数据库群聊表 存入的字段有：创建者id，和群号
+                            Log.i("gotResult", "gotResult: " + l);//群号
+                            RequestParams requ = new RequestParams(NetUtil.url + "AddGroupServlet");
+                            //将创建者id和群号包装好
+                            requ.addQueryStringParameter("groupMainUserId", user.getUserId() + "");
+                            requ.addQueryStringParameter("groupNumber", l + "");
+                            //访问服务器，添加新建的群
+                            x.http().get(requ, new Callback.CommonCallback<String>() {
+                                @Override
+                                public void onSuccess(String result) {
+                                    String url = NetUtil.url + "InsertCircleServlet";
+                                    RequestParams requestParams = new RequestParams(url);
+                                    requestParams.addBodyParameter("circleUserId", user.getUserId() + "");
+                                    requestParams.addBodyParameter("circleName", circleName);
+                                    requestParams.addBodyParameter("circleLabel", circleLabel);
+                                    requestParams.addBodyParameter("circleAddress", circleAddress);
+
+                                    if (bitmap != null) {
+                                        //如果用户设置了图片，就上传信息给服务器，若没有设置图片，则不发送图片地址的信息，服务器端会进行判断
+                                        requestParams.addBodyParameter("circleImageUrl", circleImageUrl);
+                                    }
+                                    requestParams.addBodyParameter("latitude", myLatitude + "");
+                                    requestParams.addBodyParameter("longitude", myLongitude + "");
+
+                                    x.http().post(requestParams, new Callback.CommonCallback<String>() {
+                                        @Override
+                                        public void onSuccess(final String result) {
+                                            if (result.equals("default.png")) {//如果图片地址为默认地址，即用户没有选择淘圈图片，则不上传图片
+                                                return;
+                                            }
+                                            //如果添加到服务器数据库成功，则把头像上传到服务器,服务器返回的result就是图片的服务器url地址
+                                            //开子线程进行耗时操作
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    super.run();
+                                                    String url = NetUtil.url + "CircleImageServlet";
+                                                    RequestParams requestParams = new RequestParams(url);
+                                                    //
+                                                    // 1、获取sd卡目录
+                                                    //  File sdFile = Environment.getExternalStorageDirectory();
+//                                                   //2、获取文件完整目录
+//                                                  File imageFile = new File(sdFile+"/xiaoyuanershou/image/circleImage.png");
 //
-                                //将文件上传到服务器
-                                requestParams.setMultipart(true);  //指定上传文件格式
-                                requestParams.addBodyParameter("circleImage", circleImageFile);
-                                requestParams.addBodyParameter("circleImageUrl", result);
-                                x.http().post(requestParams, new CommonCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        if (circleImageFile.exists()) {
-                                            circleImageFile.delete();//删除文件，不占用用户存储空间
-                                        }
-                                    }
-                                    @Override
-                                    public void onError(Throwable ex, boolean isOnCallback) {
-                                    }
-                                    @Override
-                                    public void onCancelled(CancelledException cex) {
-                                    }
-                                    @Override
-                                    public void onFinished() {
-                                    }
-                                });
-                            }
-                        }.start();
+                                                    //将文件上传到服务器
+                                                    requestParams.setMultipart(true);  //指定上传文件格式
+                                                    requestParams.addBodyParameter("circleImage", circleImageFile);
+                                                    requestParams.addBodyParameter("circleImageUrl", result);
+                                                    x.http().post(requestParams, new CommonCallback<String>() {
+                                                        @Override
+                                                        public void onSuccess(String result) {
+                                                            if (circleImageFile.exists()) {
+                                                                circleImageFile.delete();//删除文件，不占用用户存储空间
+                                                            }
+                                                        }
 
-                        Toast.makeText(CreateTaoquanActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
-                        finish();
-                    }
-                    @Override
-                    public void onError(Throwable ex, boolean isOnCallback) {
-                        Toast.makeText(CreateTaoquanActivity.this, "创建失败,请检查你的网络设置", Toast.LENGTH_SHORT).show();
-                    }
-                    @Override
-                    public void onCancelled(CancelledException cex) {
-                    }
-                    @Override
-                    public void onFinished() {
+                                                        @Override
+                                                        public void onError(Throwable ex, boolean isOnCallback) {
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(CancelledException cex) {
+                                                        }
+
+                                                        @Override
+                                                        public void onFinished() {
+                                                        }
+                                                    });
+                                                }
+                                            }.start();
+
+                                            Toast.makeText(CreateTaoquanActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable ex, boolean isOnCallback) {
+                                            Toast.makeText(CreateTaoquanActivity.this, "创建失败,请检查你的网络设置", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(CancelledException cex) {
+                                        }
+
+                                        @Override
+                                        public void onFinished() {
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(Throwable ex, boolean isOnCallback) {
+
+                                }
+
+                                @Override
+                                public void onCancelled(CancelledException cex) {
+
+                                }
+
+                                @Override
+                                public void onFinished() {
+
+                                }
+                            });
+
+                        }
                     }
                 });
                 break;
@@ -239,23 +292,23 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                 break;
             case R.id.iv_location:
                 mLocationClient.start();  //开始定位
-                if(isFirstClickLocation){ //如果是第一次点击定位，则后面不执行
+                if (isFirstClickLocation) { //如果是第一次点击定位，则后面不执行
                     isFirstClickLocation = false;
                     poiFlag++;
                     return;
                 }
-                String poi ="";
+                String poi = "";
                 if (poiList != null) {
                     int poiSize = poiList.size();
-                    if(poiFlag!=poiSize){  //不是poiList里的最后一个poi的后一个
-                        poi=poiList.get(poiFlag).getName();
+                    if (poiFlag != poiSize) {  //不是poiList里的最后一个poi的后一个
+                        poi = poiList.get(poiFlag).getName();
                         poiFlag++;
-                    }else { //是poiList里的最后一个poi的后一个
-                        poi="";
+                    } else { //是poiList里的最后一个poi的后一个
+                        poi = "";
                         poiFlag = 0;
                     }
                 }
-                etCircleAddress.setText(myLocation.getAddrStr().replace("中国","")+poi);
+                etCircleAddress.setText(myLocation.getAddrStr().replace("中国", "") + poi);
                 break;
         }
     }
@@ -419,16 +472,15 @@ public class CreateTaoquanActivity extends AppCompatActivity {
             myLongitude = location.getLongitude(); //经度
             poiList = location.getPoiList();// POI数据
 
-            etCircleAddress.setText(myLocation.getAddrStr().replace("中国","")+poiList.get(0).getName());
+            etCircleAddress.setText(myLocation.getAddrStr().replace("中国", "") + poiList.get(0).getName());
         }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        poiFlag=0;
+        poiFlag = 0;
     }
-
 
 
 }

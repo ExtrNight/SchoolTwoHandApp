@@ -85,6 +85,23 @@
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
             android:visibility="gone"/>
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/image_d_m"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/image_e_m"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+            android:visibility="gone"/>
 
     </LinearLayout>
 

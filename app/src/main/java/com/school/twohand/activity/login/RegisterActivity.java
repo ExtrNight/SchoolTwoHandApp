@@ -11,7 +11,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.school.twohand.entity.User;
 import com.school.twohand.schooltwohandapp.R;
+import com.school.twohand.utils.NetUtil;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
@@ -63,11 +70,44 @@ public class RegisterActivity extends AppCompatActivity {
                            @Override
                            public void gotResult(int i, String s) {
                                if (i == 0 ){
-                                   pdialog.cancel();
-                                   Intent intent = new Intent();
-                                   intent.putExtra("userName",name);
-                                   setResult(RESULT_OK,intent);
-                                   finish();
+                                   //也在自己的服务器上插入注册账号密码
+                                   RequestParams requestParams = new RequestParams(NetUtil.url+"RegisterServlet");
+                                   User user = new User();
+                                   user.setUserAccount(name);
+                                   user.setUserPassword(password);
+                                   Gson gson = new Gson();
+                                   String userString = gson.toJson(user);
+                                   requestParams.addBodyParameter("user",userString);
+                                   x.http().post(requestParams, new Callback.CommonCallback<String>() {
+                                       @Override
+                                       public void onSuccess(String result) {
+                                           if (result!=null) {
+                                               pdialog.cancel();
+                                               Intent intent = new Intent();
+                                               intent.putExtra("userName", name);
+                                               intent.putExtra("userId",result);
+                                               setResult(RESULT_OK, intent);
+                                               finish();
+                                           }else {
+                                               Toast.makeText(RegisterActivity.this, "注册失败请重试", Toast.LENGTH_SHORT).show();
+                                           }
+                                       }
+
+                                       @Override
+                                       public void onError(Throwable ex, boolean isOnCallback) {
+
+                                       }
+
+                                       @Override
+                                       public void onCancelled(CancelledException cex) {
+
+                                       }
+
+                                       @Override
+                                       public void onFinished() {
+
+                                       }
+                                   });
                                }else {
                                    pdialog.cancel();
                                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();

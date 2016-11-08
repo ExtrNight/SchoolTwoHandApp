@@ -1,6 +1,7 @@
 package com.school.twohand.fragement;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.google.gson.Gson;
+import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.DemoActivity;
 import com.school.twohand.schooltwohandapp.R;
@@ -38,10 +41,12 @@ import cn.jpush.im.android.api.JMessageClient;
 
 import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
+import cn.jpush.im.android.api.enums.ConversationType;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
 
 /**
  * Created by Administrator on 2016/9/20 0020.
@@ -89,9 +94,30 @@ public class MessageFragement extends Fragment {
 
         //获取application对象
         exampleApplication = (MyApplication) getActivity().getApplication();
-        if (JMessageClient.getConversationList()!=null){
-            conver = JMessageClient.getConversationList();
+
+        //从本地取用户信息
+        /*
+        同样根据Context对象获取SharedPreference对象；
+        直接使用SharedPreference的getXXX(key)方法获取数据。
+         */
+        SharedPreferences sp = getActivity().getSharedPreferences("USER",getActivity().MODE_PRIVATE);
+        String userString = sp.getString("user",null);
+        Log.i("MyApplication", "onCreate: "+userString);
+        if (userString!=null){
+            Gson gson = new Gson();
+            User user = gson.fromJson(userString,User.class);
+            exampleApplication.setUser(user);
+            JMessageClient.login(user.getUserAccount(), user.getUserPassword(), new BasicCallback() {
+                @Override
+                public void gotResult(int i, String s) {
+                    if (JMessageClient.getConversationList()!=null){
+                        conver = JMessageClient.getConversationList();
+                        initMessage();
+                    }
+                }
+            });
         }
+
 
         //定时
         dingShi(getView());
@@ -99,7 +125,7 @@ public class MessageFragement extends Fragment {
         //注册监听，监听有没有人发消息
         JMessageClient.registerEventReceiver(this);
 
-        initMessage();
+
         return view;
 
     }
@@ -108,6 +134,7 @@ public class MessageFragement extends Fragment {
      * 将messages中的数据展示到listview
      */
     public void initMessage() {
+        Log.i("MessageFragement", "initMessage: "+conver);
         if (conver!=null) {
             if (commonAdapter == null) {
                 commonAdapter = new CommonAdapter<Conversation>(getActivity(), conver, R.layout.message_user_item) {
@@ -116,45 +143,47 @@ public class MessageFragement extends Fragment {
                         //Conversation{type=single, targetId='18906992571', latestText='明年', latestType=text, lastMsgDate=1478252235004, unReadMsgCnt=2, msgTableName='msg337395036', targetAppkey='530b86b0928b7315c440867b'}
                         //Log.i("message", "usermessage: " + conversation);
                         //找控件
-                        final ImageView head = viewHolder.getViewById(R.id.messageUserHead);//用户头像
-                        final TextView userName = viewHolder.getViewById(R.id.messageUserName);//用户名
-                        TextView lastMessage = viewHolder.getViewById(R.id.lastMessageContent);//最后一条消息内容
-                        TextView time = viewHolder.getViewById(R.id.timeText);//时间显示
-                        TextView messageNumber = viewHolder.getViewById(R.id.messageNumber);//消息数量
-                        CircleImageView circleImageView = viewHolder.getViewById(R.id.circle);//红圆圈
-                        //给控件赋值
+                        if (conversation.getType()==ConversationType.single) {
+                            final ImageView head = viewHolder.getViewById(R.id.messageUserHead);//用户头像
+                            final TextView userName = viewHolder.getViewById(R.id.messageUserName);//用户名
+                            TextView lastMessage = viewHolder.getViewById(R.id.lastMessageContent);//最后一条消息内容
+                            TextView time = viewHolder.getViewById(R.id.timeText);//时间显示
+                            TextView messageNumber = viewHolder.getViewById(R.id.messageNumber);//消息数量
+                            CircleImageView circleImageView = viewHolder.getViewById(R.id.circle);//红圆圈
+                            //给控件赋值
 
-                        //获取对话列表用户信息,用户头像赋值,用户昵称赋值
-                        String userId = conversation.getTargetId();
-                        JMessageClient.getUserInfo(userId, new GetUserInfoCallback() {
-                            @Override
-                            public void gotResult(int i, String s, UserInfo userInfo) {
-                                if (i == 0) {
-                                    userName.setText(userInfo.getNickname());
-                                    userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
-                                        @Override
-                                        public void gotResult(int i, String s, Bitmap bitmap) {
-                                            if (i == 0) {
-                                                //获取到头像
-                                                head.setImageBitmap(bitmap);
+                            //获取对话列表用户信息,用户头像赋值,用户昵称赋值
+                            String userId = conversation.getTargetId();
+                            JMessageClient.getUserInfo(userId, new GetUserInfoCallback() {
+                                @Override
+                                public void gotResult(int i, String s, UserInfo userInfo) {
+                                    if (i == 0) {
+                                        userName.setText(userInfo.getNickname());
+                                        userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
+                                            @Override
+                                            public void gotResult(int i, String s, Bitmap bitmap) {
+                                                if (i == 0) {
+                                                    //获取到头像
+                                                    head.setImageBitmap(bitmap);
+                                                }
                                             }
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
+                            });
+                            //最后一条聊天记录
+                            lastMessage.setText(conversation.getLatestText());
+                            //最后一条聊天记录的时间
+                            time.setText(passTime(conversation.getLastMsgDate()));
+                            //未回复的消息数量
+                            if (conversation.getUnReadMsgCnt() == 0) {
+                                circleImageView.setVisibility(View.INVISIBLE);
+                                messageNumber.setVisibility(View.INVISIBLE);
+                            } else {
+                                circleImageView.setVisibility(View.VISIBLE);
+                                messageNumber.setVisibility(View.VISIBLE);
+                                messageNumber.setText(conversation.getUnReadMsgCnt() + "");
                             }
-                        });
-                        //最后一条聊天记录
-                        lastMessage.setText(conversation.getLatestText());
-                        //最后一条聊天记录的时间
-                        time.setText(passTime(conversation.getLastMsgDate()));
-                        //未回复的消息数量
-                        if (conversation.getUnReadMsgCnt()==0){
-                            circleImageView.setVisibility(View.INVISIBLE);
-                            messageNumber.setVisibility(View.INVISIBLE);
-                        }else {
-                            circleImageView.setVisibility(View.VISIBLE);
-                            messageNumber.setVisibility(View.VISIBLE);
-                            messageNumber.setText(conversation.getUnReadMsgCnt() + "");
                         }
                     }
                 };
@@ -187,13 +216,15 @@ public class MessageFragement extends Fragment {
     public void onEventMainThread(MessageEvent event) {
         Message msg = event.getMessage();
         switch (msg.getContentType()) {
+
             case text:
-                conver.clear();
-                conver.addAll(JMessageClient.getConversationList());
-                //commonAdapter = null;
-                initMessage();
-                Log.i("conver", "onEventMainThread: zhixing");
-                break;
+                if (msg.getTargetType()== ConversationType.single){
+                    conver.clear();
+                    conver.addAll(JMessageClient.getConversationList());
+                    //commonAdapter = null;
+                    initMessage();
+                    break;
+                }
         }
     }
 

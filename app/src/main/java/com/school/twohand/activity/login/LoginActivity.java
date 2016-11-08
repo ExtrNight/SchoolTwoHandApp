@@ -44,12 +44,20 @@ public class LoginActivity extends AppCompatActivity {
     String userAccount;
     String passwordString;
     MyApplication myApplication;
+    String userId = null;
     static final int CODE = 10;//去注册界面的请求码
     public static final int ResultCode = 100;   //登录成功的结果码
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //登录临时的用户
+        JMessageClient.login("1111", "1111", new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+                Log.i("headImage", "gotResult: " + i);
+            }
+        });
         //找控件
         userName = (EditText) findViewById(R.id.userName);
         password = (EditText) findViewById(R.id.userPassword);
@@ -79,6 +87,15 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                //登录临时的用户
+                if (JMessageClient.getMyInfo()==null) {
+                    JMessageClient.login("1111", "1111", new BasicCallback() {
+                        @Override
+                        public void gotResult(int i, String s) {
+                            Log.i("headImage", "gotResult: " + i);
+                        }
+                    });
+                }
                 //判断该用户有没有头像
                 /*
                 public abstract void getAvatarBitmap(GetAvatarBitmapCallback callback)
@@ -86,9 +103,11 @@ public class LoginActivity extends AppCompatActivity {
                 所有的缩略头像bitmap在sdk内都会缓存， 并且会有清理机制，所以上层不需要对缩略头像bitmap做缓存。
                 */
                 String name = s.toString();//当前输入账户
+                Log.i("headImage", "gotResult: "+name);
                 JMessageClient.getUserInfo(name, new GetUserInfoCallback() {
                     @Override
                     public void gotResult(int i, String s, UserInfo userInfo) {
+                        Log.i("headImage", "gotResult: "+i+userInfo);
                         if (i == 0){//获取用户信息
                             userInfo.getAvatarBitmap(new GetAvatarBitmapCallback() {
                                 @Override
@@ -96,6 +115,7 @@ public class LoginActivity extends AppCompatActivity {
                                     if (i == 0){//获取头像
                                         headImage.setImageBitmap(bitmap);
                                     }
+                                    Log.i("headImage", "gotResult: "+i+ "==="+bitmap);
                                 }
                             });
                         }else{
@@ -126,6 +146,7 @@ public class LoginActivity extends AppCompatActivity {
                     JMessageClient.login(userAccount, passwordString, new BasicCallback() {
                         @Override
                         public void gotResult(int i, String s) {
+                            Log.i("login", "gotResult: "+userAccount+passwordString);
                             if (i==0){
                                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                                 pdilog.cancel();
@@ -140,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                                         if (userInfo.getNickname().trim().length() == 0||userInfo.getAvatar()== null){
                                             pdilog1.cancel();
                                             Intent intent = new Intent(LoginActivity.this,FixProfileActivity.class);
+                                            intent.putExtra("userId",userId);
                                             startActivity(intent);
                                         }else{
                                             pdilog1.cancel();
@@ -170,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     SharedPreferences.Editor editor = sp.edit();
                                                     editor.putString("user",result);
                                                     editor.commit();
+                                                    finish();
                                                 }
 
                                                 @Override
@@ -216,6 +239,18 @@ public class LoginActivity extends AppCompatActivity {
             String name = data.getStringExtra("userName");
             Log.i("requestCode", "onActivityResult: "+name);
             userName.setText(name);
+            //返回的userId
+            userId = data.getStringExtra("userId");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (JMessageClient.getMyInfo()!=null) {
+            if (JMessageClient.getMyInfo().getUserName().equals("1111")) {
+                JMessageClient.logout();
+            }
         }
     }
 
