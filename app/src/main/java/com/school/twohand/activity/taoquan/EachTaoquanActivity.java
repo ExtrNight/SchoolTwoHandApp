@@ -34,12 +34,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
 import com.school.twohand.customview.EachTaoquanListView;
 import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.Goods;
+import com.school.twohand.entity.Group;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryGoodsBean;
@@ -60,6 +62,10 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetGroupInfoCallback;
+import cn.jpush.im.android.api.model.GroupInfo;
+import cn.jpush.im.api.BasicCallback;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -108,6 +114,9 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
     AlphaAnimation alphaAnimationTo0;      //透明度变化，由不透明到全透明
     AnimationSet animationSetPublish;  //组合动画，点击发布开始动画
 
+
+    //群id
+    Long groupId = 0L;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,6 +127,8 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
         initView();
         initData();
         initAnimation();
+        //获取群id，初始化
+        groupNumber(amoyCircle.getCircleUserId());
         initEvent();
 
     }
@@ -553,7 +564,20 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_bottom_joinCircle:  //加入淘圈
-                joinCircle(user.getUserId(), amoyCircle.getCircleId());
+                JMessageClient.logout();//用户先退出
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // 写子线程中的操作
+                        try {
+                            Thread.sleep(500);
+                            joinCircle(user.getUserId(), amoyCircle.getCircleId());
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
                 break;
             case R.id.btn_bottom_publish: //发布
                 btnBottomPublish.startAnimation(animationSetPublish);//点击发布后开始动画，然后跳转到发布页面
@@ -580,7 +604,19 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        quitCircle(user.getUserId(), amoyCircle.getCircleId());
+                                        JMessageClient.logout();//用户先退出
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                // 写子线程中的操作
+                                                try {
+                                                    Thread.sleep(500);
+                                                    quitCircle(user.getUserId(), amoyCircle.getCircleId());
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }).start();
                                     }
                                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -628,6 +664,17 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                 getGoodsData(queryGoodsBean);
                 break;
             case R.id.LL_2:
+                Log.i("groupId", "onClick: "+groupId);
+
+                //传入群号？？？
+                if (groupId!=0) {
+                    Intent intent4 = new Intent(this,QunLiaoActivity.class);
+
+                    intent4.putExtra("groupId",groupId+"");
+                    JMessageClient.enterGroupConversation(groupId);
+                    startActivity(intent4);
+                }
+
                 break;
             case R.id.LL_3: //跳转到动态页面
                 Intent intent3 = new Intent(this, TaoquanDynamicActivity.class);
@@ -640,6 +687,75 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
     //加入淘圈，需要参数：用户Id，所加入淘圈Id
     private void joinCircle(int userId, int circleId) {
+       /*
+       public static void addGroupMembers(long groupID,
+        java.util.List<java.lang.String> userNameList,
+        cn.jpush.im.api.BasicCallback callback)
+        向群组中添加成员。本方法所有传入的username,会默认在本应用下查找, 若要跨应用添加其他用户请使用addGroupMembers(long, String, List, BasicCallback)
+        参数:
+        groupID - 群组的groupID
+        userNameList - 添加进群组的成员username集合
+        callback - 回调接口*/
+
+        final List<String> userNames = new ArrayList<>();
+        //查群主账号密码
+        RequestParams requestParams1 = new RequestParams(NetUtil.url + "QueryInfoServlet");
+        requestParams1.addQueryStringParameter("userId", amoyCircle.getCircleUserId()+"");
+        x.http().get(requestParams1, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson=new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                User MainUser = gson.fromJson(result,User.class);
+                //登录圈主账号
+                JMessageClient.login(MainUser.getUserAccount(),MainUser.getUserPassword(), new BasicCallback() {
+                    @Override
+                    public void gotResult(int i, String s) {
+                        if (i == 0){
+                            userNames.add(myApplication.getUser().getUserAccount());
+                            Log.i("添加成员", "joinCircle: "+groupId+"___"+userNames.get(0));
+                            JMessageClient.addGroupMembers(groupId,"530b86b0928b7315c440867b",userNames, new BasicCallback() {
+                                @Override
+                                public void gotResult(int i, String s) {
+                                    Log.i("添加成员",i+"---"+ s);
+                                    if (i == 0){
+                                        Log.i("添加成员", "gotResult:成功 ");
+                                        JMessageClient.logout();
+                                        JMessageClient.login(myApplication.getUser().getUserAccount(),myApplication.getUser().getUserPassword(), new BasicCallback() {
+                                            @Override
+                                            public void gotResult(int i, String s) {
+                                                if (i == 0){
+                                                    Log.i("添加成员", "重新登录 ");
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
+
         RequestParams requestParams = new RequestParams(NetUtil.url + "JoinCircleServlet");
         requestParams.addQueryStringParameter("userId", userId + "");
         requestParams.addQueryStringParameter("circleId", circleId + "");
@@ -671,6 +787,75 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
     //退出淘圈，需要参数：用户Id，所加入淘圈Id
     private void quitCircle(int userId, int circleId) {
+        /*
+        public static void removeGroupMembers(long groupID,
+        java.lang.String appKey,
+        java.util.List<java.lang.String> userNameList,
+        cn.jpush.im.api.BasicCallback callback)
+        踢出群组中成员,通过指定appKey可以实现跨应用踢出群组成员
+        参数:
+        groupID - 群组的groupID
+        appKey - 指定的appKey,如果appKey为空则在本应用appKey下查找用户
+        userNameList - 踢出群组成员的username集合
+        callback - 回调接口
+        */
+        final List<String> userNames = new ArrayList<>();
+        //查群主账号密码
+        RequestParams requestParams1 = new RequestParams(NetUtil.url + "QueryInfoServlet");
+        requestParams1.addQueryStringParameter("userId", amoyCircle.getCircleUserId()+"");
+        x.http().get(requestParams1, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson=new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                User MainUser = gson.fromJson(result,User.class);
+                //登录圈主账号
+                JMessageClient.login(MainUser.getUserAccount(), MainUser.getUserPassword(), new BasicCallback() {
+                    @Override
+                    public void gotResult(int i, String s) {
+                        if (i == 0) {
+                            userNames.add(myApplication.getUser().getUserAccount());
+                            Log.i("添加成员", "joinCircle: " + groupId + "___" + userNames.get(0));
+                            JMessageClient.removeGroupMembers(groupId, "530b86b0928b7315c440867b", userNames, new BasicCallback() {
+                                @Override
+                                public void gotResult(int i, String s) {
+                                    Log.i("添加成员",i+"---"+ s);
+                                    if (i == 0){
+                                        Log.i("添加成员", "gotResult:成功 ");
+                                        JMessageClient.logout();
+                                        JMessageClient.login(myApplication.getUser().getUserAccount(),myApplication.getUser().getUserPassword(), new BasicCallback() {
+                                            @Override
+                                            public void gotResult(int i, String s) {
+                                                if (i == 0){
+                                                    Log.i("添加成员", "重新登录 ");
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+
+
         RequestParams requestParams = new RequestParams(NetUtil.url + "QuitCircleServlet");
         requestParams.addQueryStringParameter("userId", userId + "");
         requestParams.addQueryStringParameter("circleId", circleId + "");
@@ -699,6 +884,48 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
             }
         });
     }
+    private void groupNumber(Integer userId){
+        //根据userId 查询q对应群号集合，根据群号查询群名，根据群名是否跟当前群名相同判断返回的群号
+        RequestParams requestParams = new RequestParams(NetUtil.url+"QuestGroupServlet");
+        requestParams.addQueryStringParameter("groupMainUserId",userId+"");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson = new Gson();
+                List<Group> groups = gson.fromJson(result,new TypeToken<List<Group>>(){}.getType());
+                for (int i = 0 ;i < groups.size(); i++){
+                    String groupNumber = groups.get(i).getGroupNumber();
+                    JMessageClient.getGroupInfo(Long.parseLong(groupNumber), new GetGroupInfoCallback() {
+                        @Override
+                        public void gotResult(int i, String s, GroupInfo groupInfo) {
+                            if (i == 0){
+                                if (groupInfo.getGroupName().equals(amoyCircle.getCircleName())) {
+                                    groupId = groupInfo.getGroupID();
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

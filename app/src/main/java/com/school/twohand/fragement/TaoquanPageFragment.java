@@ -1,12 +1,14 @@
 package com.school.twohand.fragement;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,13 +22,19 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 
 
+import com.google.gson.Gson;
 import com.school.twohand.activity.taoquan.SearchActivity;
+import com.school.twohand.entity.User;
 import com.school.twohand.fragement.taoquan.TaoquanDiscoveryFragment;
 import com.school.twohand.fragement.taoquan.TaoquanMineFragment;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 
 /** 淘圈页面的fragment
  * Created by yang on 2016/9/19 0019.
@@ -42,10 +50,11 @@ public class TaoquanPageFragment extends Fragment {
 
     TranslateAnimation translateToRight; //向右平移的动画
     TranslateAnimation translateToLeft;  //向左平移的动画
-
+    MyApplication exampleApplication;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.taoquan_page_fragment,null);
         ll_top_taoquan = (RelativeLayout) v.findViewById(R.id.ll_top_taoquan);
         vp = (ViewPager) v.findViewById(R.id.vp);
@@ -158,3 +167,34 @@ public class TaoquanPageFragment extends Fragment {
     }
 
 }
+
+
+/*
+exampleApplication = (MyApplication) getActivity().getApplication();
+        //从本地取用户信息
+        */
+/*
+        同样根据Context对象获取SharedPreference对象；
+        直接使用SharedPreference的getXXX(key)方法获取数据。
+         *//*
+
+        SharedPreferences sp = getActivity().getSharedPreferences("USER",getActivity().MODE_PRIVATE);
+        String userString = sp.getString("user",null);
+        Log.i("MyApplication", "onCreate: "+userString);
+        if (userString!=null){
+        Gson gson = new Gson();
+        User user = gson.fromJson(userString,User.class);
+        exampleApplication.setUser(user);
+        if (JMessageClient.getMyInfo()==null) {
+        JMessageClient.login(user.getUserAccount(), user.getUserPassword(), new BasicCallback() {
+@Override
+public void gotResult(int i, String s) {
+        if (i == 0) {
+
+        }
+        }
+        });
+        }else{
+
+        }
+        }*/

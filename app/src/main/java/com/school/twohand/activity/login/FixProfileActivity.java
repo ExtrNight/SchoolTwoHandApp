@@ -19,6 +19,11 @@ import android.widget.Toast;
 
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CircleImageView;
+import com.school.twohand.utils.NetUtil;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -104,31 +109,63 @@ public class FixProfileActivity extends AppCompatActivity {
                 pdilog.setMessage("上传个人资料中。。。");
                 pdilog.show();
                 if (img!=null&&mNickNameEt.getText().toString()!=null){
-                    JMessageClient.updateUserAvatar(img, new BasicCallback() {
+                    RequestParams params = new RequestParams(NetUtil.url + "UploadHeadImageServlet");
+                    params.setMultipart(true);
+                    params.addBodyParameter("file",img);
+                    params.addBodyParameter("nickname",mNickNameEt.getText().toString());
+                    params.addBodyParameter("userId",getIntent().getStringExtra("userId"));
+                    x.http().post(params, new Callback.CommonCallback<Boolean>() {
                         @Override
-                        public void gotResult(int i, String s) {
-                            if (i == 0){
-                                Toast.makeText(FixProfileActivity.this, "头像传送成功", Toast.LENGTH_SHORT).show();
-                                JMessageClient.getMyInfo().setNickname(mNickNameEt.getText().toString());
-                                JMessageClient.updateMyInfo(UserInfo.Field.nickname, JMessageClient.getMyInfo(), new BasicCallback() {
+                        public void onSuccess(Boolean result) {
+                            if (result){
+                                //极光服务器更新你的头像和昵称
+                                JMessageClient.updateUserAvatar(img, new BasicCallback() {
                                     @Override
                                     public void gotResult(int i, String s) {
-                                        pdilog.cancel();
                                         if (i == 0){
-                                            Toast.makeText(FixProfileActivity.this, "用户名更新", Toast.LENGTH_SHORT).show();
-                                            finish();
+                                            Toast.makeText(FixProfileActivity.this, "头像传送成功", Toast.LENGTH_SHORT).show();
+                                            JMessageClient.getMyInfo().setNickname(mNickNameEt.getText().toString());
+                                            JMessageClient.updateMyInfo(UserInfo.Field.nickname, JMessageClient.getMyInfo(), new BasicCallback() {
+                                                @Override
+                                                public void gotResult(int i, String s) {
+                                                    pdilog.cancel();
+                                                    if (i == 0){
+
+                                                        Toast.makeText(FixProfileActivity.this, "用户名更新", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                    }else{
+                                                        Toast.makeText(FixProfileActivity.this, "用户名更新失败", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                         }else{
-                                            Toast.makeText(FixProfileActivity.this, "用户名更新失败", Toast.LENGTH_SHORT).show();
+                                            pdilog.cancel();
+                                            Toast.makeText(FixProfileActivity.this, "头像传送失败", Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 });
-                            }else{
-                                pdilog.cancel();
-                                Toast.makeText(FixProfileActivity.this, "头像传送失败", Toast.LENGTH_SHORT).show();
                             }
+
+                        }
+
+                        @Override
+                        public void onError(Throwable ex, boolean isOnCallback) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(CancelledException cex) {
+
+                        }
+
+                        @Override
+                        public void onFinished() {
+
                         }
                     });
-                }else if(mNickNameEt.getText().toString()!=null&& JMessageClient.getMyInfo().getAvatar()!=null){
+
+
+                }/*else if(mNickNameEt.getText().toString()!=null&& JMessageClient.getMyInfo().getAvatar()!=null){
                     JMessageClient.getMyInfo().setNickname(mNickNameEt.getText().toString());
                     JMessageClient.updateMyInfo(UserInfo.Field.nickname, JMessageClient.getMyInfo(), new BasicCallback() {
                         @Override
@@ -143,7 +180,7 @@ public class FixProfileActivity extends AppCompatActivity {
 
                         }
                     });
-                }
+                }*/
 
             }
         });

@@ -3,6 +3,7 @@ package com.school.twohand.fragement;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,9 +15,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.school.twohand.activity.MyAuctionActivity;
 import com.school.twohand.activity.MyBuyActivity;
@@ -28,7 +31,11 @@ import com.school.twohand.activity.MySellActivity;
 import com.school.twohand.activity.NumberAttentionActivity;
 import com.school.twohand.activity.NumberFansActivity;
 import com.school.twohand.activity.NumberPriaseActivity;
+import com.school.twohand.activity.login.LoginActivity;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
+
+import cn.jpush.im.android.api.JMessageClient;
 
 /**
  * Created by Administrator on 2016/9/20 0020.
@@ -44,6 +51,8 @@ public class MeFragement extends Fragment implements MyScrollView.OnScrollListen
     FrameLayout numberAttention;
     FrameLayout numberFans;
     LinearLayout myInfor;
+    Button login;
+    Button exit;
 
     private MyScrollView myScrollView;
     private LinearLayout mNameLayout;
@@ -96,6 +105,33 @@ public class MeFragement extends Fragment implements MyScrollView.OnScrollListen
         numberAttention = (FrameLayout) view.findViewById(R.id.fl_sum2);
         numberFans = (FrameLayout) view.findViewById(R.id.fl_sum3);
         myInfor = (LinearLayout) view.findViewById(R.id.li_nameTop);
+
+        //登录按钮点击
+        login = (Button) view.findViewById(R.id.login);
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),LoginActivity.class);
+                startActivityForResult(intent,0);
+            }
+        });
+
+        //退出按钮点击
+        exit = (Button)view.findViewById(R.id.exit);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //清空本地存储的User对象
+                SharedPreferences sp = getActivity().getSharedPreferences("USER",getActivity().MODE_PRIVATE);
+                SharedPreferences.Editor editor = sp.edit();
+                editor.clear();
+                editor.commit();
+                MyApplication myApplication = (MyApplication) getActivity().getApplication();
+                myApplication.setUser(null);
+                JMessageClient.logout();
+                Toast.makeText(getActivity(), "退出成功", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         release.setOnClickListener(new View.OnClickListener() {
             @Override

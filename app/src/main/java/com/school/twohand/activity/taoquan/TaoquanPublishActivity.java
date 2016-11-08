@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.king.photo_library.ImagesSelectorActivity;
 import com.king.photo_library.SelectorSettings;
 import com.school.twohand.activity.GoodsClassActivity;
@@ -480,7 +481,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         for (int i = 0; i < files.size(); i++) {
             params.addBodyParameter("file" + i, files.get(i));
         }
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         String goodsString = gson.toJson(goods);
         params.addBodyParameter("goods", goodsString);
         x.http().post(params, new Callback.CommonCallback<String>() {

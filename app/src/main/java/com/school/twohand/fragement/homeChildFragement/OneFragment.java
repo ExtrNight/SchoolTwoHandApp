@@ -194,8 +194,23 @@ public class OneFragment extends Fragment {
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
                         goodsPrice.setText("￥"+goods.getGoodsPrice()+"");
-                        userSchool.setText("贵校丶"+goods.getGoodsUserSchoolName());
-                        amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
+
+                        userSchool.setVisibility(View.GONE);
+                        if(goods.getGoodsUserSchoolName()!=null){
+                            userSchool.setVisibility(View.VISIBLE);
+                            userSchool.setText("来自 "+goods.getGoodsUserSchoolName());
+                        }else{
+                            if(goods.getGoodsUser().getUserSchoolName()!=null){
+                                userSchool.setVisibility(View.VISIBLE);
+                                userSchool.setText("来自 "+goods.getGoodsUser().getUserSchoolName());
+                            }
+                        }
+                        amoyCircle.setVisibility(View.GONE);
+                        if(goods.getGoodsAmoyCircle()!=null){
+                            amoyCircle.setVisibility(View.VISIBLE);
+                            amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
+                        }
+
                         like.setText("点赞"+goods.getGoodsLikes().size());
                         messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());
                         goodsText.setText("<"+goods.getGoodsTitle()+">"+goods.getGoodsDescribe());

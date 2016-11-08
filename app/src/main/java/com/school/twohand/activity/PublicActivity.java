@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -100,43 +101,121 @@ public class PublicActivity extends AppCompatActivity {
     List<AmoyCircle> amoyCircles;//淘圈数据源
     Integer amoyId = 0;//选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
+    File imageAddress;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
-        //查询用户对应淘圈
-        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
-        requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                //将淘圈弄到列表中
-                Gson gson = new Gson();
-                amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {}.getType());
-                CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
-                    @Override
-                    public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                        TextView textView = viewHolder.getViewById(R.id.amoyItem);
-                        textView.setText(amoyCircle.getCircleName());
-                        amoyId = amoyCircle.getCircleId();
+
+            //查询用户对应淘圈
+            RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
+            requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
+            x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                @Override
+                public void onSuccess(String result) {
+                    Log.i("ddfsdsf", "onSuccess: "+result);
+                    //将淘圈弄到列表中
+                    Gson gson = new Gson();
+                    amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {
+                    }.getType());
+
+                    //详情界面（我的商品，编辑跳转过来，还原界面）
+                    Intent intent = getIntent();
+                    String detailString = intent.getStringExtra("DetailGoods");
+                    imageAddress = new File(intent.getStringExtra("imageurl"));
+                    Log.i("ddfsdsf", "lastYeMian: "+detailString);
+                    if (detailString.equals("DetailGoods")){
+                        String goodsString = intent.getStringExtra("goodsString");
+                        String filesString = intent.getStringExtra("filesString");
+                        Log.i("lastYeMian", "lastYeMian: "+goodsString+"=="+filesString);
+                        Gson gson1 = new Gson();
+                        Goods goods = gson1.fromJson(goodsString,Goods.class);
+                        //amoyId = goods.getGoodsAmoyCircle().getCircleId();
+                        files = gson.fromJson(filesString,new TypeToken<List<File>>(){}.getType());
+                        classid = goods.getGoodsClass().getClass_id();
+                        Log.i("ddfsdsf", "lastYeMian: "+goods.getGoodsTitle());
+
+                        publicTitle.setText(goods.getGoodsTitle());
+                        publicContent.setText(goods.getGoodsDescribe());
+                        Log.i("ddfsdsf", "lastYeMian: "+classid);
+                        publicClass.setText(classIdConvertString(classid));
+
+                        final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) publicPhoto.getLayoutParams();
+                        for (int i = 0 ; i< files.size();i++){
+                            Uri uri = Uri.parse(files.get(i).toString());
+                            Log.i("ddfsdsf", "onSuccess: "+uri);
+                            if (i == 0){
+                                Log.i("ddfsdsf", "onSuccess: "+uri);
+                                publicPhoto1.setVisibility(View.VISIBLE);
+                                publicPhoto1.setImageURI(uri);
+                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo1);
+                            }
+                            if (i == 1){
+                                publicPhoto2.setVisibility(View.VISIBLE);
+                                publicPhoto2.setImageURI(uri);
+                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo2);
+                            }
+                            if (i == 2){
+                                publicPhoto3.setVisibility(View.VISIBLE);
+                                publicPhoto3.setImageURI(uri);
+                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo3);
+                            }
+                            if (i == 3){
+                                publicPhoto4.setVisibility(View.VISIBLE);
+                                publicPhoto4.setImageURI(uri);
+                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo4);
+                            }
+                            if (i == 4){
+                                publicPhoto5.setVisibility(View.VISIBLE);
+                                publicPhoto5.setImageURI(uri);
+                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo5);
+                            }
+                            mResults.add(files.get(i).toString());
+                        }
+                        publicPrice.setText(goods.getGoodsPrice()+"");
+                        publicClass.setText(goods.getGoodsClass().getClass_id());
+                        //还差淘圈？？
+
                     }
-                };
-                publicCircle.setAdapter(commonAdapter);
-            }
 
-            @Override
-            public void onError(Throwable ex, boolean isOnCallback) {
-            }
 
-            @Override
-            public void onCancelled(CancelledException cex) {
-            }
+                    CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
+                        @Override
+                        public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
+                            TextView textView = viewHolder.getViewById(R.id.amoyItem);
+                            textView.setText(amoyCircle.getCircleName());
+                            //amoyId = amoyCircle.getCircleId();
 
-            @Override
-            public void onFinished() {
-            }
-        });
+                        }
+                    };
+                    publicCircle.setAdapter(commonAdapter);
+
+                    publicCircle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            amoyId = amoyCircles.get(position).getCircleId();
+                        }
+                    });
+
+
+
+                }
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+                }
+
+                @Override
+                public void onFinished() {
+                }
+            });
+
+
 
     }
 
@@ -169,60 +248,57 @@ public class PublicActivity extends AppCompatActivity {
                 thread.start();
             }
         }
+
+
+
         //请求分类界面
         if (requestCode == REQUEST_CODE_CLASS) {
-            switch (data.getStringExtra("result")) {
-                case "1":
-                    publicClass.setText("校园代步");
-                    classid = 1;
-                    break;
-                case "2":
-                    publicClass.setText("手机");
-                    classid = 2;
-                    break;
-                case "3":
-                    publicClass.setText("电脑");
-                    classid = 3;
-                    break;
-                case "4":
-                    publicClass.setText("数码配件");
-                    classid = 4;
-                    break;
-                case "5":
-                    publicClass.setText("数码");
-                    classid = 5;
-                    break;
-                case "6":
-                    publicClass.setText("电器");
-                    classid = 6;
-                    break;
-                case "7":
-                    publicClass.setText("运动健身");
-                    classid = 7;
-                    break;
-                case "8":
-                    publicClass.setText("衣物伞帽");
-                    classid = 8;
-                    break;
-                case "9":
-                    publicClass.setText("图书教材");
-                    classid = 9;
-                    break;
-                case "10":
-                    publicClass.setText("租赁");
-                    classid = 10;
-                    break;
-                case "11":
-                    publicClass.setText("生活娱乐");
-                    classid = 11;
-                    break;
-                case "12":
-                    publicClass.setText("其他");
-                    classid = 12;
-                    break;
-
-            }
+            Integer classId = Integer.parseInt(data.getStringExtra("result"));
+            classid = classId;
+            publicClass.setText(classIdConvertString(classId));
         }
+    }
+
+    //分类界面id转化成String
+    private String classIdConvertString(Integer classId){
+        if (classId == 1){
+            return "校园代步";
+        }
+        if (classId == 2){
+            return "手机";
+        }
+        if (classId == 3){
+            return "电脑";
+        }
+        if (classId == 4){
+            return "数码配件";
+        }
+        if (classId == 5){
+            return "数码";
+        }
+        if (classId == 6){
+            return "电器";
+        }
+        if (classId == 7){
+            return "运动健身";
+        }
+        if (classId == 8){
+            return "衣物伞帽";
+        }
+        if (classId == 9){
+            return "图书教材";
+        }
+        if (classId == 10){
+            return "租赁";
+        }
+        if (classId == 11){
+            return "生活娱乐";
+        }
+        if (classId == 12){
+            return "其他";
+        }
+
+        return null;
     }
 
     //初始化图片控件
@@ -354,7 +430,7 @@ public class PublicActivity extends AppCompatActivity {
         int i = 1;
         Log.i("LAG", "压缩前的长度: " + baos.toByteArray().length);
         while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            options -= 10;//每次都减少10
+            options -= 45;//每次都减少10
             if (options == 10) {
                 break;
             }
@@ -408,27 +484,27 @@ public class PublicActivity extends AppCompatActivity {
                 break;
             case R.id.public_photo1:
                 mResults.remove(0);
-                files.clear();
+                files.remove(0);
                 initPhotoView();
                 break;
             case R.id.public_photo2:
                 mResults.remove(1);
-                files.clear();
+                files.remove(1);
                 initPhotoView();
                 break;
             case R.id.public_photo3:
                 mResults.remove(2);
-                files.clear();
+                files.remove(2);
                 initPhotoView();
                 break;
             case R.id.public_photo4:
                 mResults.remove(3);
-                files.clear();
+                files.remove(3);
                 initPhotoView();
                 break;
             case R.id.public_photo5:
                 mResults.remove(4);
-                files.clear();
+                files.remove(4);
                 initPhotoView();
                 break;
             case R.id.public_photo:
@@ -448,6 +524,7 @@ public class PublicActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.publicSure:
+                Log.i("publish", "files.size: "+files.size());
                 if (publicTitle.getText().toString().trim().length() == 0 || publicContent.getText().toString().trim().length() == 0
                         || files.size() < 1 || publicPrice.getText().toString().trim().length() == 0 || publicClass.getText().toString().trim().length() == 0) {
                     Toast.makeText(PublicActivity.this, "信息不全", Toast.LENGTH_SHORT).show();
@@ -525,6 +602,7 @@ public class PublicActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -534,6 +612,21 @@ public class PublicActivity extends AppCompatActivity {
                 //删除保存在本地的图片,不占用用户的内存
                 Log.i("CreateTaoquanDynamic", "onDestroy: 1111");
                 File[] tempImageFiles = imageFileDir.listFiles();
+                for (int i = 0; i < tempImageFiles.length; i++) {
+                    if (tempImageFiles[i] != null) {
+                        if (tempImageFiles[i].isFile() && tempImageFiles[i].exists()) {
+                            tempImageFiles[i].delete();
+                        }
+                    }
+                }
+            }
+        }
+
+        //删除文件夹里所有内容，直接对文件夹调用delete，若文件夹里内容为空，则可以成功删除，否则要将文件夹里所有文件全部删除才可以删除该文件夹
+        if (imageAddress != null) { //要先判断文件夹不为null，否则若用户没选择图片会出现空指针异常
+            if (imageAddress.exists()) {
+                //删除保存在本地的图片,不占用用户的内存
+                File[] tempImageFiles = imageAddress.listFiles();
                 for (int i = 0; i < tempImageFiles.length; i++) {
                     if (tempImageFiles[i] != null) {
                         if (tempImageFiles[i].isFile() && tempImageFiles[i].exists()) {

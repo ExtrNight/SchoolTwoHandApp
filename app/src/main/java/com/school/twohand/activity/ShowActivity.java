@@ -83,13 +83,13 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show);
 
         ButterKnife.inject(this);
-        myApplication = (MyApplication) getApplication();
+        /*myApplication = (MyApplication) getApplication();*/
         //从本地取用户信息
         /*
         同样根据Context对象获取SharedPreference对象；
         直接使用SharedPreference的getXXX(key)方法获取数据。
          */
-        SharedPreferences sp = ShowActivity.this.getSharedPreferences("USER",MODE_PRIVATE);
+        /*SharedPreferences sp = ShowActivity.this.getSharedPreferences("USER",MODE_PRIVATE);
         String userString = sp.getString("user",null);
         if (userString!=null){
             Gson gson = new Gson();
@@ -101,7 +101,7 @@ public class ShowActivity extends AppCompatActivity {
 
                 }
             });
-        }
+        }*/
 
         //创建fragment存到list中
         homeFragement = new HomeFragement();
