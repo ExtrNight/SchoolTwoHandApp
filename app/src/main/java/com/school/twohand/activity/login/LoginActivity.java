@@ -126,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
         //登录
         login.setOnClickListener(new View.OnClickListener() {
             @Override
