@@ -55,6 +55,7 @@ import cn.jpush.im.android.api.callback.CreateGroupCallback;
  * 创建淘圈的页面
  */
 public class CreateTaoquanActivity extends AppCompatActivity {
+
     MyApplication myApplication;
     User user;
 
@@ -84,10 +85,6 @@ public class CreateTaoquanActivity extends AppCompatActivity {
     TextView etCircleAddress;
     @InjectView(R.id.iv_upload_circle_image)
     ImageView ivUploadCircleImage;
-    @InjectView(R.id.iv_create_taoquan_return)
-    ImageView ivCreateTaoquanReturn;
-    @InjectView(R.id.iv_location)
-    ImageView ivLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

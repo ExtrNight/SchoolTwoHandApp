@@ -218,7 +218,6 @@
 
         <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
         <activity android:name=".MainActivity" />
-
         <activity android:name="com.school.twohand.activity.GoPayActivity" />
         <activity
             android:name=".DemoActivity"
@@ -244,7 +243,6 @@
         <activity android:name="com.school.twohand.activity.NumberFansActivity" />
         <activity android:name="com.school.twohand.activity.NumberPriaseActivity" />
         <activity android:name="com.school.twohand.activity.SecondPageActivity" />
-
 
         <!-- mob分享 -->
         <activity
@@ -289,7 +287,6 @@
         <activity android:name="com.school.twohand.activity.login.MessageListActivity" />
         android:screenOrientation="portrait"
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name="com.school.twohand.activity.NearBySchoolActivity" />
         <activity android:name="com.school.twohand.activity.OrderDetailActivity" />
         <activity android:name="com.school.twohand.activity.IntroduceActivity" />
         <activity android:name="com.school.twohand.activity.GetAddressActivity" />

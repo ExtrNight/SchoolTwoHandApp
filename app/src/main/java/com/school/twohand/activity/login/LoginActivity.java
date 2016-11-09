@@ -211,7 +211,8 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 }
                                             });
-
+                                            setResult(ResultCode);
+                                            finish();
                                         }
                                     }
                                 });
@@ -253,4 +254,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+
 }

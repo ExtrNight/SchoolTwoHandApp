@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +43,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.image.ImageOptions;
 import org.xutils.x;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -59,10 +59,6 @@ import cn.jpush.im.android.api.JMessageClient;
 
 public class DetailGoodsActivity extends AppCompatActivity {
 
-    @InjectView(R.id.view)
-    Toolbar view;
-    @InjectView(R.id.message_detail)
-    Button messageDetail;
     @InjectView(R.id.like_message)
     Button likeMessage;
     @InjectView(R.id.relativeLayout)
@@ -75,8 +71,9 @@ public class DetailGoodsActivity extends AppCompatActivity {
     LinearLayout sayLinearLayout;
     @InjectView(R.id.listView)
     ListView listView;
-    @InjectView(R.id.returnRel)
-    Button returnRel;
+
+    TextView tvMessageNumber;  //留言数量
+    ImageView ivNoComment;     //没有留言的图片
     ImageView goodsImageA;
     ImageView goodsImageB;
     ImageView goodsImageC;
@@ -100,7 +97,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
     TextView shengLueHao;
     TextView iWantTo;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,20 +111,34 @@ public class DetailGoodsActivity extends AppCompatActivity {
         Intent intent = getIntent();
 
         goodsMessageString = intent.getStringExtra("goodsMessage");
-        position = intent.getIntExtra("position",0)-1;
+        position = intent.getIntExtra("position", 0) - 1;
 
+        //从“收到的赞”页面跳转过来的，那个页面传来了一个Goods对象
+        String goodsJson = intent.getStringExtra("goodsJson");
         Gson gson = new Gson();
-        goodsMessages = gson.fromJson(goodsMessageString, new TypeToken<List<Goods>>() {}.getType());
-        goods = goodsMessages.get(position);
+        if(goodsMessageString!=null){
+            goodsMessages = gson.fromJson(goodsMessageString, new TypeToken<List<Goods>>() {}.getType());
+            goods = goodsMessages.get(position);
+        }else if(goodsJson!=null){
+            goods = gson.fromJson(goodsJson,Goods.class);
+        }
+
+        initHeadView();
 
         //数据库获取对应商品留言表
-        RequestParams requestParams = new RequestParams(NetUtil.url+"QueryMessageServlet");
-        requestParams.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
+        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryMessageServlet");
+        requestParams.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 Gson gson = new Gson();
-                messageBoards = gson.fromJson(result,new TypeToken<List<MessageBoard>>(){}.getType());
+                messageBoards = gson.fromJson(result, new TypeToken<List<MessageBoard>>() {}.getType());
+                tvMessageNumber.setText("热门留言 ("+messageBoards.size()+")");
+                if(messageBoards.size()==0){
+                    ivNoComment.setVisibility(View.VISIBLE);
+                }else{
+                    ivNoComment.setVisibility(View.GONE);
+                }
                 initData();
             }
             @Override
@@ -142,8 +152,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
             }
         });
 
-        initHeadView();
-        listView.addHeaderView(headView);
 
         //有可能用户没有登录myApplication 中User对象wei null
         //判断当前商品是否是自己发布的，如果是显示三个省略号，（可进行的操作，跳到发布界面编辑，删除商品，取消）；
@@ -223,14 +231,12 @@ public class DetailGoodsActivity extends AppCompatActivity {
     //3、创建文件夹
     public static void makeRootDirectory(String filePath) {
         File file = null;
-        try {
-            file = new File(filePath);
-            if (!file.exists()) {
-                file.mkdir();
-            }
-        } catch (Exception e) {
 
+        file = new File(filePath);
+        if (!file.exists()) {
+            file.mkdir();
         }
+
     }
 
 
@@ -348,12 +354,11 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 })
                 .show();
 
-
     }
 
-    public void initHeadView(){
-        if (goods!=null){
-            headView =  LayoutInflater.from(this).inflate(R.layout.detail_goods,null);
+    public void initHeadView() {
+        if (goods != null) {
+            headView = LayoutInflater.from(this).inflate(R.layout.detail_goods, null);
             ImageView headImage = (ImageView) headView.findViewById(R.id.user_head_m);
             TextView userName = (TextView) headView.findViewById(R.id.user_name_m);
             TextView goodsPrice = (TextView) headView.findViewById(R.id.goods_price_m);
@@ -368,39 +373,40 @@ public class DetailGoodsActivity extends AppCompatActivity {
             headImageC = (ImageView) headView.findViewById(R.id.image_h_c_m);
             likeNumber = (TextView) headView.findViewById(R.id.likeNumber_m);
             TextView amoyName = (TextView) headView.findViewById(R.id.amoy_name_m);
+            tvMessageNumber = (TextView) headView.findViewById(R.id.tv_message_number);
+            ivNoComment = (ImageView) headView.findViewById(R.id.iv_no_comment);
             final TextView readNumber = (TextView) headView.findViewById(R.id.readNumber_m);
             //服务器找头像
-            String headUrl = NetUtil.imageUrl+goods.getGoodsUser().getUserHead();
+            String headUrl = NetUtil.imageUrl + goods.getGoodsUser().getUserHead();
             ImageOptions headImageOptions = new ImageOptions.Builder()
                     .setCircular(true)
                     .build();
-            x.image().bind(headImage,headUrl,headImageOptions);
+            x.image().bind(headImage, headUrl, headImageOptions);
             //用户名
             userName.setText(goods.getGoodsUser().getUserName());
             //商品价格
-            if (goods.getGoodsAuction()==0){
-                goodsPrice.setText("￥"+goods.getGoodsPrice()+"");
+            if (goods.getGoodsAuction() == 0) {
+                goodsPrice.setText("￥" + goods.getGoodsPrice() + "");
             }
-            if (goods.getGoodsAuction()==1){
-                goodsPrice.setText("起拍￥"+goods.getGoodsPrice()+"");
-                iWantTo.setText("出价");
-            }
-
+//            if (goods.getGoodsAuction()==1){
+//                goodsPrice.setText("起拍￥"+goods.getGoodsPrice()+"");
+//                iWantTo.setText("出价");
+//            }
             //商品详情
-            goodsDetail.setText("<"+goods.getGoodsTitle()+">"+goods.getGoodsDescribe());
+            goodsDetail.setText(goods.getGoodsTitle() + "  " + goods.getGoodsDescribe());
             //服务器找商品图片信息
-            for (int i = 0 ; i < goods.getGoodsImages().size();i++) {
+            for (int i = 0; i < goods.getGoodsImages().size(); i++) {
                 String goodsUrl = NetUtil.imageUrl + goods.getGoodsImages().get(i).getImageAddress();
                 ImageOptions goodsImageOptions = new ImageOptions.Builder().build();
-                if (i == 0){
+                if (i == 0) {
                     x.image().bind(goodsImageA, goodsUrl, goodsImageOptions);
                     goodsImageA.setVisibility(View.VISIBLE);
                 }
-                if (i == 1){
+                if (i == 1) {
                     x.image().bind(goodsImageB, goodsUrl, goodsImageOptions);
                     goodsImageB.setVisibility(View.VISIBLE);
                 }
-                if (i == 2){
+                if (i == 2) {
                     x.image().bind(goodsImageC, goodsUrl, goodsImageOptions);
                     goodsImageC.setVisibility(View.VISIBLE);
                 }
@@ -415,24 +421,24 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
             }
             //点赞数
-            likeNumber.setText("点赞:"+goods.getGoodsLikes().size());
+            likeNumber.setText("点赞:" + goods.getGoodsLikes().size());
             //浏览数量加一
-            RequestParams requestParams = new RequestParams(NetUtil.url+"AddGoodsPVServlet");
+            RequestParams requestParams = new RequestParams(NetUtil.url + "AddGoodsPVServlet");
             //判断是否是游客
             Integer userId;
-            if (myApplication.getUser()==null){
+            if (myApplication.getUser() == null) {
                 //是游客
                 userId = 0;
-            }else{
+            } else {
                 userId = myApplication.getUser().getUserId();
             }
             //访问服务器让商品浏览数加一
-            requestParams.addQueryStringParameter("userId",userId+"");
-            requestParams.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
+            requestParams.addQueryStringParameter("userId", userId + "");
+            requestParams.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
             x.http().get(requestParams, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    readNumber.setText("浏览:"+result);
+                    readNumber.setText("浏览:" + result);
                 }
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
@@ -444,7 +450,12 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 public void onFinished() {
                 }
             });
+            amoyName.setVisibility(View.GONE);
             //淘圈
+            if(goods.getGoodsAmoyCircle()!=null){
+                amoyName.setVisibility(View.VISIBLE);
+                amoyName.setText("淘圈 | " + goods.getGoodsAmoyCircle().getCircleName());
+            }
             /*amoyName.setText("淘圈|"+goods.getGoodsAmoyCircle().getCircleName());*/
             amoyName.setVisibility(View.GONE);
             if(goods.getGoodsAmoyCircle()!=null){
@@ -452,36 +463,36 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 amoyName.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
             }
             //点赞重新服务器获取
-            RequestParams requestParams2 = new RequestParams(NetUtil.url+"QueryZZZZServlet");
-            requestParams2.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
+            RequestParams requestParams2 = new RequestParams(NetUtil.url + "QueryZZZZServlet");
+            requestParams2.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
             x.http().get(requestParams2, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
                     //点赞人的头像
                     Gson gson = new Gson();
-                    List<LikeTbl> likeTbls = gson.fromJson(result,new TypeToken<List<LikeTbl>>(){}.getType());
-                    likeNumber.setText("点赞"+likeTbls.size());
+                    List<LikeTbl> likeTbls = gson.fromJson(result, new TypeToken<List<LikeTbl>>() {}.getType());
+                    likeNumber.setText("点赞" + likeTbls.size());
 
-                    for (int i = 0 ; i < likeTbls.size();i++) {
-                        String goodsUrl = NetUtil.imageUrl +  likeTbls.get(i).getLikeUserMe().getUserHead();
-                        Log.i("likeMessage", "onSuccess: "+goodsUrl);
+                    for (int i = 0; i < likeTbls.size(); i++) {
+                        String goodsUrl = NetUtil.imageUrl + likeTbls.get(i).getLikeUserMe().getUserHead();
+                        Log.i("likeMessage", "onSuccess: " + goodsUrl);
                         ImageOptions goodsImageOptions = new ImageOptions.Builder()
                                 .setCircular(true)
                                 .build();
-                        if (i == 0){
+                        if (i == 0) {
                             x.image().bind(headImageA, goodsUrl, goodsImageOptions);
                             headImageA.setVisibility(View.VISIBLE);
                         }
-                        if (i == 1){
+                        if (i == 1) {
                             x.image().bind(headImageB, goodsUrl, goodsImageOptions);
                             headImageB.setVisibility(View.VISIBLE);
                         }
-                        if (i == 2){
+                        if (i == 2) {
                             x.image().bind(headImageC, goodsUrl, goodsImageOptions);
                             headImageC.setVisibility(View.VISIBLE);
                         }
-                        if (likeTbls.get(i).getLikeUserMe().getUserId()==((MyApplication)getApplication()).getUser().getUserId()){
-                             likeMessage.setSelected(true);
+                        if (likeTbls.get(i).getLikeUserMe().getUserId() == ((MyApplication) getApplication()).getUser().getUserId()) {
+                            likeMessage.setSelected(true);
                             Log.i("likeMessage", "onSuccess: setSelected");
                         }
                     }
@@ -496,101 +507,94 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 public void onFinished() {
                 }
             });
-
-
         }
+        listView.addHeaderView(headView);
     }
 
-
-    public void initData(){
+    public void initData() {
         //留言
-        if (commonAdapter == null){
-            commonAdapter = new CommonAdapter<MessageBoard>(this,messageBoards,R.layout.message_board_item) {
+        if (commonAdapter == null) {
+            commonAdapter = new CommonAdapter<MessageBoard>(this, messageBoards, R.layout.message_board_item) {
                 @Override
                 public void convert(ViewHolder viewHolder, MessageBoard messageBoard, int position) {
                     ImageView headView = viewHolder.getViewById(R.id.message_user_head);
                     TextView headName = viewHolder.getViewById(R.id.message_user_name);
                     TextView messagedetail = viewHolder.getViewById(R.id.message_content);
                     //留言头像获取
-                    String headImageUrl= NetUtil.imageUrl+messageBoard.getMessageBoardUserMe().getUserHead();
+                    String headImageUrl = NetUtil.imageUrl + messageBoard.getMessageBoardUserMe().getUserHead();
                     ImageOptions imageOptions = new ImageOptions.Builder()
                             .setCircular(true)
                             .build();
-                    x.image().bind(headView,headImageUrl,imageOptions);
+                    x.image().bind(headView, headImageUrl, imageOptions);
                     //留言用户名
                     headName.setText(messageBoard.getMessageBoardUserMe().getUserName());
                     //留言内容
                     String content = messageBoard.getMessageBoardContent();
 
-                    if (messageBoard.getMessageBoardUserOther()!=null){
-                        messagedetail.setText("@"+messageBoard.getMessageBoardUserOther().getUserName()+" "+content);
-                    }else {
+                    if (messageBoard.getMessageBoardUserOther() != null) {
+                        messagedetail.setText("@" + messageBoard.getMessageBoardUserOther().getUserName() + " " + content);
+                    } else {
                         messagedetail.setText(content);
                     }
                 }
             };
             listView.setAdapter(commonAdapter);
 
-
-        }else{
+        } else {
             commonAdapter.notifyDataSetChanged();
         }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-
                 //判断是否是游客
                 Integer userId;
-                if (myApplication.getUser()==null){
+                if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
-                    startActivityForResult(intent,0);
-                }else{
-
+                    Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else{
                     //弹出键盘
                     say.setFocusable(true);
                     say.setFocusableInTouchMode(true);
                     say.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(say,InputMethodManager.SHOW_FORCED);
+                    imm.showSoftInput(say, InputMethodManager.SHOW_FORCED);
 
-
-                    if (position==0){
+                    if (position == 0) {
                         say.setHint("输入你想对TA说的话");
-                    }else{
-                        say.setHint("@"+messageBoards.get(position-1).getMessageBoardUserMe().getUserName());
+                    } else {
+                        say.setHint("@" + messageBoards.get(position - 1).getMessageBoardUserMe().getUserName());
                     }
                     send.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            messageBoard.setMessageBoardUserMe(((MyApplication)getApplication()).getUser());
-                            Log.i("likeMessage", "onClick: "+position);
-                            if (position==0){
+                            messageBoard.setMessageBoardUserMe(((MyApplication) getApplication()).getUser());
+                            Log.i("likeMessage", "onClick: " + position);
+                            if (position == 0) {
                                 messageBoard.setMessageBoardUserOther(null);
-                            }else {
-                                messageBoard.setMessageBoardUserOther(messageBoards.get(position-1).getMessageBoardUserMe());
+                            } else {
+                                messageBoard.setMessageBoardUserOther(messageBoards.get(position - 1).getMessageBoardUserMe());
                             }
-
-                            Goods goods1 =new Goods();
+                            Goods goods1 = new Goods();
                             goods1.setGoodsId(goods.getGoodsId());
                             messageBoard.setMessageBoardGoods(goods1);
                             messageBoard.setMessageBoardContent(say.getText().toString());
                             Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                             String messageBoardString = gson1.toJson(messageBoard);
-                            RequestParams requestParams = new RequestParams(NetUtil.url+"AddMessageServlet");
-                            requestParams.addQueryStringParameter("messageBoard",messageBoardString);
+                            RequestParams requestParams = new RequestParams(NetUtil.url + "AddMessageServlet");
+                            requestParams.addQueryStringParameter("messageBoard", messageBoardString);
                             x.http().get(requestParams, new Callback.CommonCallback<String>() {
                                 @Override
                                 public void onSuccess(String result) {
                                     say.setText("");
-                                    RequestParams requestParams = new RequestParams(NetUtil.url+"QueryMessageServlet");
-                                    requestParams.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
-                                    x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                                    RequestParams requestParams = new RequestParams(NetUtil.url + "QueryMessageServlet");
+                                    requestParams.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
+                                    x.http().get(requestParams, new CommonCallback<String>() {
                                         @Override
                                         public void onSuccess(String result) {
                                             Gson gson = new Gson();
-                                            List<MessageBoard> newMessageBoards = gson.fromJson(result,new TypeToken<List<MessageBoard>>(){}.getType());
+                                            List<MessageBoard> newMessageBoards = gson.fromJson(result, new TypeToken<List<MessageBoard>>() {}.getType());
                                             messageBoards.clear();
                                             messageBoards.addAll(newMessageBoards);
                                             initData();
@@ -598,7 +602,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                             listView.setSelection(1);
                                             //关闭键盘
                                             InputMethodManager imm =
-                                                    (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                    (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                             imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
                                         }
                                         @Override
@@ -625,24 +629,24 @@ public class DetailGoodsActivity extends AppCompatActivity {
                         }
                     });
                 }
-
                 sayLinearLayout.setVisibility(View.VISIBLE);
                 relativeLayout.setVisibility(View.INVISIBLE);
             }
         });
-
-
     }
 
-    @OnClick({R.id.message_detail, R.id.returnRel,R.id.send,R.id.like_message})
+    @OnClick({R.id.message_detail, R.id.returnRel, R.id.send, R.id.like_message, R.id.iWantTo, R.id.goods_detail_finish})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.goods_detail_finish:
+                finish();
+                break;
             case R.id.message_detail:
-                if (myApplication.getUser()==null){
+                if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else{
+                } else{
                     relativeLayout.setVisibility(View.INVISIBLE);
                     sayLinearLayout.setVisibility(View.VISIBLE);
 
@@ -652,8 +656,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     say.setFocusableInTouchMode(true);
                     say.requestFocus();
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.showSoftInput(say,InputMethodManager.SHOW_FORCED);
-
+                    imm.showSoftInput(say, InputMethodManager.SHOW_FORCED);
                 }
                 break;
             case R.id.returnRel:
@@ -661,39 +664,42 @@ public class DetailGoodsActivity extends AppCompatActivity {
                 sayLinearLayout.setVisibility(View.INVISIBLE);
                 //关闭键盘的方法
                 InputMethodManager imm =
-                        (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
                 break;
             case R.id.send:
-                if (myApplication.getUser()==null){
+                if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else{
+                } else{
                     //如果输入框不为空
-                    if (say.getText().toString().trim().length()!=0){
+                    if (say.getText().toString().trim().length() != 0) {
                         say.setHint("");
-                        messageBoard.setMessageBoardUserMe(((MyApplication)getApplication()).getUser());
-                        Goods goods1 =new Goods();
+                        messageBoard.setMessageBoardUserMe(((MyApplication) getApplication()).getUser());
+                        Goods goods1 = new Goods();
                         goods1.setGoodsId(goods.getGoodsId());
                         messageBoard.setMessageBoardGoods(goods1);
                         messageBoard.setMessageBoardContent(say.getText().toString());
                         Gson gson1 = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                         String messageBoardString = gson1.toJson(messageBoard);
-                        RequestParams requestParams = new RequestParams(NetUtil.url+"AddMessageServlet");
-                        requestParams.addQueryStringParameter("messageBoard",messageBoardString);
+                        RequestParams requestParams = new RequestParams(NetUtil.url + "AddMessageServlet");
+                        requestParams.addQueryStringParameter("messageBoard", messageBoardString);
                         x.http().get(requestParams, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
                                 //从数据库拿最新的消息记录
                                 say.setText("");
-                                RequestParams requestParams = new RequestParams(NetUtil.url+"QueryMessageServlet");
-                                requestParams.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
-                                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                                RequestParams requestParams = new RequestParams(NetUtil.url + "QueryMessageServlet");
+                                requestParams.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
+                                x.http().get(requestParams, new CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
+                                        if(messageBoards.size()==0){
+                                            ivNoComment.setVisibility(View.GONE);//将没有评论的图片隐藏
+                                        }
                                         Gson gson = new Gson();
-                                        List<MessageBoard> newMessageBoards = gson.fromJson(result,new TypeToken<List<MessageBoard>>(){}.getType());
+                                        List<MessageBoard> newMessageBoards = gson.fromJson(result, new TypeToken<List<MessageBoard>>() {}.getType());
                                         messageBoards.clear();
                                         messageBoards.addAll(newMessageBoards);
 
@@ -702,16 +708,18 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         listView.setSelection(1);
                                         //关闭键盘
                                         InputMethodManager imm =
-                                                (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.hideSoftInputFromWindow(say.getWindowToken(), 0);
 
                                     }
                                     @Override
                                     public void onError(Throwable ex, boolean isOnCallback) {
                                     }
+
                                     @Override
                                     public void onCancelled(CancelledException cex) {
                                     }
+
                                     @Override
                                     public void onFinished() {
                                     }
@@ -727,31 +735,29 @@ public class DetailGoodsActivity extends AppCompatActivity {
                             public void onFinished() {
                             }
                         });
-                    }else{//输入框为空
+                    } else {//输入框为空
                         Toast.makeText(DetailGoodsActivity.this, "亲还没输入呢", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 break;
             case R.id.like_message:
-                if (myApplication.getUser()==null){
+                if (myApplication.getUser() == null) {
                     //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
-                    Intent intent = new Intent(DetailGoodsActivity.this,LoginActivity.class);
+                    Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
                     startActivityForResult(intent,0);
-                }else {
+                } else {
                     //取消赞
-                    if (likeMessage.isSelected()){
-                        RequestParams requestParams2 = new RequestParams(NetUtil.url+"ZZZZZZServlet");
-                        requestParams2.addQueryStringParameter("userMeId",((MyApplication)getApplication()).getUser().getUserId()+"");
-                        requestParams2.addQueryStringParameter("likeOtherId",goods.getGoodsUser().getUserId()+"");
-                        requestParams2.addQueryStringParameter("likeGoodsId",goods.getGoodsId()+"");
-                        requestParams2.addQueryStringParameter("flag",2+"");
+                    if (likeMessage.isSelected()) {
+                        RequestParams requestParams2 = new RequestParams(NetUtil.url + "ZZZZZZServlet");
+                        requestParams2.addQueryStringParameter("userMeId", ((MyApplication) getApplication()).getUser().getUserId() + "");
+                        requestParams2.addQueryStringParameter("likeOtherId", goods.getGoodsUser().getUserId() + "");
+                        requestParams2.addQueryStringParameter("likeGoodsId", goods.getGoodsId() + "");
+                        requestParams2.addQueryStringParameter("flag", 2 + "");
                         x.http().get(requestParams2, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
-
-                                RequestParams requestParams2 = new RequestParams(NetUtil.url+"QueryZZZZServlet");
-                                requestParams2.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
+                                RequestParams requestParams2 = new RequestParams(NetUtil.url + "QueryZZZZServlet");
+                                requestParams2.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
                                 x.http().get(requestParams2, new CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
@@ -759,27 +765,28 @@ public class DetailGoodsActivity extends AppCompatActivity {
                                         likeMessage.setSelected(false);
                                         //点赞人的头像
                                         Gson gson = new Gson();
-                                        List<LikeTbl> likeTbls = gson.fromJson(result,new TypeToken<List<LikeTbl>>(){}.getType());
-                                        Log.i("likeMessage", "onSuccess: "+likeTbls);
+                                        List<LikeTbl> likeTbls = gson.fromJson(result, new TypeToken<List<LikeTbl>>() {
+                                        }.getType());
+                                        Log.i("likeMessage", "onSuccess: " + likeTbls);
                                         headImageA.setVisibility(View.GONE);
                                         headImageB.setVisibility(View.GONE);
                                         headImageC.setVisibility(View.GONE);
-                                        likeNumber.setText("点赞"+likeTbls.size());
-                                        for (int i = 0 ; i < likeTbls.size();i++) {
-                                            String goodsUrl = NetUtil.imageUrl +  likeTbls.get(i).getLikeUserMe().getUserHead();
-                                            Log.i("likeMessage", "onSuccess: "+goodsUrl);
+                                        likeNumber.setText("点赞" + likeTbls.size());
+                                        for (int i = 0; i < likeTbls.size(); i++) {
+                                            String goodsUrl = NetUtil.imageUrl + likeTbls.get(i).getLikeUserMe().getUserHead();
+                                            Log.i("likeMessage", "onSuccess: " + goodsUrl);
                                             ImageOptions goodsImageOptions = new ImageOptions.Builder()
                                                     .setCircular(true)
                                                     .build();
-                                            if (i == 0){
+                                            if (i == 0) {
                                                 x.image().bind(headImageA, goodsUrl, goodsImageOptions);
                                                 headImageA.setVisibility(View.VISIBLE);
                                             }
-                                            if (i == 1){
+                                            if (i == 1) {
                                                 x.image().bind(headImageB, goodsUrl, goodsImageOptions);
                                                 headImageB.setVisibility(View.VISIBLE);
                                             }
-                                            if (i == 2){
+                                            if (i == 2) {
                                                 x.image().bind(headImageC, goodsUrl, goodsImageOptions);
                                                 headImageC.setVisibility(View.VISIBLE);
                                             }
@@ -807,18 +814,18 @@ public class DetailGoodsActivity extends AppCompatActivity {
                             }
                         });
 
-                    }else {
+                    } else {
                         //赞
-                        RequestParams requestParams2 = new RequestParams(NetUtil.url+"ZZZZZZServlet");
-                        requestParams2.addQueryStringParameter("userMeId",((MyApplication)getApplication()).getUser().getUserId()+"");
-                        requestParams2.addQueryStringParameter("likeOtherId",goods.getGoodsUser().getUserId()+"");
-                        requestParams2.addQueryStringParameter("likeGoodsId",goods.getGoodsId()+"");
-                        requestParams2.addQueryStringParameter("flag",1+"");
+                        RequestParams requestParams2 = new RequestParams(NetUtil.url + "ZZZZZZServlet");
+                        requestParams2.addQueryStringParameter("userMeId", ((MyApplication) getApplication()).getUser().getUserId() + "");
+                        requestParams2.addQueryStringParameter("likeOtherId", goods.getGoodsUser().getUserId() + "");
+                        requestParams2.addQueryStringParameter("likeGoodsId", goods.getGoodsId() + "");
+                        requestParams2.addQueryStringParameter("flag", 1 + "");
                         x.http().get(requestParams2, new Callback.CommonCallback<String>() {
                             @Override
                             public void onSuccess(String result) {
-                                RequestParams requestParams2 = new RequestParams(NetUtil.url+"QueryZZZZServlet");
-                                requestParams2.addQueryStringParameter("goodsId",goods.getGoodsId()+"");
+                                RequestParams requestParams2 = new RequestParams(NetUtil.url + "QueryZZZZServlet");
+                                requestParams2.addQueryStringParameter("goodsId", goods.getGoodsId() + "");
                                 x.http().get(requestParams2, new CommonCallback<String>() {
                                     @Override
                                     public void onSuccess(String result) {
@@ -827,48 +834,55 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
                                         //点赞人的头像
                                         Gson gson = new Gson();
-                                        List<LikeTbl> likeTbls = gson.fromJson(result,new TypeToken<List<LikeTbl>>(){}.getType());
-                                        likeNumber.setText("点赞"+likeTbls.size());
-                                        Log.i("likeMessage", "onSuccess: "+likeTbls);
+                                        List<LikeTbl> likeTbls = gson.fromJson(result, new TypeToken<List<LikeTbl>>() {
+                                        }.getType());
+                                        likeNumber.setText("点赞" + likeTbls.size());
+                                        Log.i("likeMessage", "onSuccess: " + likeTbls);
                                         headImageA.setVisibility(View.GONE);
                                         headImageB.setVisibility(View.GONE);
                                         headImageC.setVisibility(View.GONE);
-                                        for (int i = 0 ; i < likeTbls.size();i++) {
-                                            String goodsUrl = NetUtil.imageUrl +  likeTbls.get(i).getLikeUserMe().getUserHead();
+                                        for (int i = 0; i < likeTbls.size(); i++) {
+                                            String goodsUrl = NetUtil.imageUrl + likeTbls.get(i).getLikeUserMe().getUserHead();
                                             ImageOptions goodsImageOptions = new ImageOptions.Builder()
                                                     .setCircular(true)
                                                     .build();
-                                            if (i == 0){
+                                            if (i == 0) {
                                                 x.image().bind(headImageA, goodsUrl, goodsImageOptions);
                                                 headImageA.setVisibility(View.VISIBLE);
                                             }
-                                            if (i == 1){
+                                            if (i == 1) {
                                                 x.image().bind(headImageB, goodsUrl, goodsImageOptions);
                                                 headImageB.setVisibility(View.VISIBLE);
                                             }
-                                            if (i == 2){
+                                            if (i == 2) {
                                                 x.image().bind(headImageC, goodsUrl, goodsImageOptions);
                                                 headImageC.setVisibility(View.VISIBLE);
                                             }
                                         }
                                     }
+
                                     @Override
                                     public void onError(Throwable ex, boolean isOnCallback) {
                                     }
+
                                     @Override
                                     public void onCancelled(CancelledException cex) {
                                     }
+
                                     @Override
                                     public void onFinished() {
                                     }
                                 });
                             }
+
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
                             }
+
                             @Override
                             public void onCancelled(CancelledException cex) {
                             }
+
                             @Override
                             public void onFinished() {
                             }
@@ -876,6 +890,26 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     }
                 }
                 break;
+            case R.id.iWantTo:
+                if (myApplication.getUser() == null) {
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(DetailGoodsActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    //进入与你对话人的聊天
+                    JMessageClient.enterSingleConversation(goods.getGoodsUser().getUserAccount());
+                    myApplication.setOtherAccount(goods.getGoodsUser().getUserAccount());
+                    //页面跳转到聊天室
+                    Intent intent = new Intent(DetailGoodsActivity.this, ChatActivity.class);
+                    intent.putExtra("image", goods.getGoodsImages().get(0).getImageAddress());
+                    intent.putExtra("price", goods.getGoodsPrice() + "");
+                    intent.putExtra("userName", goods.getGoodsUser().getUserName());
+
+                    intent.putExtra("goodsMessage", goodsMessageString);
+                    intent.putExtra("position", position + "");
+                    startActivity(intent);
+                }
+
 
 
 
