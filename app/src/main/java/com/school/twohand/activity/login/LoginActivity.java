@@ -195,7 +195,6 @@ public class LoginActivity extends AppCompatActivity {
                                                     setResult(ResultCode);
                                                     finish();
                                                 }
-
                                                 @Override
                                                 public void onError(Throwable ex, boolean isOnCallback) {
 
@@ -211,8 +210,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                                 }
                                             });
-                                            setResult(ResultCode);
-                                            finish();
                                         }
                                     }
                                 });
@@ -228,8 +225,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

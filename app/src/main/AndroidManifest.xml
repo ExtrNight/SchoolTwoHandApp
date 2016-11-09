@@ -294,7 +294,8 @@
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity android:name="com.school.twohand.activity.AddAddressActivity"/>
-
+        <activity android:name="com.school.twohand.activity.InforPageActivity"/>
+        <activity android:name="com.school.twohand.activity.NearBySchoolActivity"/>
     </application>
 
 </manifest>

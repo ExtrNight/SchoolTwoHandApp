@@ -125,7 +125,6 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                 final String circleLabel = etCircleLabel.getText().toString();
                 final String circleAddress = etCircleAddress.getText().toString();
 
-
                 if (bitmap == null) {
                     Toast.makeText(CreateTaoquanActivity.this, "你还没有选择头像哦", Toast.LENGTH_SHORT).show();
                     return;
@@ -160,50 +159,77 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                             return;
                         }
                         //如果添加到服务器数据库成功，则把头像上传到服务器,服务器返回的result就是图片的服务器url地址
-                        //开子线程进行耗时操作
-//                        new Thread() {
-//                            @Override
-//                            public void run() {
-//                                super.run();
-                                String url = NetUtil.url + "CircleImageServlet";
-                                RequestParams requestParams = new RequestParams(url);
-                                //
-                                // 1、获取sd卡目录
-                                //  File sdFile = Environment.getExternalStorageDirectory();
+                        String url = NetUtil.url + "CircleImageServlet";
+                        RequestParams requestParams = new RequestParams(url);
+                        // 1、获取sd卡目录
+                        //  File sdFile = Environment.getExternalStorageDirectory();
 //                                                   //2、获取文件完整目录
 //                                                  File imageFile = new File(sdFile+"/xiaoyuanershou/image/circleImage.png");
-//
-                                //将文件上传到服务器
-                                requestParams.setMultipart(true);  //指定上传文件格式
-                                requestParams.addBodyParameter("circleImage", circleImageFile);
-                                Log.i("11111", "run: "+result+"----"+circleImageFile);
-                                requestParams.addBodyParameter("circleImageUrl", result);
-                                x.http().post(requestParams, new CommonCallback<String>() {
-                                    @Override
-                                    public void onSuccess(String result) {
-                                        if (circleImageFile.exists()) {
-                                            circleImageFile.delete();//删除文件，不占用用户存储空间
+                        //将文件上传到服务器
+                        requestParams.setMultipart(true);  //指定上传文件格式
+                        requestParams.addBodyParameter("circleImage", circleImageFile);
+                        requestParams.addBodyParameter("circleImageUrl", result);
+                        x.http().post(requestParams, new CommonCallback<String>() {
+                            @Override
+                            public void onSuccess(String result) {
+                                if (circleImageFile.exists()) {
+                                    circleImageFile.delete();//删除文件，不占用用户存储空间
+                                }
+                            }
+
+                            @Override
+                            public void onError(Throwable ex, boolean isOnCallback) {
+                                Log.i("11111", "onError: "+ex);
+                            }
+
+                            @Override
+                            public void onCancelled(CancelledException cex) {
+                            }
+
+                            @Override
+                            public void onFinished() {
+                            }
+
+                        });
+                        /**
+                         * 创建群的方法
+                         * groupName - 群组名称
+                         groupDesc - 群组描述
+                         callback - 回调接口
+                         */
+                        JMessageClient.createGroup(circleName, circleLabel, new CreateGroupCallback() {
+                            @Override
+                            public void gotResult(int i, String s, long l) {
+                                if (i == 0) {
+                                    //存入数据库群聊表 存入的字段有：创建者id，和群号
+                                    Log.i("gotResult", "gotResult: " + l);//群号
+                                    RequestParams requ = new RequestParams(NetUtil.url + "AddGroupServlet");
+                                    //将创建者id和群号包装好
+                                    requ.addQueryStringParameter("groupMainUserId", user.getUserId() + "");
+                                    requ.addQueryStringParameter("groupNumber", l + "");
+                                    //访问服务器，添加新建的群
+                                    x.http().get(requ, new CommonCallback<String>() {
+                                        @Override
+                                        public void onSuccess(String result) {
+                                            Log.i("CreateTaoquanActivity", "onSuccess: "+result);
+
+                                            Toast.makeText(CreateTaoquanActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
+                                            finish();
+
                                         }
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable ex, boolean isOnCallback) {
-                                        Log.i("11111", "onError: "+ex);
-                                    }
-
-                                    @Override
-                                    public void onCancelled(CancelledException cex) {
-                                    }
-
-                                    @Override
-                                    public void onFinished() {
-                                    }
-
-                                });
-//                            }
-//                        }.start();
-                        Toast.makeText(CreateTaoquanActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
-                        finish();
+                                        @Override
+                                        public void onError(Throwable ex, boolean isOnCallback) {
+                                        }
+                                        @Override
+                                        public void onCancelled(CancelledException cex) {
+                                        }
+                                        @Override
+                                        public void onFinished() {
+                                        }
+                                    });
+                                }
+                            }
+                        });
 
                     }
 
@@ -218,49 +244,6 @@ public class CreateTaoquanActivity extends AppCompatActivity {
 
                     @Override
                     public void onFinished() {
-                    }
-                });
-
-                /**
-                 * 创建群的方法
-                 * groupName - 群组名称
-                 groupDesc - 群组描述
-                 callback - 回调接口
-                 */
-                JMessageClient.createGroup(circleName, circleLabel, new CreateGroupCallback() {
-                    @Override
-                    public void gotResult(int i, String s, long l) {
-                        if (i == 0) {
-                            //存入数据库群聊表 存入的字段有：创建者id，和群号
-                            Log.i("gotResult", "gotResult: " + l);//群号
-                            RequestParams requ = new RequestParams(NetUtil.url + "AddGroupServlet");
-                            //将创建者id和群号包装好
-                            requ.addQueryStringParameter("groupMainUserId", user.getUserId() + "");
-                            requ.addQueryStringParameter("groupNumber", l + "");
-                            //访问服务器，添加新建的群
-                            x.http().get(requ, new Callback.CommonCallback<String>() {
-                                @Override
-                                public void onSuccess(String result) {
-
-                                }
-
-                                @Override
-                                public void onError(Throwable ex, boolean isOnCallback) {
-
-                                }
-
-                                @Override
-                                public void onCancelled(CancelledException cex) {
-
-                                }
-
-                                @Override
-                                public void onFinished() {
-
-                                }
-                            });
-
-                        }
                     }
                 });
                 break;

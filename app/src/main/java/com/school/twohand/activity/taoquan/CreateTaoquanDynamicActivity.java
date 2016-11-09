@@ -327,7 +327,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
             Bitmap bm = null;
             File file = new File(mResults.get(i));
             Uri imageUri = Uri.fromFile(file);
-            InputStream is = null;
+            InputStream is ;
             try {
                 is = getContentResolver().openInputStream(imageUri);
                 bm = BitmapFactory.decodeStream(is);
@@ -355,6 +355,14 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
         while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             options -= 45;//每次都减少10
             if(options == 10){
+                while(baos.toByteArray().length / 1024 > 100){  //再次压缩
+                    options -= 3;
+                    if(options == 1){
+                        break;
+                    }
+                    baos.reset();//重置baos即清空baos
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);
+                }
                 break;
             }
             Log.i("LAG", "看看质量减少没，并且执行: " + (i++) + "次---->" + options);

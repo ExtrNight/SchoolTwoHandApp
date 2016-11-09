@@ -426,8 +426,10 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                         }
                     };
                     lvEachTaoquanGoods.setAdapter(goodsAdapter);
+//                    ListViewItemUtils.setListViewHeightBasedOnChildren(lvEachTaoquanGoods);
                 } else {
                     goodsAdapter.notifyDataSetChanged();
+//                    ListViewItemUtils.setListViewHeightBasedOnChildren(lvEachTaoquanGoods);
                 }
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -594,6 +596,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Log.i("EachTaoquanActivity", "onSuccess: "+result);
                 Gson gson = new Gson();
                 List<Group> groups = gson.fromJson(result,new TypeToken<List<Group>>(){}.getType());
                 for (int i = 0 ;i < groups.size(); i++){
@@ -613,7 +616,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Log.i("EachTaoquanActivity", "onError: "+ex);
             }
 
             @Override
@@ -746,14 +749,14 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                     startActivityForResult(intent,RequestCode);
                 }else{
                     Log.i("groupId", "onClick: "+groupId);
-                    groupNumber(amoyCircle.getCircleUserId());
-                    //传入群号？？？
-                    if (groupId!=0) {
-                        Intent intent4 = new Intent(this,QunLiaoActivity.class);
-
-                        intent4.putExtra("groupId",groupId+"");
-                        JMessageClient.enterGroupConversation(groupId);
-                        startActivity(intent4);
+                    if(isCircleMember){
+                        //传入群号？？？
+                        if (groupId!=0) {
+                            Intent intent4 = new Intent(this,QunLiaoActivity.class);
+                            intent4.putExtra("groupId",groupId+"");
+                            JMessageClient.enterGroupConversation(groupId);
+                            startActivity(intent4);
+                        }
                     }
                 }
                 break;

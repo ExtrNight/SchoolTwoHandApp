@@ -3,33 +3,7 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_gray"
-    android:gravity="center">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:id="@+id/LL_no_user">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="你还没有登录哦~"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="6dp"
-            android:paddingBottom="6dp"
-            android:id="@+id/tv_login"
-            android:textColor="#000000"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp"
-            android:background="@color/myTheme_color"
-            android:text="马上登录"/>
-    </LinearLayout>
+    android:background="@color/background_gray">
 
     <LinearLayout
         android:layout_width="wrap_content"
