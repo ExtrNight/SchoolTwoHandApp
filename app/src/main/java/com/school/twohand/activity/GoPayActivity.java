@@ -283,7 +283,10 @@ public class GoPayActivity extends AppCompatActivity {
                     x.http().get(requestParams, new Callback.CommonCallback<String>() {
                         @Override
                         public void onSuccess(String result) {
-                            Toast.makeText(GoPayActivity.this, result, Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(GoPayActivity.this, result, Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(GoPayActivity.this,MyBuyActivity.class);
+                            startActivity(intent);
+
                         }
 
                         @Override
@@ -302,8 +305,8 @@ public class GoPayActivity extends AppCompatActivity {
                         }
                     });
                 }
-                Toast.makeText(GoPayActivity.this, name + "'s pay status is fail, error code is "
-                        + code + " ,reason is " + reason , Toast.LENGTH_SHORT).show();
+                /*Toast.makeText(GoPayActivity.this, name + "'s pay status is fail, error code is "
+                        + code + " ,reason is " + reason , Toast.LENGTH_SHORT).show();*/
 
                 hideDialog();
             }

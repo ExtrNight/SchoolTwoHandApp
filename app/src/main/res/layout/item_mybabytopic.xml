@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical"
+    android:layout_marginTop="5dp"
+    android:descendantFocusability="blocksDescendants">
+
+    <RelativeLayout
+        android:id="@+id/rl_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="12dp">
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/iv_userImage"
+            android:background="#ffffff"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="center"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_userName"
+            android:layout_toRightOf="@+id/iv_userImage"
+            android:layout_marginTop="1dp"
+            android:layout_marginLeft="10dp"
+            android:text="用户名"
+            android:maxLines="1"
+            android:maxEms="6"
+            android:textSize="13sp"
+            android:textColor="#000000"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1小时前"
+            android:textSize="13sp"
+            android:layout_below="@+id/tv_userName"
+            android:textColor="@drawable/main_text_color"
+            android:layout_alignLeft="@+id/tv_userName"/>
+
+
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/rl_top"
+        android:id="@+id/LL_click_to_details">
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_describe"
+                android:text="这里是商品描述这里是商品描述这里是商品描述这里是商品描述"
+                android:maxLines="2"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:ellipsize="end"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/iv_image_item"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginLeft="12dp"
+                android:layout_toRightOf="@+id/tv_describe"
+                />
+
+            <View
+                android:id="@+id/view1"
+                android:layout_below="@+id/iv_image_item"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/view"
+                android:layout_marginTop="9dp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:paddingTop="12dp"
+                android:layout_gravity="center"
+                android:layout_below="@+id/view1">
+
+                <ImageView
+                    android:id="@+id/iv_location"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_school"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_location"
+                    android:text="来自苏州"
+                    android:textSize="13sp"
+                    android:maxEms="10"
+                    android:maxLines="1"
+                    android:textColor="#0c87e6"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/tv_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="笔记本台式机闲置"
+                    android:textSize="13sp"
+                    android:textColor="#0c87e6"
+                    android:layout_toRightOf="@+id/tv_school"
+                    android:layout_centerVertical="true"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_priase"
+                    android:layout_centerVertical="true"
+                    android:text="点赞 1 "
+                    android:layout_marginLeft="265dp"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:maxEms="12"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_write"
+                    android:text=" 留言 1"
+                    android:textColor="@color/black"
+                    android:layout_toRightOf="@+id/tv_priase"
+                    android:layout_marginLeft="20dp"
+                    android:layout_centerVertical="true"
+                    android:textSize="13sp"
+                    android:maxEms="12"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+</RelativeLayout>
+

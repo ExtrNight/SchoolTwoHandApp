@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/rl_item_mycircle"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:id="@+id/iv_cicleImage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"/>
+
+        <TextView
+            android:id="@+id/tv_circleName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="高博软件技术学院"
+            android:textColor="@color/black"
+            android:textSize="15dp"
+            android:layout_toRightOf="@+id/iv_cicleImage"
+            android:layout_marginLeft="15dp"
+            android:layout_alignTop="@+id/iv_cicleImage"/>
+
+        <TextView
+            android:id="@+id/tv_introduce"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:text="天哪~这鱼塘什么介绍都没有，快使出你的洪荒之力帮塘主想一个吧"
+            android:textSize="14dp"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@+id/iv_cicleImage"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginTop="15dp"
+            android:layout_below="@+id/tv_circleName"/>
+
+        <TextView
+            android:id="@+id/tv_sumSay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/view"
+            android:text="人气3081209  发布201987"
+            android:textSize="13dp"
+            android:layout_below="@+id/tv_introduce"
+            android:layout_alignLeft="@+id/tv_circleName"
+            android:layout_marginTop="20dp"/>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="#d9d5d5"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+</RelativeLayout>

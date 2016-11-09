@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -104,7 +105,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         a.setText("卖家：" + queryOrderDetailBean.getSellUserName());
 
         ImageView b= (ImageView) findViewById(R.id.iv_goodImage);
-        x.image().bind(b, NetUtil.imageUrl +queryOrderDetailBean.getGoodsImage().getImageAddress());
+        x.image().bind(b, NetUtil.imageUrl + queryOrderDetailBean.getGoodsImage().getImageAddress());
 
         TextView c= (TextView) findViewById(R.id.tv_text_title);
         c.setText("#"+queryOrderDetailBean.getGoodsName()+"#");
@@ -254,7 +255,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     }
 
-    public void btnClick(final QueryOrderDetailBean queryOrderDetailBean, Button btn1, Button btn2, Button btn3){
+    public void btnClick(final QueryOrderDetailBean queryOrderDetailBean,Button btn1,Button btn2,Button btn3){
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

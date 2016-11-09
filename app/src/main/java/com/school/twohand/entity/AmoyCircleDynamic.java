@@ -21,6 +21,38 @@ public class AmoyCircleDynamic implements Parcelable {
     List<AmoyCircleDynamicImage> imageList;         //图片对象的集合
     List<Integer> likesList;		  			  //包含点赞者用户Id的集合
 
+    private Integer likeSum;
+    private Integer messageSum;
+
+
+    public AmoyCircleDynamic(String amoyCircleDynamicTitle, String amoyCircleDynamicContent,
+                             Timestamp amoyCircleDynamicTime, List<AmoyCircleDynamicImage> imageList, Integer likeSum,
+                             Integer messageSum, User user) {
+        super();
+        this.amoyCircleDynamicTitle = amoyCircleDynamicTitle;
+        this.amoyCircleDynamicContent = amoyCircleDynamicContent;
+        this.amoyCircleDynamicTime = amoyCircleDynamicTime;
+        this.imageList = imageList;
+        this.likeSum = likeSum;
+        this.messageSum = messageSum;
+        this.user = user;
+    }
+
+    public AmoyCircleDynamic(int amoyCirlceDynamicId, User user, String amoyCircleDynamicTitle,
+                             String amoyCircleDynamicContent, Timestamp amoyCircleDynamicTime, List<AmoyCircleDynamicImage> imageList,
+                             Integer likeSum, Integer messageSum) {
+        super();
+        this.amoyCirlceDynamicId = amoyCirlceDynamicId;
+        this.user = user;
+        this.amoyCircleDynamicTitle = amoyCircleDynamicTitle;
+        this.amoyCircleDynamicContent = amoyCircleDynamicContent;
+        this.amoyCircleDynamicTime = amoyCircleDynamicTime;
+        this.imageList = imageList;
+        this.likeSum = likeSum;
+        this.messageSum = messageSum;
+    }
+
+
     //包含所有字段的构造方法
     public AmoyCircleDynamic(int amoyCirlceDynamicId, User user, int amoyCircleId, String amoyCircleDynamicTitle,
                              String amoyCircleDynamicContent,
@@ -57,6 +89,23 @@ public class AmoyCircleDynamic implements Parcelable {
 
     public void setAmoyCirlceDynamicId(int amoyCirlceDynamicId) {
         this.amoyCirlceDynamicId = amoyCirlceDynamicId;
+    }
+
+
+    public Integer getLikeSum() {
+        return likeSum;
+    }
+
+    public void setLikeSum(Integer likeSum) {
+        this.likeSum = likeSum;
+    }
+
+    public Integer getMessageSum() {
+        return messageSum;
+    }
+
+    public void setMessageSum(Integer messageSum) {
+        this.messageSum = messageSum;
     }
 
     public User getUser() {

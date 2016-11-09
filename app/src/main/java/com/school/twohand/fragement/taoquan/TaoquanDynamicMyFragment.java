@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicDetailsActivity;
 import com.school.twohand.entity.AmoyCircleDynamic;
@@ -45,12 +46,15 @@ import in.srain.cube.views.ptr.PtrClassicFrameLayout;
 public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements UltraRefreshListener {
 
     MyApplication myApplication;
-    User user;
 
     @InjectView(R.id.ultra_lv_dynamic)
     public UltraRefreshListView mLv_dynamic_all;
     @InjectView(R.id.ultra_ptr_dynamic)
     PtrClassicFrameLayout mPtrFrame_dynamic_all;
+    @InjectView(R.id.tv_login)
+    TextView tvLogin;
+    @InjectView(R.id.LL_no_user)
+    LinearLayout LLNoUser;
 
     private int pageNo = 1;
     public void setPageNo(int pageNo) {this.pageNo = pageNo;}
@@ -78,15 +82,11 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
         //设置数据刷新回调接口
         mLv_dynamic_all.setUltraRefreshListener(this);
 
-
         return view;
     }
 
     @Override
     public void initView() {
-        myApplication = (MyApplication) getActivity().getApplication();
-        user = myApplication.getUser();
-
         Bundle bundle = getArguments();
         if(bundle!=null){
             circleId = bundle.getInt("circleId");
@@ -97,14 +97,22 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
 
     @Override
     public void initData() {
-        getData();
+        myApplication = (MyApplication) getActivity().getApplication();
+        if (myApplication.getUser() == null) {
+            LLNoUser.setVisibility(View.VISIBLE);   //显示出登录,把ListView隐藏
+            mPtrFrame_dynamic_all.setVisibility(View.GONE);
+        } else {
+            LLNoUser.setVisibility(View.GONE);
+            mPtrFrame_dynamic_all.setVisibility(View.VISIBLE);
+            getData();
+        }
     }
 
     //获取该淘圈的所有我的动态
     public void getData(){
         RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
-        requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
+        requestParams.addQueryStringParameter("currentUserId",myApplication.getUser().getUserId()+"");
         requestParams.addBodyParameter("requirement",1+""); //表示只查出我的动态
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
         requestParams.addQueryStringParameter("pageSize",pageSize+"");
@@ -191,7 +199,7 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
     private void loadMoreData(){
         RequestParams requestParams = new RequestParams(NetUtil.url+"QueryCircleDynamicServlet");
         requestParams.addQueryStringParameter("circleId",circleId+"");
-        requestParams.addQueryStringParameter("currentUserId",user.getUserId()+"");
+        requestParams.addQueryStringParameter("currentUserId",myApplication.getUser().getUserId()+"");
         requestParams.addBodyParameter("requirement",1+""); //表示只查出我的动态
         requestParams.addQueryStringParameter("pageNo",pageNo+"");
         requestParams.addQueryStringParameter("pageSize",pageSize+"");
@@ -281,7 +289,16 @@ public class TaoquanDynamicMyFragment extends TaoquanBaseFragment implements Ult
 
     @Override
     public void initEvent() {
-
+        if(myApplication.getUser()==null){
+            tvLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(intent,TaoquanDynamicForwardFragment.RequestCode);
+                }
+            });
+        }
     }
 
     @Override

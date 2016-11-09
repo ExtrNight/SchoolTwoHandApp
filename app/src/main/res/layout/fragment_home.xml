@@ -70,7 +70,7 @@
                     android:id="@+id/firstTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="新鲜的"
+                    android:text="最热的"
                     android:layout_marginTop="3dp"
                     android:textSize="15sp"
                     android:textColor="@color/text_color_after"
@@ -86,7 +86,7 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginTop="3dp"
-                   android:text="附近的"
+                   android:text="最新的"
                    android:textColor="@color/text_color_before"
                    android:textSize="15sp"
                    android:textStyle="bold"/>

@@ -77,12 +77,6 @@ public class TaoquanPublishActivity extends AppCompatActivity {
     ImageView publicPhoto4;
     @InjectView(R.id.public_photo5)
     ImageView publicPhoto5;
-    @InjectView(R.id.publicAuction1)
-    RadioButton publicAuction1;
-    @InjectView(R.id.publicAuction2)
-    RadioButton publicAuction2;
-    @InjectView(R.id.publicSure)
-    Button publicSure;
     @InjectView(R.id.publicPrice)
     EditText publicPrice;
     @InjectView(R.id.publicClass)
@@ -91,8 +85,6 @@ public class TaoquanPublishActivity extends AppCompatActivity {
     Spinner publicCircle;
     @InjectView(R.id.tv_publish_taoquan_name)
     TextView tvPublishTaoquanName;
-    @InjectView(R.id.publish_finish)
-    ImageView publishFinish;
 
     public static final int ResultCode = 19;
     private ArrayList<String> mResults = new ArrayList<>();
@@ -100,21 +92,21 @@ public class TaoquanPublishActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 732;
     private static final int REQUEST_CODE_CLASS = 1;
     Integer classid = 0;
-    Integer amoyId = 0;//选中淘圈的id
+    Integer amoyId = 0;   //选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
-        publicCircle.setVisibility(View.GONE);
+        publicCircle.setVisibility(View.GONE);  //隐藏Spinner，只显示当前淘圈名
         tvPublishTaoquanName.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
         if (intent != null) {
             amoyId = intent.getIntExtra("circleId", 0);
             String circleName = intent.getStringExtra("circleName");
             if (circleName != null) {
-                tvPublishTaoquanName.setText(circleName);
+                tvPublishTaoquanName.setText("< "+circleName+" >");
             }
         }
 
@@ -165,7 +157,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
                 initPhotoView();
                 //选择图片的保存
                 final ShapeLoadingDialog shapeLoadingDialog = new ShapeLoadingDialog(this);//shapeLoadingDialog对象
-                shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等...");
+                shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
                 shapeLoadingDialog.show();
                 Thread thread = new Thread(new Runnable() {
                     @Override
@@ -329,15 +321,13 @@ public class TaoquanPublishActivity extends AppCompatActivity {
             Bitmap bm = null;
             File file = new File(mResults.get(i));
             Uri imageUri = Uri.fromFile(file);
-            InputStream is = null;
+            InputStream is;
             try {
                 is = getContentResolver().openInputStream(imageUri);
                 bm = BitmapFactory.decodeStream(is);
                 if (is != null) {
                     is.close();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -363,7 +353,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         int i = 1;
         Log.i("LAG", "压缩前的长度: " + baos.toByteArray().length);
         while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            options -= 10;//每次都减少10
+            options -= 45;//每次都减少10
             if (options == 10) {
                 break;
             }
@@ -458,11 +448,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         String describe = publicContent.getText().toString();
         Float goodsPrice = Float.parseFloat(publicPrice.getText().toString());
         Byte auction = -1;
-        if (publicAuction1.isChecked()) {
-            auction = 0;//一口价
-        } else if (publicAuction2.isChecked()) {
-            auction = 1;//拍卖
-        }
+        auction = 0;  //一口价，拍卖去掉
         List<GoodsImage> goodsImages = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             String address = files.get(i).toString().substring(files.get(i).toString().lastIndexOf("/") + 1, files.get(i).toString().length());
@@ -472,7 +458,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
 
         Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,user.getUserSchoolName());
         final ProgressDialog dia = new ProgressDialog(this);
-        dia.setMessage("加载中....");
+        dia.setMessage("发布中...");
         dia.show();
 
         RequestParams params = new RequestParams(NetUtil.url + "UploadImages");
@@ -481,6 +467,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         for (int i = 0; i < files.size(); i++) {
             params.addBodyParameter("file" + i, files.get(i));
         }
+        //Gson gson = new Gson();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         String goodsString = gson.toJson(goods);
         params.addBodyParameter("goods", goodsString);

@@ -19,6 +19,27 @@ public class User implements Parcelable {
 	String userAddress;
 	String userSchoolName;
 
+	public User(String userName, String userHead, String userSex,Timestamp userBirthday, String userPersonalProfile,
+				String userAddress) {
+		super();
+		this.userName = userName;
+		this.userHead = userHead;
+		this.userSex=userSex;
+		this.userBirthday = userBirthday;
+		this.userPersonalProfile = userPersonalProfile;
+		this.userAddress = userAddress;
+		//查询名片信息
+
+	}
+
+	public User(Integer userId, String userName, String userHead, String userAddress) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.userHead = userHead;
+		this.userAddress = userAddress;
+	}
+
 	public Integer getUserId() {
 		return userId;
 	}

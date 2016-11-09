@@ -14,9 +14,12 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.myApplication.MyApplication;
+import com.school.twohand.query.entity.QueryReleaseBean;
 import com.school.twohand.query.entity.QueryTopicBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
+import com.school.twohand.utils.MyListView;
 import com.school.twohand.utils.NetUtil;
 import com.school.twohand.utils.ViewHolder;
 
@@ -37,8 +40,7 @@ import butterknife.ButterKnife;
  */
 public class TopicFragment extends Fragment{
     ListView liTopic;
-    int pageNo = 1;
-    int pageSize = 4;
+
     CommonAdapter<QueryTopicBean> queryTopicBeanCommonAdapter;
     List<QueryTopicBean> queryTopicBean=new ArrayList<>();
 
@@ -47,7 +49,7 @@ public class TopicFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_topic,null);
-        liTopic= (ListView) view.findViewById(R.id.li_topic);
+        liTopic= (MyListView) view.findViewById(R.id.li_topic);
         ButterKnife.inject(getActivity());
         getTopicData();
         return view;
@@ -55,11 +57,10 @@ public class TopicFragment extends Fragment{
 
     private void getTopicData(){
         String url = NetUtil.url + "QueryTopicServlet";
-        Log.i("TopicFragment", "getTopicData: getTopicData"+url);
+        Integer userId=  ((MyApplication)getActivity().getApplication()).getUser().getUserId();
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addQueryStringParameter("pageNo", pageNo+"");
-        requestParams.addQueryStringParameter("pageSize", pageSize+"");
-        Log.i("TopicFragment", "getTopicData: getTopicData"+url);
+        requestParams.addQueryStringParameter("userId", userId + "");
+
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -68,7 +69,7 @@ public class TopicFragment extends Fragment{
                 Type type = new TypeToken<List<QueryTopicBean>>() {
                 }.getType();
                 List<QueryTopicBean> newQueryTopicBean=gson.fromJson(result,type);
-                Log.i("TopicFragment", "onSuccess: onSuccess"+result);
+
                 queryTopicBean.clear();
                 queryTopicBean.addAll(newQueryTopicBean);
 
@@ -102,7 +103,7 @@ public class TopicFragment extends Fragment{
 
 
                             ImageView e=viewHolder.getViewById(R.id.iv_image_item);
-                            x.image().bind(e,NetUtil.imageUrl+queryTopicBean.getImageList());
+                            x.image().bind(e, NetUtil.imageUrl + queryTopicBean.getImageList());
 
                             TextView f=viewHolder.getViewById(R.id.tv_school);
                             f.setText("来自"+queryTopicBean.getUserAddress()+" 鱼塘|");
@@ -112,6 +113,9 @@ public class TopicFragment extends Fragment{
 
                             TextView h=viewHolder.getViewById(R.id.tv_write);
                             h.setText("留言"+queryTopicBean.getMessageSum());
+
+                            TextView i=viewHolder.getViewById(R.id.tv_circleName);
+                            i.setText(queryTopicBean.getAmoyCircleName());
 
                         }
                     };

@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorViewpage"
     tools:context="com.school.twohand.activity.GetAddressActivity">
 
     <RelativeLayout
@@ -24,37 +23,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="选择地址"
+            android:text="收货地址"
             android:textSize="16sp"
             android:textColor="@android:color/black"/>
-</RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_toolbar1"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/white"
-        android:layout_below="@+id/rl_toolbar"
-        >
-        <ImageView
-            android:id="@+id/goback1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:padding="8dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/back"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="管理收货地址"
-            android:textSize="16sp"
-            android:textColor="@android:color/black"/>
-
     </RelativeLayout>
 
+    <ListView
+        android:id="@+id/li_getAddress"
+        android:layout_below="@+id/rl_toolbar"
+        android:layout_above="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorViewpage">
+
+    </ListView>
+
     <RelativeLayout
+        android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

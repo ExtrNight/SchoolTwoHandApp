@@ -23,10 +23,10 @@ public class LikeTbl {
 	public void setLikeUserOther(User likeUserOther) {
 		this.likeUserOther = likeUserOther;
 	}
-	public Goods getLikeGoodsId() {
+	public Goods getLikeGoods() {
 		return likeGoods;
 	}
-	public void setLikeGoodsId(Goods likeGoods) {
+	public void setLikeGoods(Goods likeGoods) {
 		this.likeGoods = likeGoods;
 	}
 	public LikeTbl(Integer likeId, User likeUserMe, User likeUserOther,

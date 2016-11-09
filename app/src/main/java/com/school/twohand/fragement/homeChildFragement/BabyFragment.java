@@ -4,7 +4,6 @@ package com.school.twohand.fragement.homeChildFragement;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-
-
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryReleaseBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -44,8 +42,7 @@ import butterknife.ButterKnife;
 public class BabyFragment extends Fragment {
 
     ListView lvRelease;
-    int pageNo = 1;
-    int pageSize = 4;
+
     CommonAdapter<QueryReleaseBean> queryReleaseBeanCommonAdapter;
     List<QueryReleaseBean>  queryReleaseBean=new ArrayList<>();
 
@@ -63,37 +60,38 @@ public class BabyFragment extends Fragment {
 
     private void getGoodsData() {
         String url = NetUtil.url + "QueryReleaseServlet";
+        Integer userId=  ((MyApplication)getActivity().getApplication()).getUser().getUserId();
         RequestParams requestParams = new RequestParams(url);
-        Log.i("BabyFragment", "getGoodsData: getGoodsData"+url);
-        requestParams.addQueryStringParameter("pageNo", pageNo+"");
-        requestParams.addQueryStringParameter("pageSize", pageSize+"");
-        Log.i("BabyFragment", "getGoodsData: getGoodsData"+url);
+        requestParams.addQueryStringParameter("userId", userId + "");
+
+
+
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(final String result) {
-                Log.i("BabyFragment", "onSuccess: onSuccess");
+
                 Gson gson = new GsonBuilder()
                         .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
                 Type type = new TypeToken<List<QueryReleaseBean>>() {
                 }.getType();
-                Log.i("BabyFragment", "onSuccess: onSuccess+111");
+
                 List<QueryReleaseBean> newQueryReleaseBean = gson.fromJson(result, type);
-                Log.i("BabyFragment", "onSuccess: onSuccess+222");
+
                 queryReleaseBean.clear();
                 queryReleaseBean.addAll(newQueryReleaseBean);
-                Log.i("BabyFragment", "onSuccess: onSuccess+333");
+
                 //设置ListView的数据源
                 if (queryReleaseBeanCommonAdapter == null) {
                     queryReleaseBeanCommonAdapter = new CommonAdapter<QueryReleaseBean>(getActivity(), queryReleaseBean, R.layout.item_mybaby) {
                         @Override
-                        public void convert(ViewHolder viewHolder, QueryReleaseBean queryReleaseBean, final int position) {
-                            Log.i("BabyFragment", "convert: convert+11");
+                            public void convert(ViewHolder viewHolder, QueryReleaseBean queryReleaseBean, final int position) {
+
                             TextView a = viewHolder.getViewById(R.id.tv_babyTitle);
                             a.setText(queryReleaseBean.getGoodsDescribe());
-                            Log.i("BabyFragment", "convert: convert"+a);
+
                             TextView b = viewHolder.getViewById(R.id.tv_babyPrice1);
-                            b.setText("￥"+queryReleaseBean.getGoodsPrice());
-                            Log.i("BabyFragment", "convert: convert"+b);
+                            b.setText("￥" + queryReleaseBean.getGoodsPrice());
+
                             //设置商品图片
                             LinearLayout LL = viewHolder.getViewById(R.id.LL);
                             LL.setTag(queryReleaseBean);
@@ -148,11 +146,11 @@ public class BabyFragment extends Fragment {
     public void addLLView(LinearLayout LL, final int position) {
         Log.i("BabyFragment", "addLLView: addLLView+11");
         LL.removeAllViews(); //加之前要先把之前的remove掉，！！！
-        for (int i = 0; i < ((QueryReleaseBean) LL.getTag()).getGoodsImage().size(); i++) {
+          for (int i = 0; i < ((QueryReleaseBean) LL.getTag()).getGoodsImage().size(); i++) {
             View view = LayoutInflater.from(getActivity()).inflate(
                     R.layout.each_baby_image_item, null);
             ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_baby_image_item);
-            String url2 = NetUtil.imageUrl+"image/" + ((QueryReleaseBean) LL.getTag()).getGoodsImage().get(i).getImageAddress();
+            String url2 = NetUtil.imageUrl + ((QueryReleaseBean) LL.getTag()).getGoodsImage().get(i).getImageAddress();
             ImageOptions imageOptions2 = new ImageOptions.Builder()
                     .setFailureDrawableId(R.mipmap.ic_launcher)
                     .setLoadingDrawableId(R.mipmap.ic_launcher)

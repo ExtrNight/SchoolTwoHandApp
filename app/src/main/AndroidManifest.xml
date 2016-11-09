@@ -296,6 +296,8 @@
         <activity android:name="com.school.twohand.activity.taoquan.QunLiaoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
+        <activity android:name="com.school.twohand.activity.AddAddressActivity"/>
+
     </application>
 
 </manifest>

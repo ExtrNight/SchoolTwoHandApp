@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorViewpage">
+<RelativeLayout
+    android:layout_marginTop="7dp"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:layout_centerVertical="true"
+
+    android:background="#767593">
+    <TextView
+        android:id="@+id/tv_receievename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="收货人:成龙"
+        android:textColor="@color/white"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="12dp"/>
+
+    <TextView
+        android:id="@+id/tv_phoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="13027227689"
+        android:textColor="@color/white"
+        android:layout_alignBottom="@+id/tv_receievename"
+        android:layout_marginLeft="230dp"/>
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="收货地址：江苏省苏州市工业园区独墅湖高教区仁爱路一号"
+        android:textColor="@color/white"
+        android:layout_below="@+id/tv_phoneNumber"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_address" />
+
+
+</RelativeLayout>
+
+
+</RelativeLayout>

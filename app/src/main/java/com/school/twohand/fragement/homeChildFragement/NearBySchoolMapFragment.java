@@ -2,6 +2,7 @@ package com.school.twohand.fragement.homeChildFragement;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
@@ -244,7 +246,13 @@ public class NearBySchoolMapFragment extends Fragment{
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            updateUserSchoolName(poi.name);
+                            if(((MyApplication) getActivity().getApplication()).getUser()==null){
+                                //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                startActivity(intent);
+                            }else{
+                                updateUserSchoolName(poi.name);
+                            }
                         }
                     }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                 @Override

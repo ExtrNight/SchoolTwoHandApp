@@ -278,6 +278,7 @@
                 android:textColor="@color/view"
                 android:layout_toRightOf="@+id/tv_text_address"
                 android:layout_marginLeft="40dp"
+                android:layout_marginRight="25dp"
                 android:layout_alignTop="@+id/tv_text_address"
                 />
             <View
@@ -338,7 +339,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/view"
                 android:text="2555674281581697"
-                android:layout_alignBottom="@+id/tv_text_orderId"
+                android:layout_alignTop="@+id/tv_text_orderId"
                 android:layout_toRightOf="@+id/tv_text_orderId"
                 android:layout_marginLeft="42dp"/>
 

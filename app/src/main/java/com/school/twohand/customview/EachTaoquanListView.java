@@ -26,7 +26,8 @@ public class EachTaoquanListView extends ListView implements AbsListView.OnScrol
 
     private View headView;   //头部布局
     private View footView;  //底部布局
-    private ProgressBar footPb;
+//    private ProgressBar footPb;
+    private BounceProgressBar bounceProgressBar;    //带有跳跃动画的ProgressBar
     private TextView footTv;
 
     public ImageView iv_taoquan_bg;             //淘圈背景
@@ -85,7 +86,7 @@ public class EachTaoquanListView extends ListView implements AbsListView.OnScrol
     //初始化底部
     void initFoot(Context context){
         footView = LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_footer,null);
-        footPb = (ProgressBar) footView.findViewById(R.id.footer_progressbar);
+        bounceProgressBar = (BounceProgressBar) footView.findViewById(R.id.footer_progressbar);
         footTv = (TextView) footView.findViewById(R.id.footer_hint_textview);
 
         addFooterView(footView);//添加footView
@@ -154,11 +155,11 @@ public class EachTaoquanListView extends ListView implements AbsListView.OnScrol
     public void changeFootState(){
         if(isLoading){
             //正在加载：ProgressBar显示
-            footPb.setVisibility(VISIBLE);
+            bounceProgressBar.setVisibility(VISIBLE);
             footTv.setVisibility(GONE);
         }else{
             //没有在加载,进图条隐藏，文本显示
-            footPb.setVisibility(GONE);
+            bounceProgressBar.setVisibility(GONE);
             footTv.setVisibility(VISIBLE);
         }
     }

@@ -12,10 +12,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.fragement.taoquan.TaoquanBaseFragment;
 import com.school.twohand.fragement.taoquan.TaoquanDynamicAllFragment;
 import com.school.twohand.fragement.taoquan.TaoquanDynamicForwardFragment;
 import com.school.twohand.fragement.taoquan.TaoquanDynamicMyFragment;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class TaoquanDynamicActivity extends AppCompatActivity {
     @InjectView(R.id.vp_taoquan_dynamic)
     ViewPager vpTaoquanDynamic;
 
+    MyApplication myApplication;
+
     List<TaoquanBaseFragment> fragmentList=new ArrayList<>();
     TaoquanDynamicAllFragment taoquanDynamicAllFragment;
     TaoquanDynamicMyFragment taoquanDynamicMyFragment;
@@ -53,7 +57,9 @@ public class TaoquanDynamicActivity extends AppCompatActivity {
 
     private int circleId;
     private String circleName;
+    private int isCircleMemberFlag;     //判断是否是淘圈成员，1表示是
     public static final int RequestCode = 10;
+    private static final int LoginRequestCode = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +76,10 @@ public class TaoquanDynamicActivity extends AppCompatActivity {
         if(intent!=null){
             circleId = intent.getIntExtra("circleId",0);
             circleName = intent.getStringExtra("circleName");
+            isCircleMemberFlag = intent.getIntExtra("isCircleMemberFlag",0);
         }
 
-
+        myApplication = (MyApplication) getApplication();
 
     }
 
@@ -140,10 +147,18 @@ public class TaoquanDynamicActivity extends AppCompatActivity {
             return;
         }
         if(view.getId()==R.id.tv_publish_dynamic){ //发布动态
-            Intent intent = new Intent(this,CreateTaoquanDynamicActivity.class);
-            intent.putExtra("circleId",circleId);
-            //startActivity(intent);
-            startActivityForResult(intent,RequestCode);
+            if(myApplication.getUser()==null){
+                //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                Intent intent = new Intent(TaoquanDynamicActivity.this, LoginActivity.class);
+                startActivityForResult(intent,LoginRequestCode);
+            }else{
+                if(isCircleMemberFlag==1){  //是淘圈成员
+                    Intent intent = new Intent(this,CreateTaoquanDynamicActivity.class);
+                    intent.putExtra("circleId",circleId);
+                    startActivityForResult(intent,RequestCode);
+                }
+
+            }
             return;
         }
         int currentIndex = 0;  //viewPager显示项的位置
@@ -183,6 +198,12 @@ public class TaoquanDynamicActivity extends AppCompatActivity {
             taoquanDynamicForwardFragment.setPageNo(1);//设置页数为第一页
             taoquanDynamicForwardFragment.mLv_dynamic_all.setSelectionAfterHeaderView();
             taoquanDynamicForwardFragment.getData();//我评论的Fragment重新加载
+        } else if(requestCode==LoginRequestCode&&resultCode==LoginActivity.ResultCode){
+            myApplication = (MyApplication) getApplication();
+        } else if(requestCode==TaoquanDynamicForwardFragment.RequestCode&&resultCode==LoginActivity.ResultCode){
+            //"我评论的"和"我发布的"fragment登录成功的回调
+            taoquanDynamicForwardFragment.initData();
+            taoquanDynamicMyFragment.initData();
         }
     }
 

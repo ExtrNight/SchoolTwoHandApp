@@ -291,6 +291,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
                             intent.putExtra("filesString",filesString);
                             intent.putExtra("DetailGoods","DetailGoods");
                             intent.putExtra("imageurl",imageAddress);
+                            intent.putExtra("goodId",goods.getGoodsId()+"");
                             startActivity(intent);
 
 

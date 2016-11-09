@@ -81,27 +81,26 @@
                         android:textColor="@color/black"
                         android:layout_marginLeft="20dp"/>
 
-                    <com.school.twohand.activity.CircleImageView
-
-                        android:id="@+id/iv_headimg"
+                    <ImageView
+                        android:id="@+id/iv_headimg1"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
-                        android:layout_centerVertical="true"
                         android:layout_marginLeft="60dp"
-                        android:background="#00000000"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/ic_launcher"
                         />
 
-
-                    <ImageView
+                    <com.school.twohand.utils.CircleImageView
                         android:id="@+id/iv_headimg2"
                         android:layout_width="47dp"
                         android:layout_height="47dp"
                         android:layout_marginLeft="60dp"
                         android:layout_centerVertical="true"
-
+                        android:src="@mipmap/ic_launcher"
+                        android:visibility="gone"
                         />
                     <ImageView
-
+                        android:id="@+id/ceshi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -123,49 +122,13 @@
                     android:layout_marginRight="20dp"
                     />
 
-                <RelativeLayout
-                    android:id="@+id/li_backgd"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_below="@+id/view"
-                    android:background="@color/white">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="更改主页背景图"
-                        android:textColor="@color/black"
-                        android:layout_marginLeft="20dp"
-                        android:textSize="14dp"
-                        android:layout_marginTop="17dp"/>
-
-                    <ImageView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:padding="8dp"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/go"
-                        />
-                </RelativeLayout>
-
-                <View
-                    android:id="@+id/view1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0.5dp"
-                    android:background="@color/view"
-                    android:layout_below="@+id/li_backgd"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    />
 
                 <RelativeLayout
                     android:id="@+id/rl_sex"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_below="@+id/view1"
+                    android:layout_below="@+id/view"
                     android:background="@color/white">
 
                     <TextView

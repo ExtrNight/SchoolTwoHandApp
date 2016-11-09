@@ -9,14 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
-            <Button
+           <!-- <Button
             android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -25,7 +23,7 @@
                 android:id="@+id/exit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="退出"/>
+                android:text="退出"/>-->
 
             <include
                 android:id="@+id/name"
@@ -47,8 +45,7 @@
                 android:id="@+id/li_number"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/white"
-                 >
+                android:background="@color/white">
                 <FrameLayout
                     android:id="@+id/fl_sum1"
                     android:layout_width="0dp"
@@ -136,8 +133,8 @@
                 android:layout_height="50dp"
                 android:id="@+id/rl_release"
                 android:background="@color/white"
-                android:layout_below="@+id/view2"
-                >
+                android:layout_below="@+id/view2">
+
                 <ImageView
                     android:id="@+id/iv_logoRle"
                     android:layout_width="24dp"
@@ -164,7 +161,7 @@
                     android:textSize="15dp"
                     android:layout_centerVertical="true"
                     android:textColor="#c3b5b5"
-                    android:text="0"
+                    android:text=""
                     />
                 <ImageView
                     android:id="@+id/iv_release"
@@ -217,7 +214,7 @@
                     android:layout_marginRight="15dp"
                     android:textSize="15dp"
                     android:layout_centerVertical="true"
-                    android:text="0"
+                    android:text=""
                     android:textColor="#c3b5b5"
                     />
                 <ImageView
@@ -274,7 +271,7 @@
                     android:layout_marginRight="15dp"
                     android:textSize="15dp"
                     android:layout_centerVertical="true"
-                    android:text="0"
+                    android:text=""
                     android:textColor="#c3b5b5"
                     />
                 <ImageView
@@ -301,8 +298,7 @@
                 android:layout_height="50dp"
                 android:layout_below="@+id/view5"
                 android:id="@+id/rl_praise"
-                android:background="@color/white"
-                >
+                android:background="@color/white">
                 <ImageView
                     android:id="@+id/iv_logoPriase"
                     android:layout_width="24dp"
@@ -328,7 +324,7 @@
                     android:layout_marginRight="15dp"
                     android:textSize="15dp"
                     android:layout_centerVertical="true"
-                    android:text="0"
+                    android:text=""
                     android:textColor="#c3b5b5"
                     />
                 <ImageView
@@ -349,90 +345,14 @@
                 android:layout_below="@id/rl_praise"
                 android:background="#c3b5b5" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@+id/view6"
-                android:id="@+id/rl_auction"
-                android:background="@color/white"
-                >
 
-                <ImageView
-                    android:id="@+id/iv_logoAuction"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginLeft="19dp"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/auction"/>
-
-                <TextView
-                    android:id="@+id/tv_textAuction"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="我的拍卖"
-                    android:textSize="13dp"
-                    android:layout_toRightOf="@+id/iv_logoAuction"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="14dp" />
-
-
-                <ImageView
-                    android:id="@+id/iv_auction"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:padding="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@mipmap/go"
-                    />
-            </RelativeLayout>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/rl_help"
-                android:layout_marginTop="7dp"
-                android:layout_below="@+id/rl_auction"
-                android:background="@color/white"
-                >
-                <ImageView
-                    android:id="@+id/iv_logoHelp"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginLeft="19dp"
-                    android:layout_centerVertical="true"
-                    android:src="@mipmap/help"/>
-                <TextView
-                    android:id="@+id/tv_textHelp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="帮助与反馈"
-                    android:textSize="14dp"
-                    android:layout_toRightOf="@+id/iv_logoHelp"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="13dp" />
-
-
-                <ImageView
-                    android:id="@+id/iv_Help"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:padding="8dp"
-                    android:layout_marginRight="8dp"
-                    android:src="@mipmap/go"
-                    />
-            </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:id="@+id/rl_set"
                     android:layout_marginTop="7dp"
-                    android:layout_below="@+id/rl_help"
+                    android:layout_below="@+id/view6"
                     android:background="@color/white"
                     android:layout_marginBottom="7dp"
                     >
@@ -442,12 +362,12 @@
                         android:layout_height="24dp"
                         android:layout_marginLeft="19dp"
                         android:layout_centerVertical="true"
-                        android:src="@mipmap/set"/>
+                        android:src="@mipmap/auction"/>
                     <TextView
-                        android:id="@+id/tv_textSet"
+                        android:id="@+id/exit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="设置"
+                        android:text="退出登录"
                         android:textSize="14dp"
                         android:layout_toRightOf="@+id/iv_logoSet"
                         android:layout_centerVertical="true"

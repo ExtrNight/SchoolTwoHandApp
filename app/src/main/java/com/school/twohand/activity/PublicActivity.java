@@ -25,6 +25,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.king.photo_library.ImagesSelectorActivity;
 import com.king.photo_library.SelectorSettings;
+import com.school.twohand.activity.login.LoginActivity;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.ClassTbl;
 import com.school.twohand.entity.Goods;
@@ -76,10 +78,6 @@ public class PublicActivity extends AppCompatActivity {
     ImageView publicPhoto4;
     @InjectView(R.id.public_photo5)
     ImageView publicPhoto5;
-    @InjectView(R.id.publicAuction1)
-    RadioButton publicAuction1;
-    @InjectView(R.id.publicAuction2)
-    RadioButton publicAuction2;
     @InjectView(R.id.publicSure)
     Button publicSure;
     @InjectView(R.id.publicPrice)
@@ -88,136 +86,158 @@ public class PublicActivity extends AppCompatActivity {
     TextView publicClass;
     @InjectView(R.id.publicCircle)
     Spinner publicCircle;
-    @InjectView(R.id.publish_finish)
-    ImageView publishFinish;
-    @InjectView(R.id.tv_publish_taoquan_name)
-    TextView tvPublishTaoquanName;
+    private ShapeLoadingDialog shapeLoadingDialog;
 
     private ArrayList<String> mResults = new ArrayList<>();
     List<File> files = new ArrayList<>();
     private static final int REQUEST_CODE = 732;
     private static final int REQUEST_CODE_CLASS = 1;
     Integer classid = 0;
-    List<AmoyCircle> amoyCircles;//淘圈数据源
+    List<AmoyCircle> amoyCircles = new ArrayList<>();//淘圈数据源
     Integer amoyId = 0;//选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
     File imageAddress;
+
+    MyApplication myApplication;
+    private static final int LoginRequestCode = 30;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
 
-            //查询用户对应淘圈
-            RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
-            requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
-            x.http().get(requestParams, new Callback.CommonCallback<String>() {
-                @Override
-                public void onSuccess(String result) {
-                    Log.i("ddfsdsf", "onSuccess: "+result);
-                    //将淘圈弄到列表中
-                    Gson gson = new Gson();
-                    amoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {
-                    }.getType());
-
-                    //详情界面（我的商品，编辑跳转过来，还原界面）
-                    Intent intent = getIntent();
-                    String detailString = intent.getStringExtra("DetailGoods");
-                    imageAddress = new File(intent.getStringExtra("imageurl"));
-                    Log.i("ddfsdsf", "lastYeMian: "+detailString);
-                    if (detailString.equals("DetailGoods")){
-                        String goodsString = intent.getStringExtra("goodsString");
-                        String filesString = intent.getStringExtra("filesString");
-                        Log.i("lastYeMian", "lastYeMian: "+goodsString+"=="+filesString);
-                        Gson gson1 = new Gson();
-                        Goods goods = gson1.fromJson(goodsString,Goods.class);
-                        //amoyId = goods.getGoodsAmoyCircle().getCircleId();
-                        files = gson.fromJson(filesString,new TypeToken<List<File>>(){}.getType());
-                        classid = goods.getGoodsClass().getClass_id();
-                        Log.i("ddfsdsf", "lastYeMian: "+goods.getGoodsTitle());
-
-                        publicTitle.setText(goods.getGoodsTitle());
-                        publicContent.setText(goods.getGoodsDescribe());
-                        Log.i("ddfsdsf", "lastYeMian: "+classid);
-                        publicClass.setText(classIdConvertString(classid));
-
-                        final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) publicPhoto.getLayoutParams();
-                        for (int i = 0 ; i< files.size();i++){
-                            Uri uri = Uri.parse(files.get(i).toString());
-                            Log.i("ddfsdsf", "onSuccess: "+uri);
-                            if (i == 0){
-                                Log.i("ddfsdsf", "onSuccess: "+uri);
-                                publicPhoto1.setVisibility(View.VISIBLE);
-                                publicPhoto1.setImageURI(uri);
-                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo1);
-                            }
-                            if (i == 1){
-                                publicPhoto2.setVisibility(View.VISIBLE);
-                                publicPhoto2.setImageURI(uri);
-                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo2);
-                            }
-                            if (i == 2){
-                                publicPhoto3.setVisibility(View.VISIBLE);
-                                publicPhoto3.setImageURI(uri);
-                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo3);
-                            }
-                            if (i == 3){
-                                publicPhoto4.setVisibility(View.VISIBLE);
-                                publicPhoto4.setImageURI(uri);
-                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo4);
-                            }
-                            if (i == 4){
-                                publicPhoto5.setVisibility(View.VISIBLE);
-                                publicPhoto5.setImageURI(uri);
-                                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo5);
-                            }
-                            mResults.add(files.get(i).toString());
-                        }
-                        publicPrice.setText(goods.getGoodsPrice()+"");
-                        publicClass.setText(goods.getGoodsClass().getClass_id());
-                        //还差淘圈？？
-
-                    }
-
-
-                    CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
-                        @Override
-                        public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
-                            TextView textView = viewHolder.getViewById(R.id.amoyItem);
-                            textView.setText(amoyCircle.getCircleName());
-                            //amoyId = amoyCircle.getCircleId();
-
-                        }
-                    };
-                    publicCircle.setAdapter(commonAdapter);
-
-                    publicCircle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            amoyId = amoyCircles.get(position).getCircleId();
-                        }
-                    });
-
-
-
-                }
-
-                @Override
-                public void onError(Throwable ex, boolean isOnCallback) {
-                }
-
-                @Override
-                public void onCancelled(CancelledException cex) {
-                }
-
-                @Override
-                public void onFinished() {
-                }
-            });
-
-
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
+        init();
 
     }
+
+    private void init() {
+        myApplication = (MyApplication) getApplication();
+        if (myApplication.getUser() == null) {
+            //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+            Intent intent = new Intent(PublicActivity.this, LoginActivity.class);
+            startActivityForResult(intent, LoginRequestCode);
+        } else {
+            initTaoquan();
+        }
+    }
+
+    private void initTaoquan() {
+        //查询用户对应淘圈
+        RequestParams requestParams = new RequestParams(NetUtil.url + "QueryAmoyServlet");
+        requestParams.addQueryStringParameter("userId", ((MyApplication) getApplication()).getUser().getUserId() + "");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                //将淘圈弄到列表中
+                Gson gson = new Gson();
+                List<AmoyCircle> newAmoyCircles = gson.fromJson(result, new TypeToken<List<AmoyCircle>>() {}.getType());
+
+                amoyCircles.add(new AmoyCircle());  //第一个，也是默认的，不选择淘圈
+                amoyCircles.addAll(newAmoyCircles);
+                CommonAdapter<AmoyCircle> commonAdapter = new CommonAdapter<AmoyCircle>(PublicActivity.this, amoyCircles, R.layout.amoy_item) {
+                    @Override
+                    public void convert(ViewHolder viewHolder, AmoyCircle amoyCircle, int position) {
+                        TextView textView = viewHolder.getViewById(R.id.amoyItem);
+                        if (position == 0) {
+                            textView.setText(" 无 ");
+                        } else {
+                            textView.setText("< " + amoyCircle.getCircleName() + " >");
+                        }
+                    }
+                };
+                publicCircle.setAdapter(commonAdapter);
+                publicCircle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        if (position == 0) {
+                            amoyId = null;
+                        } else {
+                            amoyId = amoyCircles.get(position).getCircleId();
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                    }
+                });
+
+                //详情界面（我的商品，编辑跳转过来，还原界面）
+                Intent intent = getIntent();
+                String detailString = intent.getStringExtra("DetailGoods");
+                Log.i("ddfsdsf", "lastYeMian: " + detailString);
+                if (detailString.equals("DetailGoods")) {
+                    imageAddress = new File(intent.getStringExtra("imageurl"));
+                    String goodsString = intent.getStringExtra("goodsString");
+                    String filesString = intent.getStringExtra("filesString");
+                    Log.i("lastYeMian", "lastYeMian: " + goodsString + "==" + filesString);
+                    Gson gson1 = new Gson();
+                    Goods goods = gson1.fromJson(goodsString, Goods.class);
+                    //amoyId = goods.getGoodsAmoyCircle().getCircleId();
+                    files = gson.fromJson(filesString, new TypeToken<List<File>>() {
+                    }.getType());
+                    classid = goods.getGoodsClass().getClass_id();
+                    Log.i("ddfsdsf", "lastYeMian: " + goods.getGoodsTitle());
+
+                    publicTitle.setText(goods.getGoodsTitle());
+                    publicContent.setText(goods.getGoodsDescribe());
+                    Log.i("ddfsdsf", "lastYeMian: " + classid);
+                    publicClass.setText(classIdConvertString(classid));
+
+                    final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) publicPhoto.getLayoutParams();
+                    for (int i = 0; i < files.size(); i++) {
+                        Uri uri = Uri.parse(files.get(i).toString());
+                        Log.i("ddfsdsf", "onSuccess: " + uri);
+                        if (i == 0) {
+                            Log.i("ddfsdsf", "onSuccess: " + uri);
+                            publicPhoto1.setVisibility(View.VISIBLE);
+                            publicPhoto1.setImageURI(uri);
+                            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo1);
+                        }
+                        if (i == 1) {
+                            publicPhoto2.setVisibility(View.VISIBLE);
+                            publicPhoto2.setImageURI(uri);
+                            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo2);
+                        }
+                        if (i == 2) {
+                            publicPhoto3.setVisibility(View.VISIBLE);
+                            publicPhoto3.setImageURI(uri);
+                            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo3);
+                        }
+                        if (i == 3) {
+                            publicPhoto4.setVisibility(View.VISIBLE);
+                            publicPhoto4.setImageURI(uri);
+                            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo4);
+                        }
+                        if (i == 4) {
+                            publicPhoto5.setVisibility(View.VISIBLE);
+                            publicPhoto5.setImageURI(uri);
+                            layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo5);
+                        }
+                        mResults.add(files.get(i).toString());
+                    }
+                    publicPrice.setText(goods.getGoodsPrice() + "");
+                    publicClass.setText(goods.getGoodsClass().getClass_id());
+                    //还差淘圈？？
+
+                }
+
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
+
+
 
 
     //回调请求码是REQUEST_CODE就请求图库，请求码是REQUEST_CODE_CLASS就请求分类界面返回分类结果
@@ -234,15 +254,14 @@ public class PublicActivity extends AppCompatActivity {
                 //初始化选择图片后的图片控件
                 initPhotoView();
                 //选择图片的保存
-                final ProgressDialog dia = new ProgressDialog(PublicActivity.this);
-                dia.setMessage("图片压缩处理中....");
-                dia.show();
+                shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
+                shapeLoadingDialog.show();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         //压缩保存
                         initSaveImage();
-                        dia.cancel();
+                        shapeLoadingDialog.dismiss();
                     }
                 });
                 thread.start();
@@ -256,6 +275,12 @@ public class PublicActivity extends AppCompatActivity {
             Integer classId = Integer.parseInt(data.getStringExtra("result"));
             classid = classId;
             publicClass.setText(classIdConvertString(classId));
+            return;
+        }
+
+        if(requestCode==LoginRequestCode&&resultCode==LoginActivity.ResultCode){
+            //登录成功页面返回的
+            init();
         }
     }
 
@@ -524,6 +549,12 @@ public class PublicActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.publicSure:
+                if(myApplication.getUser()==null){
+                    //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                    Intent intent = new Intent(PublicActivity.this, LoginActivity.class);
+                    startActivityForResult(intent,LoginRequestCode);
+                    return;
+                }
                 Log.i("publish", "files.size: "+files.size());
                 if (publicTitle.getText().toString().trim().length() == 0 || publicContent.getText().toString().trim().length() == 0
                         || files.size() < 1 || publicPrice.getText().toString().trim().length() == 0 || publicClass.getText().toString().trim().length() == 0) {
@@ -552,11 +583,6 @@ public class PublicActivity extends AppCompatActivity {
         String describe = publicContent.getText().toString();
         Float goodsPrice = Float.parseFloat(publicPrice.getText().toString());
         Byte auction = -1;
-        if (publicAuction1.isChecked()) {
-            auction = 0;//一口价
-        } else if (publicAuction2.isChecked()) {
-            auction = 1;//拍卖
-        }
         List<GoodsImage> goodsImages = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             String address = files.get(i).toString().substring(files.get(i).toString().lastIndexOf("/") + 1, files.get(i).toString().length());
@@ -583,8 +609,32 @@ public class PublicActivity extends AppCompatActivity {
             public void onSuccess(String result) {
                 //加载成功回调，返回获取到的数据
                 Log.i("LAG", "onSuccess: " + result);
-                Intent intent = new Intent(PublicActivity.this, ShowActivity.class);
-                startActivity(intent);
+                finish();
+//                Intent intent = new Intent(PublicActivity.this, ShowActivity.class);
+//                startActivity(intent);
+                Intent intent = getIntent();
+                String goodId = intent.getStringExtra("goodId");
+                //做删除操作既改变商品状态
+                RequestParams requestParams = new RequestParams(NetUtil.url + "DeleteGoodsServlet");
+                requestParams.addQueryStringParameter("goodsId",goodId);
+                x.http().get(requestParams, new Callback.CommonCallback<String>() {
+                    @Override
+                    public void onSuccess(String result) {
+
+                    }
+                    @Override
+                    public void onError(Throwable ex, boolean isOnCallback) {
+
+                    }
+                    @Override
+                    public void onCancelled(CancelledException cex) {
+
+                    }
+                    @Override
+                    public void onFinished() {
+
+                    }
+                });
             }
 
             @Override

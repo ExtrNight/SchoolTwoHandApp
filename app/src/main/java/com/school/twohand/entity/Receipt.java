@@ -11,6 +11,13 @@ public class Receipt {
 	String receiptContactNumber;
 	String receiptZipCode;
 	String receiptConsignee;
+	public Receipt(Integer receiptId, String receiptDetailed, String receiptContactNumber) {
+		super();
+		this.receiptId = receiptId;
+		this.receiptDetailed = receiptDetailed;
+		this.receiptContactNumber = receiptContactNumber;
+	}
+
 	public Integer getReceiptId() {
 		return receiptId;
 	}

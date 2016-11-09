@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.entity.GoodsOrderState;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryOrderBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -45,8 +46,7 @@ public class MyBuyActivity extends AppCompatActivity {
     ImageView goback;
     @InjectView(R.id.lv_buy)
     ListView lvBuy;
-    int pageNo = 1;
-    int pageSize = 8;
+
     CommonAdapter<QueryOrderBean> queryOrderBeanCommonAdapter;
     List<QueryOrderBean>  queryOrderBeen=new ArrayList<>();
 
@@ -88,9 +88,9 @@ public class MyBuyActivity extends AppCompatActivity {
 
     public  void getOrderData(){
         String url= NetUtil.url+"QueryOrderBeanServlet";
+        Integer userId=  ((MyApplication) this.getApplication()).getUser().getUserId();
         RequestParams requestParams=new RequestParams(url);
-        requestParams.addQueryStringParameter("pageNo",pageNo+"");
-        requestParams.addQueryStringParameter("pageSize", pageSize + "");
+        requestParams.addQueryStringParameter("userId", userId + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

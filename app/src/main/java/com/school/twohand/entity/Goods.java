@@ -19,6 +19,42 @@ public class Goods {
 	private List<MessageBoard> goodsMessageBoards;
 	private Integer goodsPV;
 	private String goodsUserSchoolName;              //发布该商品的用户的学校名
+	private Integer likeSum;
+	private Integer messageSum;
+	public Goods(User goodsUser, String goodsDescribe, Float goodsPrice, Timestamp goodsReleaseTime,
+				 List<GoodsImage> goodsImages, Integer likeSum, Integer messageSum) {
+		super();
+		this.goodsUser = goodsUser;
+		this.goodsDescribe = goodsDescribe;
+		this.goodsPrice = goodsPrice;
+		this.goodsReleaseTime = goodsReleaseTime;
+		this.goodsImages = goodsImages;
+		this.likeSum = likeSum;
+		this.messageSum = messageSum;
+	}
+
+	public Goods(Integer goodsId, String goodsTitle, Float goodsPrice) {
+		super();
+		this.goodsId = goodsId;
+		this.goodsTitle = goodsTitle;
+		this.goodsPrice = goodsPrice;
+	}
+
+	public Integer getLikeSum() {
+		return likeSum;
+	}
+
+	public void setLikeSum(Integer likeSum) {
+		this.likeSum = likeSum;
+	}
+
+	public Integer getMessageSum() {
+		return messageSum;
+	}
+
+	public void setMessageSum(Integer messageSum) {
+		this.messageSum = messageSum;
+	}
 
 	public Integer getGoodsId() {
 		return goodsId;

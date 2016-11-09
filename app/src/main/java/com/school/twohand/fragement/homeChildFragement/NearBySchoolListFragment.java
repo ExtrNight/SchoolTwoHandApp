@@ -1,6 +1,7 @@
 package com.school.twohand.fragement.homeChildFragement;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,7 @@ import com.baidu.mapapi.search.poi.PoiResult;
 import com.baidu.mapapi.search.poi.PoiSearch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
@@ -59,7 +61,6 @@ public class NearBySchoolListFragment extends Fragment implements UltraRefreshLi
     @InjectView(R.id.ultra_ptr_nearby_school)
     PtrClassicFrameLayout ultraPtrNearbySchool;
 
-    User user;
     BDLocation location;    //从activity传来的BDLocation对象
     PoiSearch mPoiSearch;
     CommonAdapter<PoiInfo> commonAdapter;
@@ -102,8 +103,6 @@ public class NearBySchoolListFragment extends Fragment implements UltraRefreshLi
         Gson gson = new Gson();
         location = gson.fromJson(locationJson,BDLocation.class);
 
-        MyApplication myApplication = (MyApplication) getActivity().getApplication();
-        user = myApplication.getUser();
     }
 
     private void initData(){
@@ -153,7 +152,14 @@ public class NearBySchoolListFragment extends Fragment implements UltraRefreshLi
                                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        updateUserSchoolName(poiInfoList.get(position).name);
+                                        if(((MyApplication) getActivity().getApplication()).getUser()==null){
+                                            //是游客,跳转到登陆页面注册身份信息同时Application中的user被赋值
+                                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                            startActivity(intent);
+                                        }else{
+                                            updateUserSchoolName(poiInfoList.get(position).name);
+                                        }
+
                                     }
                                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -177,7 +183,7 @@ public class NearBySchoolListFragment extends Fragment implements UltraRefreshLi
 
     private void updateUserSchoolName(String userSchoolName){
         User updateUser = new User();   //存放修改的信息的User对象
-        updateUser.setUserId(user.getUserId());
+        updateUser.setUserId(((MyApplication) getActivity().getApplication()).getUser().getUserId());
         updateUser.setUserSchoolName(userSchoolName);
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         String userJson = gson.toJson(updateUser);

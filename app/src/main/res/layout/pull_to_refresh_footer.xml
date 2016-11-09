@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:bpb="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:id="@+id/xlistview_footer_content"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="#ffffff"
         android:padding="10dp">
-        <ProgressBar
+        <!--<ProgressBar-->
+            <!--android:id="@+id/footer_progressbar"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:visibility="invisible"/>-->
+        <com.school.twohand.customview.BounceProgressBar
             android:id="@+id/footer_progressbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            bpb:shape="circle"
+            bpb:singleSrcSize="10dp"
+            bpb:speed="240"
+            bpb:src="#00bb9c"/>
         <TextView
             android:id="@+id/footer_hint_textview"
             android:layout_width="wrap_content"

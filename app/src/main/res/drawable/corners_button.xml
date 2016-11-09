@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!--设置填充的颜色-->
-    <solid android:color="#bce672" />
+    <solid android:color="#00bb9c" />
     <!--设置四个角的圆角-->
     <corners
         android:topLeftRadius="25dip"

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="#ffffff">
+
+    <!--“收到的赞”的页面的Item的布局-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:paddingLeft="10dp"
+        android:paddingStart="10dp"
+        android:paddingRight="13dp"
+        android:paddingEnd="13dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:id="@+id/iv_userImage"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="3dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_userName"
+            android:layout_alignTop="@+id/iv_userImage"
+            android:layout_toRightOf="@+id/iv_userImage"
+            android:layout_marginLeft="8dp"
+            android:text="用户名"
+            android:textColor="#000000"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_describe"
+            android:layout_alignLeft="@+id/tv_userName"
+            android:layout_below="@+id/tv_userName"
+            android:text="赞了您的宝贝"
+            android:layout_marginTop="6dp"
+            android:textSize="12sp"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/tv_goodsName"-->
+            <!--android:layout_toRightOf="@+id/tv_describe"-->
+            <!--android:layout_alignTop="@+id/tv_describe"-->
+            <!--android:text="< 商品名 >"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:textColor="@color/myTheme_color"-->
+            <!--android:textSize="12sp"-->
+            <!--android:maxLength="15"-->
+            <!--android:ellipsize="end" />-->
+
+        <ImageView
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:id="@+id/iv_goods_image"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:scaleType="fitCenter"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/background_gray"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp"/>
+
+</LinearLayout>

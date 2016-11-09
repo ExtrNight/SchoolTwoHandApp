@@ -20,6 +20,7 @@ public class TaoquanDiscoveryListView extends ListView implements AbsListView.On
     View headView;   //头部布局
     View footView;   //底部布局
     private TextView footTv; //底部布局“查看更多”的TextView
+    private BounceProgressBar bounceProgressBar;    //带有跳跃动画的ProgressBar
 
     public ImageButton ib;                          //创建淘圈的ImageButton
     public TextView tv_circle_address;            //用户当前所在的位置
@@ -76,7 +77,7 @@ public class TaoquanDiscoveryListView extends ListView implements AbsListView.On
 
     private void initFoot(Context context){
         footView = LayoutInflater.from(context).inflate(R.layout.pull_to_refresh_footer,null);
-        //footPb = (ProgressBar) footView.findViewById(R.id.footer_progressbar);
+        bounceProgressBar = (BounceProgressBar) footView.findViewById(R.id.footer_progressbar);
         footTv = (TextView) footView.findViewById(R.id.footer_hint_textview);
 
         addFooterView(footView);//添加footView
@@ -106,13 +107,12 @@ public class TaoquanDiscoveryListView extends ListView implements AbsListView.On
     public void changeFootState(){
         if(isLoading){
             //正在加载：ProgressBar显示
-            //footPb.setVisibility(VISIBLE);
-            //footTv.setVisibility(GONE);
-            footTv.setText("正在加载...");
+            bounceProgressBar.setVisibility(VISIBLE);
+            footTv.setVisibility(GONE);
         }else{
             //没有在加载,进图条隐藏，文本显示
-            //footPb.setVisibility(GONE);
-            //footTv.setVisibility(VISIBLE);
+            bounceProgressBar.setVisibility(GONE);
+            footTv.setVisibility(VISIBLE);
             footTv.setText("查看更多");
         }
     }

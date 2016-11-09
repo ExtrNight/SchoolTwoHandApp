@@ -172,7 +172,7 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.tv_search: //点击搜索
                 tvResultNull.setVisibility(View.GONE);
                 if (etQuery.getText().toString().equals("")) {
-                    Toast.makeText(SearchActivity.this, "内容不能为空哦~", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchActivity.this, "搜索内容不能为空哦~", Toast.LENGTH_SHORT).show();
                 } else {
                     getData(etQuery.getText().toString());
                 }

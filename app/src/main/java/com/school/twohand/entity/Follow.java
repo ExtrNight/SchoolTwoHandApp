@@ -1,5 +1,8 @@
 package com.school.twohand.entity;
 
+/**
+ *
+ */
 public class Follow {
 	Integer followId;
 	User followMe;

@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,8 +35,9 @@ import com.school.twohand.activity.wheelview.WheelMain;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.InsertUserBean;
+import com.school.twohand.schooltwohandapp.MainActivity;
 import com.school.twohand.schooltwohandapp.R;
-import com.school.twohand.utils.NetUtil;
+import com.school.twohand.utils.*;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -55,17 +57,16 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 
 public class MyInforActivity extends AppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.goback)
     ImageView goback;
-    @InjectView(R.id.iv_headimg)
-    ImageView ivHeadimg;
     @InjectView(R.id.rl_headImg)
     RelativeLayout rlHeadImg;
-    @InjectView(R.id.li_backgd)
-    RelativeLayout liBackgd;
+
     @InjectView(R.id.checksex)
     TextView checksex;
     @InjectView(R.id.rl_sex)
@@ -84,8 +85,8 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
     TextView checknoaddress;
     @InjectView(R.id.tv_person)
     TextView tvPerson;
-    @InjectView(R.id.iv_headimg2)
-    ImageView ivHeadimg2;
+
+    com.school.twohand.utils.CircleImageView ivHeadimg2;
 
     private WheelMain wheelMainDate;
     private String beginTime;
@@ -109,7 +110,9 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
 
 
         ButterKnife.inject(this);
+        ivHeadimg2 = (com.school.twohand.utils.CircleImageView) findViewById(R.id.iv_headimg2);
         myApplication = (MyApplication) getApplication();
+
         user = myApplication.getUser();
 
         getData();
@@ -217,7 +220,7 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    @OnClick({R.id.goback, R.id.rl_headImg, R.id.li_backgd, R.id.rl_sex, R.id.rl_birth, R.id.rl_noaddress, R.id.rl_getaddress, R.id.rl_introduce})
+    @OnClick({R.id.goback, R.id.rl_headImg, R.id.rl_sex, R.id.rl_birth, R.id.rl_noaddress, R.id.rl_getaddress, R.id.rl_introduce})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.goback:
@@ -253,8 +256,7 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }).show();
                 break;
-            case R.id.li_backgd:
-                break;
+
             case R.id.rl_sex:
                 new AlertDialog.Builder(this).setItems(items1, new DialogInterface.OnClickListener() {
                     @Override
@@ -384,8 +386,9 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void showImage(Bitmap bitmap) {
-
-
+        ImageView imageView1 = (ImageView) findViewById(R.id.iv_headimg1);
+        imageView1.setVisibility(View.GONE);
+        ivHeadimg2.setVisibility(View.VISIBLE);
         ivHeadimg2.setImageBitmap(bitmap);//iv显示图片
         saveImage(bitmap);//保存文件
         uploadImage();//上传服务器
@@ -413,7 +416,14 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onSuccess(String result) {
                 Log.i("MyInforActivity", "onSuccess: onSuccess");
-
+                JMessageClient.updateUserAvatar(file, new BasicCallback() {
+                    @Override
+                    public void gotResult(int i, String s) {
+                        if (i == 0){
+                            Toast.makeText(MyInforActivity.this, "头像更新成功", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
 
             @Override
@@ -475,36 +485,31 @@ public void getData(){
         public void onSuccess(String result) {
             Gson gson=new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-            User user= gson.fromJson(result,User.class);
+            User user1= gson.fromJson(result,User.class);
+            Log.i("QueryInfoServlet", "onSuccess: "+user1.getUserHead());
+
+            ImageView imageView1 = (ImageView) findViewById(R.id.iv_headimg1);
+            imageView1.setVisibility(View.VISIBLE);
+            ImageOptions imageOptions = new ImageOptions.Builder().setCircular(true).build();
+            x.image().bind(imageView1,NetUtil.imageUrl+user1.getUserHead(),imageOptions);
+            Log.i("QueryInfoServlet", "onSuccess: "+NetUtil.imageUrl+user1.getUserHead());
+
 
             TextView tv1= (TextView) findViewById(R.id.checksex);
-            tv1.setText(user.getUserSex());
+            tv1.setText(user1.getUserSex());
 
             TextView tv2= (TextView) findViewById(R.id.checkbirth);
-            Date date=new Date(user.getUserBirthday().getTime());
+            Date date=new Date(user1.getUserBirthday().getTime());
             SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd");
             String a=aa.format(date);
             tv2.setText(a);
 
             TextView tv3= (TextView) findViewById(R.id.checknoaddress);
-            tv3.setText(user.getUserAddress());
+            tv3.setText(user1.getUserAddress());
 
             TextView tv4= (TextView) findViewById(R.id.tv_person);
-            tv4.setText(user.getUserPersonalProfile());
+            tv4.setText(user1.getUserPersonalProfile());
 
-            if (!user.getUserHead().equals("")){
-                String url = NetUtil.imageUrl+user.getUserHead();
-                ImageOptions imageOptions=new ImageOptions.Builder()
-                        .setCircular(true)
-                        .build();
-                ImageView imageVIew2 = (ImageView) findViewById(R.id.iv_headimg2);
-                x.image().bind(imageVIew2,url,imageOptions);
-                ivHeadimg2.setVisibility(View.VISIBLE);
-                ivHeadimg.setVisibility(View.GONE);
-            }else{
-                ivHeadimg2.setVisibility(View.GONE);
-                ivHeadimg.setVisibility(View.VISIBLE);
-            }
 
 
         }

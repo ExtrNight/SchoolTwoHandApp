@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     MyApplication myApplication;
     String userId = null;
     static final int CODE = 10;//去注册界面的请求码
+    public static final int ResultCode = 100;   //登录成功的结果码
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                                                     SharedPreferences.Editor editor = sp.edit();
                                                     editor.putString("user",result);
                                                     editor.commit();
+                                                    setResult(ResultCode);
                                                     finish();
                                                 }
 

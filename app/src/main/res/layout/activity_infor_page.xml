@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context="com.school.twohand.activity.InforPageActivity">
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/white"
+
+        >
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:padding="8dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back"/>
+
+    </RelativeLayout>
+
+    <com.school.twohand.activity.MyScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_toolbar"
+        >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <RelativeLayout
+            android:id="@+id/rl_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_below="@+id/iv_background">
+
+            <ImageView
+                android:id="@+id/iv_background"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:src="@mipmap/background"
+
+                android:scaleType="fitXY"
+                />
+
+        <ImageView
+        android:id="@+id/iv_headimg"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_marginLeft="30dp"
+            android:layout_marginTop="118dp"
+
+        />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="jnvptlup"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_marginTop="4dp"
+            android:layout_below="@+id/iv_headimg"
+            android:layout_marginLeft="30dp"/>
+
+        <Button
+            android:id="@+id/btn_write"
+            android:text="编辑资料"
+            android:textColor="@color/black"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:background="@color/white"
+            android:layout_marginTop="185dp"
+            android:layout_marginLeft="270dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_sumInfor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="现居苏州，95年女生"
+            android:textSize="15dp"
+            android:textColor="@color/black"
+            android:layout_below="@+id/tv_nickname"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="23dp"/>
+
+        <TextView
+            android:id="@+id/tv_person"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:text="要想让我低头，除非你跪下要想让我低头，除非你跪下要想让我低头，除非你跪下要想让我低头，除非你跪下"
+            android:textColor="@color/black"
+            android:layout_below="@+id/tv_sumInfor"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:textSize="15dp"
+            android:layout_marginTop="8dp"
+            android:lineSpacingExtra="3dp"/>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_person">
+
+
+            <RelativeLayout
+                android:id="@+id/little_ft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+
+                >
+                <include  android:id="@+id/mine"
+                    layout="@layout/mine_layout"
+                    />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/little_ft"
+                android:background="@color/colorViewpage"
+                >
+            </FrameLayout>
+            </RelativeLayout>
+
+    </RelativeLayout>
+    </LinearLayout>
+    </com.school.twohand.activity.MyScrollView>
+
+</RelativeLayout>
