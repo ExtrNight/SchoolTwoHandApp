@@ -125,6 +125,7 @@
                 android:ellipsize="end"/>
 
             <TextView
+                android:id="@+id/tv_circleName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="笔记本台式机闲置"

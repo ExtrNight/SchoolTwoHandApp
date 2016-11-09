@@ -64,8 +64,6 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
 
     @InjectView(R.id.goback)
     ImageView goback;
-    @InjectView(R.id.rl_headImg)
-    RelativeLayout rlHeadImg;
 
     @InjectView(R.id.checksex)
     TextView checksex;
@@ -107,7 +105,6 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_infor);
-
 
         ButterKnife.inject(this);
         ivHeadimg2 = (com.school.twohand.utils.CircleImageView) findViewById(R.id.iv_headimg2);

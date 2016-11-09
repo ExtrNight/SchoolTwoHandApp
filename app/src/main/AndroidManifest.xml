@@ -289,12 +289,12 @@
         android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name="com.school.twohand.activity.OrderDetailActivity" />
         <activity android:name="com.school.twohand.activity.IntroduceActivity" />
-        <activity android:name="com.school.twohand.activity.GetAddressActivity" />
         <activity android:name="com.school.twohand.activity.taoquan.QunLiaoActivity"
             android:configChanges="orientation|keyboardHidden"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"></activity>
         <activity android:name="com.school.twohand.activity.AddAddressActivity"/>
-
+        <activity android:name="com.school.twohand.activity.InforPageActivity"/>
+        <activity android:name="com.school.twohand.activity.NearBySchoolActivity"/>
     </application>
 
 </manifest>

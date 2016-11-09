@@ -34,11 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#dad4d4"
-                android:layout_below="@+id/name"
-                >
-
-
-
+                android:layout_below="@+id/name">
 
                 <LinearLayout
                 android:orientation="horizontal"
@@ -186,8 +182,7 @@
                 android:layout_height="50dp"
                 android:id="@+id/rl_sell"
                 android:layout_below="@+id/view3"
-                android:background="@color/white"
-                >
+                android:background="@color/white">
 
                 <ImageView
                     android:id="@+id/iv_logoSell"

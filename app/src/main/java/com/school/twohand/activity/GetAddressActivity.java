@@ -1,8 +1,6 @@
 package com.school.twohand.activity;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,12 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.school.twohand.entity.Receipt;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
-import com.school.twohand.query.entity.InsertUserBean;
 import com.school.twohand.query.entity.QueryGetAddressBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -97,7 +92,6 @@ public class GetAddressActivity extends AppCompatActivity {
                 } else {
                     queryGetAddressBeanCommonAdapter.notifyDataSetChanged();
                 }
-
 
             }
 
