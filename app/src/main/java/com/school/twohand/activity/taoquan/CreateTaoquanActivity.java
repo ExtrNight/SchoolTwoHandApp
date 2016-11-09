@@ -291,6 +291,7 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                         }
                     }
                 }).create().show();
+
                 break;
             case R.id.iv_create_taoquan_return:
                 finish();
