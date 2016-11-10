@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
+import com.school.twohand.activity.InforPageActivity;
 import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.customview.EachTaoquanListView;
 import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
@@ -371,7 +372,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                 if (goodsAdapter == null) {
                     goodsAdapter = new CommonAdapter<Goods>(EachTaoquanActivity.this, goodsList, R.layout.each_taoquan_item) {
                         @Override
-                        public void convert(ViewHolder viewHolder, Goods goods, final int position) {
+                        public void convert(ViewHolder viewHolder, final Goods goods, final int position) {
                             //显示用户头像
                             ImageView iv_userImage = viewHolder.getViewById(R.id.each_taoquan_item_userImage);
                             String url = NetUtil.imageUrl + goods.getGoodsUser().getUserHead();
@@ -382,6 +383,17 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();          //是否裁剪？
                             x.image().bind(iv_userImage, url, imageOptions);
+                            //点击跳转到该用户的名片,前提是用户已登录
+                            if(((MyApplication)getApplication()).getUser()!=null){
+                                iv_userImage.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(EachTaoquanActivity.this, InforPageActivity.class);
+                                        intent.putExtra("infoPageUser",goods.getGoodsUser());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
                             //设置用户名
                             TextView tv_userName = viewHolder.getViewById(R.id.each_taoquan_item_userName);
                             tv_userName.setText(goods.getGoodsUser().getUserName());
@@ -413,7 +425,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
                             TextView tv_likes_pageview = viewHolder.getViewById(R.id.tv_likes_pageview);
                             tv_likes_pageview.setText("点赞 " + goods.getGoodsLikes().size() + " · 浏览 " + goods.getGoodsPV());
                             //点击跳转详情界面
-                            LinearLayout LL_click_to_details = viewHolder.getViewById(R.id.LL_click_to_details);
+//                            LinearLayout LL_click_to_details = viewHolder.getViewById(R.id.LL_click_to_details);
 //                            LL_click_to_details.setOnClickListener(new View.OnClickListener() {
 //                                @Override
 //                                public void onClick(View v) {

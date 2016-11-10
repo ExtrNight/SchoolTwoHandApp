@@ -148,7 +148,6 @@ public class InforPageActivity extends AppCompatActivity{
                                     public void onClick(DialogInterface dialog, int which) {
                                         insertOrDeleteConcern(2);
                                         Toast.makeText(InforPageActivity.this, "取消关注成功", Toast.LENGTH_SHORT).show();
-                                        btnWrite.setText("关注Ta");
                                     }
                                 }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
                             @Override
@@ -158,7 +157,6 @@ public class InforPageActivity extends AppCompatActivity{
                     }else{
                         insertOrDeleteConcern(1);
                         Toast.makeText(InforPageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
-                        btnWrite.setText("取消关注");
                     }
                 }
                 return;
@@ -244,7 +242,7 @@ public class InforPageActivity extends AppCompatActivity{
     }
 
     //增加或删除一条关注记录,1表示增加一条关注记录，2表示删除一条关注记录
-    private void insertOrDeleteConcern(int flag){
+    private void insertOrDeleteConcern(final int flag){
         RequestParams requestParams = new RequestParams(NetUtil.url+"InsertOrDeleteConcernServlet");
         requestParams.addQueryStringParameter("myUserId",myApplication.getUser().getUserId()+"");
         requestParams.addQueryStringParameter("concernedUserId",infoPageUser.getUserId()+"");
@@ -252,6 +250,13 @@ public class InforPageActivity extends AppCompatActivity{
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                if(flag==1){  //关注成功
+                    isMyConcern = true;
+                    btnWrite.setText("取消关注");
+                }else if(flag==2){      //取消关注成功
+                    isMyConcern = false;
+                    btnWrite.setText("关注Ta");
+                }
             }
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {

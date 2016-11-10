@@ -15,9 +15,11 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.InforPageActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicActivity;
 import com.school.twohand.activity.taoquan.TaoquanDynamicDetailsActivity;
 import com.school.twohand.entity.AmoyCircleDynamic;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.ultra.CustomUltraRefreshHeader;
 import com.school.twohand.ultra.UltraRefreshListView;
@@ -128,6 +130,17 @@ public class TaoquanDynamicAllFragment extends TaoquanBaseFragment implements Ul
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();
                             x.image().bind(iv_user_image,user_image_url,imageOptions);
+                            //点击跳转到该用户的名片,前提是用户已登录
+                            if(((MyApplication)getActivity().getApplication()).getUser()!=null){
+                                iv_user_image.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), InforPageActivity.class);
+                                        intent.putExtra("infoPageUser",amoyCircleDynamic.getUser());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
                             //设置用户名
                             TextView tv_user_name = viewHolder.getViewById(R.id.tv_taoquan_dynamic_item_userName);
                             tv_user_name.setText(amoyCircleDynamic.getUser().getUserName());

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.InforPageActivity;
 import com.school.twohand.activity.login.LoginActivity;
 import com.school.twohand.customview.MyListView;
 import com.school.twohand.entity.AmoyCircleDynamic;
@@ -136,6 +137,17 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                 .setFailureDrawableId(R.mipmap.ic_launcher)
                 .setLoadingDrawableId(R.mipmap.ic_launcher).setCrop(true).build();
         x.image().bind(ivTaoquanDynamicUserImage, userImageUrl, imageOptions);
+        //点击跳转到该用户的名片,前提是用户已登录
+        if(((MyApplication)getApplication()).getUser()!=null){
+            ivTaoquanDynamicUserImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(TaoquanDynamicDetailsActivity.this, InforPageActivity.class);
+                    intent.putExtra("infoPageUser",amoyCircleDynamic.getUser());
+                    startActivity(intent);
+                }
+            });
+        }
         //设置用户名
         tvTaoquanDynamicUserName.setText(amoyCircleDynamic.getUser().getUserName());
         //设置动态文本内容
@@ -209,6 +221,17 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
                                     .setLoadingDrawableId(R.mipmap.ic_launcher)
                                     .setCrop(true).build();          //是否裁剪？
                             x.image().bind(iv_comment_user_image, url, imageOptions);
+                            //点击跳转到该用户的名片,前提是用户已登录
+                            if(((MyApplication)getApplication()).getUser()!=null){
+                                iv_comment_user_image.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(TaoquanDynamicDetailsActivity.this, InforPageActivity.class);
+                                        intent.putExtra("infoPageUser",amoyCircleDynamicComment.getUser());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
                             //显示评论者名字
                             TextView tv_comment_user_name = viewHolder.getViewById(R.id.tv_dynamic_comment_item_user_name);
                             tv_comment_user_name.setText(amoyCircleDynamicComment.getUser().getUserName());
@@ -474,7 +497,7 @@ public class TaoquanDynamicDetailsActivity extends AppCompatActivity {
 
     //增加一条评论
     public void insertComment(AmoyCircleDynamicComment amoyCircleDynamicComment){
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         String amoyCircleDynamicCommentJson = gson.toJson(amoyCircleDynamicComment);
         RequestParams requestParams = new RequestParams(NetUtil.url+"InsertCircleDynamicCommentServlet");
         requestParams.addQueryStringParameter("amoyCircleDynamicCommentJson",amoyCircleDynamicCommentJson);

@@ -241,7 +241,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
 
     protected void listDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(this,R.style.AlterDialog)
+        new AlertDialog.Builder(this,R.style.AlterDialog)
                 .setItems(new String[]{"编辑", "删除", "取消"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -382,6 +382,17 @@ public class DetailGoodsActivity extends AppCompatActivity {
                     .setCircular(true)
                     .build();
             x.image().bind(headImage, headUrl, headImageOptions);
+            //点击跳转到该用户的名片,前提是用户已登录
+            if(((MyApplication)getApplication()).getUser()!=null){
+                headImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(DetailGoodsActivity.this, InforPageActivity.class);
+                        intent.putExtra("infoPageUser",goods.getGoodsUser());
+                        startActivity(intent);
+                    }
+                });
+            }
             //用户名
             userName.setText(goods.getGoodsUser().getUserName());
             //商品价格
@@ -421,7 +432,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
 
             }
             //点赞数
-            likeNumber.setText("点赞:" + goods.getGoodsLikes().size());
+            likeNumber.setText("点赞" + goods.getGoodsLikes().size());
             //浏览数量加一
             RequestParams requestParams = new RequestParams(NetUtil.url + "AddGoodsPVServlet");
             //判断是否是游客
@@ -438,7 +449,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
             x.http().get(requestParams, new Callback.CommonCallback<String>() {
                 @Override
                 public void onSuccess(String result) {
-                    readNumber.setText("浏览:" + result);
+                    readNumber.setText("浏览" + result);
                 }
                 @Override
                 public void onError(Throwable ex, boolean isOnCallback) {
@@ -516,7 +527,7 @@ public class DetailGoodsActivity extends AppCompatActivity {
         if (commonAdapter == null) {
             commonAdapter = new CommonAdapter<MessageBoard>(this, messageBoards, R.layout.message_board_item) {
                 @Override
-                public void convert(ViewHolder viewHolder, MessageBoard messageBoard, int position) {
+                public void convert(ViewHolder viewHolder, final MessageBoard messageBoard, int position) {
                     ImageView headView = viewHolder.getViewById(R.id.message_user_head);
                     TextView headName = viewHolder.getViewById(R.id.message_user_name);
                     TextView messagedetail = viewHolder.getViewById(R.id.message_content);
@@ -526,6 +537,17 @@ public class DetailGoodsActivity extends AppCompatActivity {
                             .setCircular(true)
                             .build();
                     x.image().bind(headView, headImageUrl, imageOptions);
+                    //点击跳转到该用户的名片,前提是用户已登录
+                    if(((MyApplication)getApplication()).getUser()!=null){
+                        headView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(DetailGoodsActivity.this, InforPageActivity.class);
+                                intent.putExtra("infoPageUser",messageBoard.getMessageBoardUserMe());
+                                startActivity(intent);
+                            }
+                        });
+                    }
                     //留言用户名
                     headName.setText(messageBoard.getMessageBoardUserMe().getUserName());
                     //留言内容

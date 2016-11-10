@@ -15,8 +15,8 @@
         android:paddingBottom="12dp">
         <ImageView
             android:id="@+id/user_head_t"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
             android:src="@mipmap/ic_launcher"/>
         <TextView
             android:id="@+id/user_name_t"

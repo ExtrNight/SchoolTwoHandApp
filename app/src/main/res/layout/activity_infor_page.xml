@@ -5,22 +5,20 @@
     android:layout_height="wrap_content"
     tools:context="com.school.twohand.activity.InforPageActivity">
 
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/rl_toolbar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:background="#eeeeee">-->
+        <!--<ImageView-->
+            <!--android:id="@+id/goback1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentLeft="true"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:src="@mipmap/back"/>-->
 
-
-    <RelativeLayout
-        android:id="@+id/rl_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#eeeeee">
-        <ImageView
-            android:id="@+id/goback1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/back"/>
-
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <com.school.twohand.activity.MyScrollView
         android:id="@+id/scrollView"
@@ -48,6 +46,15 @@
                 android:src="@mipmap/background"
                 android:scaleType="fitXY" />
 
+            <ImageView
+                android:id="@+id/goback1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:src="@mipmap/return_515151_64"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -56,8 +63,8 @@
 
             <ImageView
                 android:id="@+id/iv_headimg"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginTop="118dp" />
 

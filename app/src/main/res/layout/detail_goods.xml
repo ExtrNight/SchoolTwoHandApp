@@ -12,8 +12,8 @@
         android:paddingBottom="15dp"
         android:paddingLeft="15dp"
         android:paddingStart="15dp"
-        android:paddingRight="20dp"
-        android:paddingEnd="20dp">
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp">
         <ImageView
             android:id="@+id/user_head_m"
             android:layout_width="45dp"
@@ -49,8 +49,8 @@
         android:layout_height="wrap_content"
         android:paddingLeft="15dp"
         android:paddingStart="15dp"
-        android:paddingRight="20dp"
-        android:paddingEnd="20dp">
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp">
         <TextView
             android:id="@+id/detail_m"
             android:layout_width="match_parent"
@@ -116,17 +116,17 @@
         android:layout_height="45dp"
         android:paddingLeft="15dp"
         android:paddingStart="15dp"
-        android:paddingRight="20dp"
-        android:paddingEnd="20dp"
-        android:gravity="center_vertical">
+        android:paddingRight="15dp"
+        android:paddingEnd="15dp">
 
         <TextView
             android:id="@+id/readNumber_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_centerInParent="true"
-            android:text="浏览：777" />
+            android:layout_centerVertical="true"
+            android:text="浏览：777"
+            android:textSize="13sp"/>
 
         <TextView
             android:id="@+id/point"
@@ -141,36 +141,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/point"
-            android:layout_alignTop="@+id/point"
-            android:text="点赞：323"/>
+            android:text="点赞：323"
+            android:layout_marginLeft="4dp"
+            android:textSize="13sp"
+            android:layout_centerVertical="true"/>
         <!--android:textColor="#FFB6C1"-->
 
         <ImageView
             android:id="@+id/image_h_c_m"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_toLeftOf="@+id/likeNumber_m"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="-4dp"
             android:visibility="gone"/>
         <ImageView
             android:id="@+id/image_h_b_m"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_toLeftOf="@+id/image_h_c_m"
-            android:layout_alignTop="@+id/image_h_c_m"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="-4dp"
             android:visibility="gone"/>
         <ImageView
             android:id="@+id/image_h_a_m"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_alignTop="@+id/image_h_b_m"
+            android:layout_width="31dp"
+            android:layout_height="31dp"
             android:layout_toLeftOf="@+id/image_h_b_m"
+            android:layout_centerVertical="true"
             android:visibility="gone"/>
         <TextView
             android:id="@+id/amoy_name_m"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/likeNumber_m"
+            android:layout_centerVertical="true"
             android:textSize="12sp"
             android:textColor="@color/myTheme_color"
             android:text="淘圈 | 微淘"/>
@@ -191,7 +195,6 @@
         android:paddingEnd="15dp"
         android:orientation="vertical"
         android:gravity="center_vertical"
-        android:layout_below="@+id/view"
         android:id="@+id/LL_message">
         <TextView
             android:layout_width="wrap_content"

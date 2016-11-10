@@ -80,7 +80,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
     private User user;
     private int circleId;
     public static final int ResultCode = 11;
-    ProgressDialog pd;   //进度条，圆形
+//    ProgressDialog pd;   //进度条，圆形
     private static final int REQUEST_CODE = 732;    //请求图库
     private ArrayList<String> mResults = new ArrayList<>();
     private List<File> files = new ArrayList<>();    //存放多张图片的文件集合
@@ -271,9 +271,8 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();//设置日期格式（24小时）
                 String amoyCircleDynamicJson = gson.toJson(amoyCircleDynamic);
                 requestParams.addBodyParameter("amoyCircleDynamicJson", amoyCircleDynamicJson);
-                pd = new ProgressDialog(CreateTaoquanDynamicActivity.this);
-                pd.setMessage("发布中..");
-                pd.show();
+                shapeLoadingDialog.setLoadingText("发布中....");
+                shapeLoadingDialog.show();
                 x.http().post(requestParams, new Callback.CommonCallback<String>() {
                     @Override
                     public void onSuccess(String result) {
@@ -289,7 +288,7 @@ public class CreateTaoquanDynamicActivity extends AppCompatActivity {
                     @Override
                     public void onFinished() {
                         //pd.dismiss();   //两种方式
-                        pd.cancel();
+                        shapeLoadingDialog.dismiss();
                     }
                 });
                 break;

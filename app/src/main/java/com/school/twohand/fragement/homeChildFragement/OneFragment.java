@@ -25,8 +25,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.activity.DetailGoodsActivity;
+import com.school.twohand.activity.InforPageActivity;
 import com.school.twohand.customview.HomePageListView;
 import com.school.twohand.entity.Goods;
+import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryGoodsBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -187,7 +189,7 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                     //用通用适配器将数据源显示在listView上
                     co = new CommonAdapter<Goods>(getActivity(),goodsMessage,R.layout.goods_message) {
                         @Override
-                        public void convert(ViewHolder viewHolder, Goods goods, final int position) {
+                        public void convert(ViewHolder viewHolder, final Goods goods, final int position) {
                             ImageView userHeadView = viewHolder.getViewById(R.id.user_head_t);//用户头像
                             TextView userName = viewHolder.getViewById(R.id.user_name_t);//用户名
                             TextView goodsPrice = viewHolder.getViewById(R.id.goods_price_t);//商品价格
@@ -203,6 +205,17 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                                     .setCircular(true)
                                     .build();
                             x.image().bind(userHeadView,userHeadUrl,userImageOptions);
+                            //点击跳转到该用户的名片,前提是用户已登录
+                            if(((MyApplication)getActivity().getApplication()).getUser()!=null){
+                                userHeadView.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(getActivity(), InforPageActivity.class);
+                                        intent.putExtra("infoPageUser",goods.getGoodsUser());
+                                        startActivity(intent);
+                                    }
+                                });
+                            }
                             //从数据库获取商品图片
                             /**
                              * 修改为多图片滑动滑到最后一张的时候可以进入详情或者点击进入详情
