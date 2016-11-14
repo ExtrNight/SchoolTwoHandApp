@@ -11,9 +11,8 @@
         android:id="@+id/rl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/colorViewpage"
+        android:background="@color/colorViewpage">
 
-        >
         <ImageView
             android:id="@+id/goback"
             android:layout_width="wrap_content"

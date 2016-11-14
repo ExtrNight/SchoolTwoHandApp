@@ -15,7 +15,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.myApplication.MyApplication;
-import com.school.twohand.query.entity.QueryReleaseBean;
 import com.school.twohand.query.entity.QueryTopicBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
@@ -38,18 +37,18 @@ import butterknife.ButterKnife;
 /**
  * Created by chenglong on 2016/10/25.
  */
-public class TopicFragment extends Fragment{
+public class TopicFragment extends Fragment {
+
     ListView liTopic;
 
     CommonAdapter<QueryTopicBean> queryTopicBeanCommonAdapter;
     List<QueryTopicBean> queryTopicBean=new ArrayList<>();
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_topic,null);
-        liTopic= (MyListView) view.findViewById(R.id.li_topic);
+        liTopic= (ListView) view.findViewById(R.id.li_topic);
         ButterKnife.inject(getActivity());
         getTopicData();
         return view;
@@ -66,21 +65,20 @@ public class TopicFragment extends Fragment{
             public void onSuccess(String result) {
                 Gson gson = new GsonBuilder()
                         .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-                Type type = new TypeToken<List<QueryTopicBean>>() {
-                }.getType();
+                Type type = new TypeToken<List<QueryTopicBean>>() {}.getType();
                 List<QueryTopicBean> newQueryTopicBean=gson.fromJson(result,type);
 
                 queryTopicBean.clear();
                 queryTopicBean.addAll(newQueryTopicBean);
 
                 if (queryTopicBeanCommonAdapter==null){
-                    queryTopicBeanCommonAdapter=new CommonAdapter<QueryTopicBean>(getActivity(),queryTopicBean,R.layout.item_mytopic) {
+                    queryTopicBeanCommonAdapter=new CommonAdapter<QueryTopicBean>(getActivity(),queryTopicBean, R.layout.item_mytopic) {
 
                         @Override
                         public void convert(ViewHolder viewHolder, QueryTopicBean queryTopicBean, int position) {
                             Log.i("TopicFragment", "convert: convert+11");
                             ImageView a=viewHolder.getViewById(R.id.iv_userImage);
-                            x.image().bind(a,NetUtil.imageUrl+queryTopicBean.getUserHead());
+                            x.image().bind(a, NetUtil.imageUrl+queryTopicBean.getUserHead());
 
                             TextView b=viewHolder.getViewById(R.id.tv_userName);
                             b.setText(queryTopicBean.getUserName());
@@ -103,7 +101,10 @@ public class TopicFragment extends Fragment{
 
 
                             ImageView e=viewHolder.getViewById(R.id.iv_image_item);
-                            x.image().bind(e, NetUtil.imageUrl + queryTopicBean.getImageList());
+                            if(queryTopicBean.getImageList().size()>0) {
+                                x.image().bind(e, NetUtil.imageUrl + queryTopicBean.getImageList().get(0).getCircleDynamicImageUrl());
+                                Log.i("TopicFragment", "convert: "+queryTopicBean.getImageList().get(0));
+                            }
 
                             TextView f=viewHolder.getViewById(R.id.tv_school);
                             f.setText("来自"+queryTopicBean.getUserAddress()+" 鱼塘|");

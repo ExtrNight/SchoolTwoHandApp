@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,12 +30,11 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-
 public class OrderDetailActivity extends AppCompatActivity {
+
     int orderId = 1;
     @InjectView(R.id.goback)
     ImageView goback;
-
 
     public static final int UNPAY = 1;//等待买家付款
     public static final int UNSEND = 2;//已付款，但未确认收货
@@ -45,8 +43,6 @@ public class OrderDetailActivity extends AppCompatActivity {
     public static final int ACHIEVEBUY=5;//交易完成
     public static final int CANCEL = 6;//取消订单
     QueryOrderDetailBean queryOrderDetailBean = new QueryOrderDetailBean();
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +61,6 @@ public class OrderDetailActivity extends AppCompatActivity {
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("orderId", orderId + "");
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
-
                     @Override
                     public void onSuccess(String result) {
                         Log.i("OrderDetailActivity", "onSuccess: "+result);
@@ -75,7 +70,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                         queryOrderDetailBean = gson.fromJson(result,QueryOrderDetailBean.class);
                         Log.i("OrderDetailActivity", "onSuccess: "+queryOrderDetailBean);
                         initView(queryOrderDetailBean);
-
 
                     }
 
@@ -102,7 +96,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     public void initView(QueryOrderDetailBean queryOrderDetailBean) {
 
         TextView a= (TextView) findViewById(R.id.tv_rechieve);
-        a.setText("卖家：" + queryOrderDetailBean.getSellUserName());
+        a.setText("卖家：" + queryOrderDetailBean.getRechieveName());
 
         ImageView b= (ImageView) findViewById(R.id.iv_goodImage);
         x.image().bind(b, NetUtil.imageUrl + queryOrderDetailBean.getGoodsImage().getImageAddress());
@@ -114,7 +108,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         d.setText(""+queryOrderDetailBean.getGoodsPrice());
 
         TextView e= (TextView) findViewById(R.id.tv_addressMen);
-        e.setText(queryOrderDetailBean.getRechieveName());
+        e.setText(queryOrderDetailBean.getSellUserName());
 
         TextView f= (TextView) findViewById(R.id.tv_phoneNumber);
         f.setText(""+queryOrderDetailBean.getPhoneNumber());
@@ -123,7 +117,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         g.setText(queryOrderDetailBean.getReceiptDetail());
 
         TextView h= (TextView) findViewById(R.id.tv_sell_name);
-        h.setText(queryOrderDetailBean.getSellUserName());
+        h.setText(queryOrderDetailBean.getRechieveName());
 
         TextView i= (TextView) findViewById(R.id.tv_orderId);
         i.setText(queryOrderDetailBean.getOrderNumber());
@@ -138,9 +132,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         Button btn1= (Button) findViewById(R.id.btn1);
         Button btn2= (Button) findViewById(R.id.btn2);
         Button btn3= (Button) findViewById(R.id.btn3);
+        TextView tvTextOrderNum= (TextView) findViewById(R.id.tv_text_orderId);
+        TextView tvOrderNum= (TextView) findViewById(R.id.tv_orderId);
 
         Detailshow(queryOrderDetailBean.getGoodsOrderState().getGoodsOrderStateId(),ivbackground1,ivbackground2,ivbackground3,ivbackground4
-                ,ivbackground5,tvorderState,tvtimeState,btn1,btn2,btn3);
+                ,ivbackground5,tvorderState,tvtimeState,btn1,btn2,btn3,tvTextOrderNum,tvOrderNum);
         btnClick(queryOrderDetailBean,btn1,btn2,btn3);
 
 
@@ -148,7 +144,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
 
     public void Detailshow(int orderStateId,ImageView ivbackground1,ImageView ivbackground2,ImageView ivbackground3,ImageView ivbackground4
-            ,ImageView ivbackground5,TextView tvorderState,TextView tvtimeState,Button btn1,Button btn2,Button btn3) {
+            ,ImageView ivbackground5,TextView tvorderState,TextView tvtimeState,Button btn1,Button btn2,Button btn3,TextView tvTextOrderNum,TextView tvOrderNum) {
         switch (orderStateId){
             case UNPAY:
                 //未付款
@@ -163,6 +159,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn3.setVisibility(View.GONE);
                 btn1.setText("关闭交易");
                 btn2.setText("我要付款");
+                tvTextOrderNum.setVisibility(View.GONE);
+                tvOrderNum.setVisibility(View.GONE);
 
                 SimpleDateFormat aa = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date d1 = new Date(queryOrderDetailBean.getOrderTime().getTime());
@@ -189,7 +187,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn2.setVisibility(View.GONE);
                 btn3.setVisibility(View.VISIBLE);
                 btn3.setText("提醒卖家发货");
-
+                tvTextOrderNum.setVisibility(View.VISIBLE);
+                tvOrderNum.setVisibility(View.VISIBLE);
                 break;
             case UNRECEIVE:
                 //等待卖家发货
@@ -204,6 +203,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn2.setVisibility(View.GONE);
                 btn3.setVisibility(View.VISIBLE);
                 btn3.setText("确认收货");
+                tvTextOrderNum.setVisibility(View.VISIBLE);
+                tvOrderNum.setVisibility(View.VISIBLE);
 
                 break;
             case ACHIEVE:
@@ -219,6 +220,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn2.setVisibility(View.GONE);
                 btn3.setVisibility(View.VISIBLE);
                 btn3.setText("评价");
+                tvTextOrderNum.setVisibility(View.VISIBLE);
+                tvOrderNum.setVisibility(View.VISIBLE);
                 break;
             case ACHIEVEBUY:
                 //交易完成
@@ -233,6 +236,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn2.setVisibility(View.GONE);
                 btn3.setVisibility(View.VISIBLE);
                 btn3.setText("查看评价");
+                tvTextOrderNum.setVisibility(View.VISIBLE);
+                tvOrderNum.setVisibility(View.VISIBLE);
                 break;
             case CANCEL:
                 //交易关闭
@@ -246,6 +251,8 @@ public class OrderDetailActivity extends AppCompatActivity {
                 btn1.setVisibility(View.GONE);
                 btn2.setVisibility(View.GONE);
                 btn3.setVisibility(View.GONE);
+                tvTextOrderNum.setVisibility(View.GONE);
+                tvOrderNum.setVisibility(View.GONE);
                 break;
 
 

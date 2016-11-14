@@ -50,29 +50,6 @@ public class ShowActivity extends AppCompatActivity {
     Button me_button;
 
     int preIndex;
-    @InjectView(R.id.button_home)
-    Button buttonHome;
-    @InjectView(R.id.button_container_home)
-    RelativeLayout buttonContainerHome;
-    @InjectView(R.id.button_group)
-    Button buttonGroup;
-    @InjectView(R.id.button_container_group)
-    RelativeLayout buttonContainerGroup;
-    @InjectView(R.id.button_public)
-    Button buttonPublic;
-    @InjectView(R.id.button_container_public)
-    RelativeLayout buttonContainerPublic;
-    @InjectView(R.id.button_message)
-    Button buttonMessage;
-    @InjectView(R.id.button_container_message)
-    RelativeLayout buttonContainerMessage;
-    @InjectView(R.id.button_me)
-    Button buttonMe;
-    @InjectView(R.id.button_container_me)
-    RelativeLayout buttonContainerMe;
-    @InjectView(R.id.bottom_navigation)
-    LinearLayout bottomNavigation;
-    TextView goods_price;
     MyApplication myApplication;
 
     @Override

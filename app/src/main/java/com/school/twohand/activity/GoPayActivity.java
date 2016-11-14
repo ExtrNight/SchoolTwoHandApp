@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.AmoyCircle;
 import com.school.twohand.entity.Goods;
 import com.school.twohand.entity.OrderTbl;
@@ -76,7 +77,8 @@ public class GoPayActivity extends AppCompatActivity {
 
     List<Receipt> receipts;
 
-    ProgressDialog dialog;
+//    ProgressDialog dialog;
+    private ShapeLoadingDialog shapeLoadingDialog;
     String AppId  = "42dab6855427c532053895c9fc3930a7";
     MyApplication myApplication;
     //商品名
@@ -173,9 +175,12 @@ public class GoPayActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({ R.id.gopay_pay})
+    @OnClick({ R.id.gopay_pay,R.id.btn_return})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.btn_return:
+                finish();
+                break;
             case R.id.gopay_pay:
                 //立即支付
                 pay(false);
@@ -313,24 +318,43 @@ public class GoPayActivity extends AppCompatActivity {
         });
     }
     void showDialog(String message) {
+//        try {
+//            if (dialog == null) {
+//                dialog = new ProgressDialog(this);
+//                dialog.setCancelable(true);
+//            }
+//            dialog.setMessage(message);
+//            dialog.show();
+//        } catch (Exception e) {
+//            // 在其他线程调用dialog会报错
+//        }
         try {
-            if (dialog == null) {
-                dialog = new ProgressDialog(this);
-                dialog.setCancelable(true);
+            if (shapeLoadingDialog == null) {
+                shapeLoadingDialog = new ShapeLoadingDialog(this);
             }
-            dialog.setMessage(message);
-            dialog.show();
+            shapeLoadingDialog.setLoadingText(message);
+            shapeLoadingDialog.show();
         } catch (Exception e) {
             // 在其他线程调用dialog会报错
         }
     }
 
     void hideDialog() {
-        if (dialog != null && dialog.isShowing())
+//        if (dialog != null && dialog.isShowing()){
+//            try {
+//                dialog.dismiss();
+//            } catch (Exception e) {
+//
+//            }
+//        }
+        if (shapeLoadingDialog != null ){
             try {
-                dialog.dismiss();
+                shapeLoadingDialog.dismiss();
             } catch (Exception e) {
+
             }
+        }
+
     }
 
     // 默认为0.02
@@ -353,4 +377,5 @@ public class GoPayActivity extends AppCompatActivity {
     String getOrder() {
         return "dddddd";
     }
+
 }

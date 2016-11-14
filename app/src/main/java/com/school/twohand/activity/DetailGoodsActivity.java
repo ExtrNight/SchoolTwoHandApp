@@ -300,7 +300,6 @@ public class DetailGoodsActivity extends AppCompatActivity {
                             intent.putExtra("goodId",goods.getGoodsId()+"");
                             startActivity(intent);
 
-
                         }else if (which == 1){//做删除操作
                             //在跳出一个对话框确认删除
                             AlertDialog.Builder builder = new AlertDialog.Builder(DetailGoodsActivity.this);

@@ -95,7 +95,7 @@ public class MySellActivity extends AppCompatActivity {
                 queryOrderBeen.addAll(newQueryOrderBean);
 
                 if (queryOrderBeanCommonAdapter==null){
-                    queryOrderBeanCommonAdapter=new CommonAdapter<QueryOrderBean>(MySellActivity.this,queryOrderBeen,R.layout.item_mysell) {
+                    queryOrderBeanCommonAdapter=new CommonAdapter<QueryOrderBean>(MySellActivity.this,queryOrderBeen, R.layout.item_mysell) {
                         @Override
                         public void convert(ViewHolder viewHolder, QueryOrderBean queryOrderBean, int position) {
                             //设置item中控件的取值
@@ -132,8 +132,8 @@ public class MySellActivity extends AppCompatActivity {
     public void initItemView(ViewHolder viewHolder, QueryOrderBean queryOrderBean, int position){
 
         ImageView a =viewHolder.getViewById(R.id.iv_sellImage);
-        x.image().bind(a,NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
-        Log.i("MyBuyActivity", "initItemView: initItemView"+NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
+        x.image().bind(a, NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
+        Log.i("MyBuyActivity", "initItemView: initItemView"+ NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
         TextView b=viewHolder.getViewById(R.id.tv_sellTitle);
         b.setText(""+queryOrderBean.getGoodsDescribe());
 

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class AmoyCircleDynamic implements Parcelable {
     private int amoyCirlceDynamicId;
+    private int userId;
     private User user;                             //动态发布人的User对象
     private int amoyCircleId;                       //动态所在淘圈的Id
     private String amoyCircleDynamicTitle;         //动态的标题
@@ -83,6 +84,20 @@ public class AmoyCircleDynamic implements Parcelable {
         this.imageList = imageList;
     }
 
+    public AmoyCircleDynamic(int amoyCirlceDynamicId, int userId, String amoyCircleDynamicTitle,
+                             String amoyCircleDynamicContent, Timestamp amoyCircleDynamicTime, List<AmoyCircleDynamicImage> imageList,
+                             Integer likeSum, Integer messageSum) {
+        super();
+        this.amoyCirlceDynamicId = amoyCirlceDynamicId;
+        this.userId = userId;
+        this.amoyCircleDynamicTitle = amoyCircleDynamicTitle;
+        this.amoyCircleDynamicContent = amoyCircleDynamicContent;
+        this.amoyCircleDynamicTime = amoyCircleDynamicTime;
+        this.imageList = imageList;
+        this.likeSum = likeSum;
+        this.messageSum = messageSum;
+    }
+
     public int getAmoyCirlceDynamicId() {
         return amoyCirlceDynamicId;
     }
@@ -90,7 +105,6 @@ public class AmoyCircleDynamic implements Parcelable {
     public void setAmoyCirlceDynamicId(int amoyCirlceDynamicId) {
         this.amoyCirlceDynamicId = amoyCirlceDynamicId;
     }
-
 
     public Integer getLikeSum() {
         return likeSum;
@@ -106,6 +120,14 @@ public class AmoyCircleDynamic implements Parcelable {
 
     public void setMessageSum(Integer messageSum) {
         this.messageSum = messageSum;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public User getUser() {

@@ -216,11 +216,12 @@ public class InforPageActivity extends AppCompatActivity{
 
                 TextView tv3 = (TextView) findViewById(R.id.tv_sumInfor);
 
-                SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd");
                 Date d1=new Date(user.getUserBirthday().getTime());
                 Date d2=new Date(System.currentTimeMillis());
-                long diff=d2.getTime()-d1.getTime();
-                long year = diff / (365*1000 * 60 * 60 * 24);
+                long diff=(d2.getTime()-d1.getTime())/(1000 * 60 * 60 * 24);
+                long year = diff/365 ;
+
                 tv3.setText("现居" + user.getUserAddress()+","+year+"岁"+user.getUserSex()+"生");
 
 

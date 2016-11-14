@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.school.twohand.schooltwohandapp.R;
+
 /**
  * Created by young on 2016/10/19.
  */

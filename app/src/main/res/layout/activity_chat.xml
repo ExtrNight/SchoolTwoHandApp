@@ -6,9 +6,16 @@
     tools:context="com.school.twohand.activity.message.ChatActivity">
     <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="50dp"
         android:background="@drawable/border_style_bottom"
         android:id="@+id/view">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_finish"
+            android:src="@mipmap/btn_return"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
         <TextView
             android:id="@+id/returnLast"
             android:layout_width="30dp"
@@ -22,7 +29,7 @@
             android:text="用户姓名"
             android:layout_gravity="center"
             android:textSize="20sp"
-            />
+            android:textColor="#000000"/>
         
         <TextView
             android:layout_width="30dp"
@@ -123,11 +130,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.185"
-            android:background="@drawable/send_botton_select"
+            android:background="@color/myTheme_color"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:text="发送"
             />
+        <!--android:background="@drawable/send_botton_select"-->
     </LinearLayout>
 
 </RelativeLayout>

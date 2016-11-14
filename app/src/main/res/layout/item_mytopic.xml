@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:layout_gravity="center_vertical"
-    android:layout_marginTop="5dp"
-    android:descendantFocusability="blocksDescendants">
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_centerVertical="true"
+        >
+
+
 
     <RelativeLayout
         android:id="@+id/rl_top"
@@ -69,13 +75,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <TextView
-            android:layout_width="270dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:id="@+id/tv_describe"
             android:text="这里是商品描述这里是商品描述这里是商品描述这里是商品描述"
             android:maxLines="2"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="7dp"
+            android:layout_marginLeft="20dp"
             android:textColor="@color/black"
             android:textSize="13sp"
             android:ellipsize="end"
@@ -85,15 +91,15 @@
             android:id="@+id/iv_image_item"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginLeft="12dp"
-            android:layout_toRightOf="@+id/tv_describe"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="25dp"
             />
 
         <View
             android:id="@+id/view1"
             android:layout_below="@+id/iv_image_item"
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="0.3dp"
             android:background="@color/view"
             android:layout_marginTop="9dp"/>
 
@@ -140,7 +146,7 @@
                 android:id="@+id/tv_priase"
                 android:layout_centerVertical="true"
                 android:text="点赞 1 "
-                android:layout_marginLeft="265dp"
+                android:layout_marginLeft="250dp"
                 android:textColor="@color/black"
                 android:textSize="13sp"
                 android:maxEms="12"
@@ -160,8 +166,10 @@
                 android:maxLines="1"
                 android:ellipsize="end"/>
         </RelativeLayout>
+
+
     </RelativeLayout>
     </LinearLayout>
-
+    </RelativeLayout>
 </RelativeLayout>
 

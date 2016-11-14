@@ -104,26 +104,26 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
         viewPagerHead = (ViewPager) viewHead.findViewById(R.id.viewPagerHead);
         //初始化viewPager的内容
         ImageView view1 = new ImageView(getActivity());
-        view1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        view1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         ImageView view2 = new ImageView(getActivity());
-        view2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        view2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
+//            }
+//        });
         ImageView view3 = new ImageView(getActivity());
-        view3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        view3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         view1.setBackgroundResource(R.drawable.slideshow_1);
         view2.setBackgroundResource(R.drawable.slideshow_2);
@@ -201,6 +201,7 @@ public class OneFragment extends Fragment implements HomePageListView.OnLoadChan
                             TextView goodsText = viewHolder.getViewById(R.id.goods_text_t);//商品描述
                             //从数据库获取头像
                             String userHeadUrl=NetUtil.imageUrl+goods.getGoodsUser().getUserHead();
+                            Log.i("OneFragment", "convert: "+NetUtil.imageUrl);
                             ImageOptions userImageOptions=new ImageOptions.Builder()
                                     .setCircular(true)
                                     .build();

@@ -1,25 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    <LinearLayout
+    android:layout_height="match_parent">
 
-        android:orientation="vertical"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#93DB70"
-        android:padding="10dp"
-        >
-        <TextView
-            android:id="@+id/tileText"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <!--android:background="#93DB70"-->
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:textSize="25sp"
-            android:text="点击查看商品分类"/>
+            android:layout_height="48dp"
+            android:background="@color/background_gray">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_classify_return"
+                android:src="@mipmap/btn_return"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_taoquan_discovery_name"
+                android:text="类别"
+                android:textColor="#000000"
+                android:layout_centerInParent="true"
+                android:textSize="20dp" />
+
+        </RelativeLayout>
+
+        <!--<TextView-->
+            <!--android:id="@+id/tileText"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="25sp"-->
+            <!--android:text="点击查看商品分类"/>-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/myTheme_color"
+            android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -392,7 +420,6 @@
 
                 <ImageView
                     android:id="@+id/other"
-
                     android:layout_width="75dp"
                     android:layout_height="75dp" />
                 <TextView
@@ -412,7 +439,10 @@
                     android:textSize="13sp"
                     android:text="其他你想到的"/>
             </RelativeLayout>
+
+        </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
-</ScrollView>
+</LinearLayout>

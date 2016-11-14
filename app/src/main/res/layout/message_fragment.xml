@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="50dp"
         android:background="@drawable/border_style_bottom">
 
         <TextView
@@ -14,7 +14,7 @@
             android:textStyle="bold"
             android:text="消息"
             android:textSize="19sp"
-            />
+            android:textColor="#000000"/>
     </RelativeLayout>
 
     <ListView

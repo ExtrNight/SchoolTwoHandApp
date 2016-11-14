@@ -84,7 +84,7 @@ public class GetAddressActivity extends AppCompatActivity {
                             b.setText("" + queryGetAddressBean.getReceiptNumber());
 
                             TextView c = viewHolder.getViewById(R.id.tv_address);
-                            c.setText("收货地址" + queryGetAddressBean.getReceiptDetail());
+                            c.setText("收货地址:" + queryGetAddressBean.getReceiptDetail());
                         }
                     };
                     liGetAddress.setAdapter(queryGetAddressBeanCommonAdapter);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -37,21 +38,29 @@ public class SousuoActivity extends AppCompatActivity {
     private ListView mListView;
     //数据源：默认从数据库返回是个模糊搜索结果
     String allNewText;
-    List<String> dataList= new ArrayList();
-    Button sousuoButton;
+    List<String> dataList= new ArrayList<>();
+    TextView sousuoButton;
+    ImageView iv_search_return;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sousuo);
         //找寻控件
+        iv_search_return = (ImageView) findViewById(R.id.iv_search_return);
         searchView = (SearchView) findViewById(R.id.search_view);
         mListView = (ListView) findViewById(R.id.listView);
-        sousuoButton = (Button) findViewById(R.id.sousuoButton);
+        sousuoButton = (TextView) findViewById(R.id.tv_search);
+
         if (dataList.size()!=0){
             initData();
         }
 
-
+        iv_search_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         // 设置搜索文本监听
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

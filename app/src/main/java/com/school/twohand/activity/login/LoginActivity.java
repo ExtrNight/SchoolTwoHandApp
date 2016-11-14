@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 
 import com.google.gson.Gson;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.User;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.schooltwohandapp.R;
@@ -47,6 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     String userId = null;
     static final int CODE = 10;//去注册界面的请求码
     public static final int ResultCode = 100;   //登录成功的结果码
+    private ShapeLoadingDialog shapeLoadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +67,12 @@ public class LoginActivity extends AppCompatActivity {
         login = (Button) findViewById(R.id.login);
         register = (TextView) findViewById(R.id.register);
         headImage = (ImageView) findViewById(R.id.headImage);
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
         //跳转到注册界面
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                register.setTextColor(Color.GREEN);
+//                register.setTextColor(Color.GREEN);
                 Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
                 startActivityForResult(intent,CODE);
             }
@@ -139,31 +143,34 @@ public class LoginActivity extends AppCompatActivity {
                     java.lang.String password,
                     cn.jpush.im.api.BasicCallback callback)
                     */
-                    final ProgressDialog pdilog = new ProgressDialog(LoginActivity.this);
-                    pdilog.setMessage("正在努力登录中。。。");
-                    pdilog.show();
+//                    final ProgressDialog pdilog = new ProgressDialog(LoginActivity.this);
+//                    pdilog.setMessage("正在努力登录中。。。");
+//                    pdilog.show();
+                    shapeLoadingDialog.setLoadingText("正在努力登录中...");
+                    shapeLoadingDialog.show();
                     JMessageClient.login(userAccount, passwordString, new BasicCallback() {
                         @Override
                         public void gotResult(int i, String s) {
                             Log.i("login", "gotResult: "+userAccount+passwordString);
                             if (i==0){
                                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                pdilog.cancel();
-                                final ProgressDialog pdilog1 = new ProgressDialog(LoginActivity.this);
-                                pdilog1.setMessage("正在跳转。。。");
-                                pdilog1.show();
+                                shapeLoadingDialog.dismiss();
+                                final ShapeLoadingDialog shapeLoadingDialog1 = new ShapeLoadingDialog(LoginActivity.this);
+                                shapeLoadingDialog1.setLoadingText("正在跳转...");
+                                shapeLoadingDialog1.show();
+
                                 //获取用户资料
                                 JMessageClient.getUserInfo(userAccount, new GetUserInfoCallback() {
                                     @Override
                                     public void gotResult(int i, String s, UserInfo userInfo) {
                                         //判断头像或者昵称是否为空，为空则跳转到编辑头像昵称界面
                                         if (userInfo.getNickname().trim().length() == 0||userInfo.getAvatar()== null){
-                                            pdilog1.cancel();
+                                            shapeLoadingDialog1.dismiss();
                                             Intent intent = new Intent(LoginActivity.this,FixProfileActivity.class);
                                             intent.putExtra("userId",userId);
                                             startActivity(intent);
                                         }else{
-                                            pdilog1.cancel();
+                                            shapeLoadingDialog1.dismiss();
 
                                             /*Intent intent = new Intent(LoginActivity.this,MessageListActivity.class);
                                             startActivity(intent);*/
@@ -213,7 +220,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                             }else{
-                                pdilog.cancel();
+                                shapeLoadingDialog.dismiss();
                                 Toast.makeText(LoginActivity.this, "用户名与密码不匹配", Toast.LENGTH_SHORT).show();
                             }
                         }

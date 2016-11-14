@@ -3,9 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EEEEEE" >
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="53dp"
+        android:id="@+id/btn_return"
         android:src="@mipmap/btn_return"
         android:layout_marginLeft="10dp"
         android:layout_alignParentLeft="true"/>
@@ -193,10 +195,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:background="@drawable/send_botton_select"
+            android:background="@color/myTheme_color"
             android:textStyle="bold"
             android:textSize="17sp"
             android:text="确定"/>
+        <!--android:background="@drawable/send_botton_select"-->
 
     </RelativeLayout>
     <!--<LinearLayout

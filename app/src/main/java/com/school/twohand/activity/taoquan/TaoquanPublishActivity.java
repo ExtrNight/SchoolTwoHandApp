@@ -95,11 +95,14 @@ public class TaoquanPublishActivity extends AppCompatActivity {
     Integer amoyId = 0;   //选中淘圈的id
     File imageFileDir;  //存放多张图片的本地临时文件夹，在最后删除掉，不占用用户内存空间
 
+    ShapeLoadingDialog shapeLoadingDialog;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_publish);
         ButterKnife.inject(this);
         publicCircle.setVisibility(View.GONE);  //隐藏Spinner，只显示当前淘圈名
+        shapeLoadingDialog = new ShapeLoadingDialog(this);//shapeLoadingDialog对象
         tvPublishTaoquanName.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
         if (intent != null) {
@@ -156,7 +159,6 @@ public class TaoquanPublishActivity extends AppCompatActivity {
                 //初始化选择图片后的图片控件
                 initPhotoView();
                 //选择图片的保存
-                final ShapeLoadingDialog shapeLoadingDialog = new ShapeLoadingDialog(this);//shapeLoadingDialog对象
                 shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
                 shapeLoadingDialog.show();
                 Thread thread = new Thread(new Runnable() {
@@ -457,9 +459,8 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         }
 
         Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,user.getUserSchoolName());
-        final ProgressDialog dia = new ProgressDialog(this);
-        dia.setMessage("发布中...");
-        dia.show();
+        shapeLoadingDialog.setLoadingText("正在进行图片处理，请稍等..");
+        shapeLoadingDialog.show();
 
         RequestParams params = new RequestParams(NetUtil.url + "UploadImages");
         params.setMultipart(true);
@@ -467,7 +468,6 @@ public class TaoquanPublishActivity extends AppCompatActivity {
         for (int i = 0; i < files.size(); i++) {
             params.addBodyParameter("file" + i, files.get(i));
         }
-        //Gson gson = new Gson();
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         String goodsString = gson.toJson(goods);
         params.addBodyParameter("goods", goodsString);
@@ -483,7 +483,7 @@ public class TaoquanPublishActivity extends AppCompatActivity {
 
             @Override
             public void onFinished() {
-                dia.dismiss();//加载完成
+                shapeLoadingDialog.dismiss();//加载完成
             }
 
             @Override

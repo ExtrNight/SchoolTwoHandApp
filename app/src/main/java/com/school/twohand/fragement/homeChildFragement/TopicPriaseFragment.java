@@ -102,7 +102,8 @@ public class TopicPriaseFragment extends Fragment {
 
                             ImageView e = viewHolder.getViewById(R.id.iv_image_item);
                             if(queryTopicBean.getImageList().size()>0){
-                                x.image().bind(e, NetUtil.imageUrl + queryTopicBean.getImageList().get(0));
+                                x.image().bind(e, NetUtil.imageUrl + queryTopicBean.getImageList().get(0).getCircleDynamicImageUrl());
+                                Log.i("TopicPriaseFragment", "convert: "+ queryTopicBean.getImageList().get(0).getCircleDynamicImageUrl());
                             }
 
 

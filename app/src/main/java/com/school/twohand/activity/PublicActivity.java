@@ -62,6 +62,7 @@ import butterknife.OnClick;
  * Created by Administrator on 2016/10/19 0019.
  */
 public class PublicActivity extends AppCompatActivity {
+
     @InjectView(R.id.public_title)
     EditText publicTitle;
     @InjectView(R.id.public_content)
@@ -268,13 +269,13 @@ public class PublicActivity extends AppCompatActivity {
             }
         }
 
-
-
         //请求分类界面
         if (requestCode == REQUEST_CODE_CLASS) {
-            Integer classId = Integer.parseInt(data.getStringExtra("result"));
-            classid = classId;
-            publicClass.setText(classIdConvertString(classId));
+            if(data!=null){
+                Integer classId = Integer.parseInt(data.getStringExtra("result"));
+                classid = classId;
+                publicClass.setText(classIdConvertString(classId));
+            }
             return;
         }
 
@@ -421,7 +422,7 @@ public class PublicActivity extends AppCompatActivity {
             Bitmap bm = null;
             File file = new File(mResults.get(i));
             Uri imageUri = Uri.fromFile(file);
-            InputStream is = null;
+            InputStream is ;
             try {
                 is = getContentResolver().openInputStream(imageUri);
                 bm = BitmapFactory.decodeStream(is);
@@ -591,9 +592,8 @@ public class PublicActivity extends AppCompatActivity {
         }
 
         Goods goods = new Goods(null, classTbl, user, amoyCircle, title, describe, goodsPrice, null, 1, auction, goodsImages, null, null, 0,user.getUserSchoolName());
-        final ProgressDialog dia = new ProgressDialog(this);
-        dia.setMessage("加载中....");
-        dia.show();
+        shapeLoadingDialog.setLoadingText("发布中...");
+        shapeLoadingDialog.show();
 
         RequestParams params = new RequestParams(NetUtil.url + "UploadImages");
         params.setMultipart(true);
@@ -639,7 +639,7 @@ public class PublicActivity extends AppCompatActivity {
 
             @Override
             public void onFinished() {
-                dia.dismiss();//加载完成
+                shapeLoadingDialog.dismiss();//加载完成
             }
 
             @Override

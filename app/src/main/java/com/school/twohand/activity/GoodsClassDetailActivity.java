@@ -3,10 +3,8 @@ package com.school.twohand.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +29,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 public class GoodsClassDetailActivity extends AppCompatActivity {
 
@@ -41,7 +40,8 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
     //分类id
     String classId;
     List<Goods> goodsMessage = new ArrayList<>();//服务器获取到的数据源
-    String sousuo ;
+    String sousuo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,26 +52,27 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
         initListBody();
     }
 
-    public void initListBody(){
-        final RequestParams requestParams = new RequestParams(NetUtil.url+"QueryGoodsServlet");
+    public void initListBody() {
+        final RequestParams requestParams = new RequestParams(NetUtil.url + "QueryGoodsServlet");
         QueryGoodsBean queryGoodsBean = null;
-        if (sousuo!=null&&classId==null){
-            queryGoodsBean = new QueryGoodsBean(sousuo,userSchoolName,null,0,null,null);
-        }else if (sousuo==null&&classId!=null){
-             queryGoodsBean = new QueryGoodsBean(null,userSchoolName,classId,0,null,null);
+        if (sousuo != null && classId == null) {
+            queryGoodsBean = new QueryGoodsBean(sousuo, userSchoolName, null, 0, null, null);
+        } else if (sousuo == null && classId != null) {
+            queryGoodsBean = new QueryGoodsBean(null, userSchoolName, classId, 0, null, null);
         }
 
         Gson gson = new Gson();
         String queryGoodsBeanString = gson.toJson(queryGoodsBean);
-        requestParams.addQueryStringParameter("queryGoodsBean",queryGoodsBeanString);
+        requestParams.addQueryStringParameter("queryGoodsBean", queryGoodsBeanString);
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(final String result) {
                 final Gson gson = new Gson();
-                goodsMessage = gson.fromJson(result,new TypeToken<List<Goods>>(){}.getType());
+                goodsMessage = gson.fromJson(result, new TypeToken<List<Goods>>() {
+                }.getType());
 
                 //用通用适配器将数据源显示在listView上
-                CommonAdapter<Goods> co = new CommonAdapter<Goods>(GoodsClassDetailActivity.this,goodsMessage,R.layout.goods_message) {
+                CommonAdapter<Goods> co = new CommonAdapter<Goods>(GoodsClassDetailActivity.this, goodsMessage, R.layout.goods_message) {
                     @Override
                     public void convert(ViewHolder viewHolder, Goods goods, final int position) {
                         ImageView userHeadView = viewHolder.getViewById(R.id.user_head_t);//用户头像
@@ -84,11 +85,11 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
                         TextView messageBoard = viewHolder.getViewById(R.id.message_t);//留言
                         TextView goodsText = viewHolder.getViewById(R.id.goods_text_t);//商品描述
                         //从数据库获取头像
-                        String userHeadUrl=NetUtil.imageUrl+goods.getGoodsUser().getUserHead();
-                        ImageOptions userImageOptions=new ImageOptions.Builder()
+                        String userHeadUrl = NetUtil.imageUrl + goods.getGoodsUser().getUserHead();
+                        ImageOptions userImageOptions = new ImageOptions.Builder()
                                 .setCircular(true)
                                 .build();
-                        x.image().bind(userHeadView,userHeadUrl,userImageOptions);
+                        x.image().bind(userHeadView, userHeadUrl, userImageOptions);
 
                         //从数据库获取商品图片
                         /**
@@ -108,9 +109,9 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
                             iv_goodsImage.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(GoodsClassDetailActivity.this,DetailGoodsActivity.class);
-                                    intent.putExtra("goodsMessage",gson.toJson(goodsMessage));
-                                    intent.putExtra("position",position+1);
+                                    Intent intent = new Intent(GoodsClassDetailActivity.this, DetailGoodsActivity.class);
+                                    intent.putExtra("goodsMessage", gson.toJson(goodsMessage));
+                                    intent.putExtra("position", position + 1);
                                     startActivity(intent);
                                 }
                             });
@@ -125,34 +126,34 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
 
                         //给控件赋值
                         userName.setText(goods.getGoodsUser().getUserName());
-                        goodsPrice.setText("￥"+goods.getGoodsPrice()+"");
+                        goodsPrice.setText("￥" + goods.getGoodsPrice() + "");
 
                         userSchool.setVisibility(View.GONE);
-                        if(goods.getGoodsUserSchoolName()!=null){
+                        if (goods.getGoodsUserSchoolName() != null) {
                             userSchool.setVisibility(View.VISIBLE);
-                            userSchool.setText("来自 "+goods.getGoodsUserSchoolName());
-                        }else{
-                            if(goods.getGoodsUser().getUserSchoolName()!=null){
+                            userSchool.setText("来自 " + goods.getGoodsUserSchoolName());
+                        } else {
+                            if (goods.getGoodsUser().getUserSchoolName() != null) {
                                 userSchool.setVisibility(View.VISIBLE);
-                                userSchool.setText("来自 "+goods.getGoodsUser().getUserSchoolName());
+                                userSchool.setText("来自 " + goods.getGoodsUser().getUserSchoolName());
                             }
                         }
                         amoyCircle.setVisibility(View.GONE);
-                        if(goods.getGoodsAmoyCircle()!=null){
+                        if (goods.getGoodsAmoyCircle() != null) {
                             amoyCircle.setVisibility(View.VISIBLE);
-                            amoyCircle.setText("淘圈丨"+goods.getGoodsAmoyCircle().getCircleName());
+                            amoyCircle.setText("淘圈丨" + goods.getGoodsAmoyCircle().getCircleName());
                         }
-                        like.setText("点赞"+goods.getGoodsLikes().size());
-                        messageBoard.setText("留言"+goods.getGoodsMessageBoards().size());
-                        goodsText.setText(goods.getGoodsTitle()+"  "+goods.getGoodsDescribe());
+                        like.setText("点赞" + goods.getGoodsLikes().size());
+                        messageBoard.setText("留言" + goods.getGoodsMessageBoards().size());
+                        goodsText.setText(goods.getGoodsTitle() + "  " + goods.getGoodsDescribe());
 
                         LinearLayout LL_bottom = viewHolder.getViewById(R.id.LL_bottom);
                         LL_bottom.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                Intent intent = new Intent(GoodsClassDetailActivity.this,DetailGoodsActivity.class);
-                                intent.putExtra("goodsMessage",gson.toJson(goodsMessage));
-                                intent.putExtra("position",position+1);  //这里要加1，否则数据会错乱？？？
+                                Intent intent = new Intent(GoodsClassDetailActivity.this, DetailGoodsActivity.class);
+                                intent.putExtra("goodsMessage", gson.toJson(goodsMessage));
+                                intent.putExtra("position", position + 1);  //这里要加1，否则数据会错乱？？？
                                 startActivity(intent);
                             }
                         });
@@ -170,17 +171,27 @@ public class GoodsClassDetailActivity extends AppCompatActivity {
 //                    }
 //                });
             }
+
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
             }
+
             @Override
             public void onCancelled(CancelledException cex) {
             }
+
             @Override
             public void onFinished() {
             }
         });
     }
+
+
+    @OnClick(R.id.iv_classify_return)
+    public void onClick() {
+        finish();
+    }
+
 
 
 }

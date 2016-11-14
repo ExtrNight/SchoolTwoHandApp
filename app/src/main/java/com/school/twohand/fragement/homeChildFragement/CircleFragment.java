@@ -79,7 +79,7 @@ public class CircleFragment extends Fragment {
 
                             //设置item中控件的取值
                             ImageView a=viewHolder.getViewById(R.id.iv_cicleImage);
-                            x.image().bind(a, NetUtil.imageUrl + "image/" + queryCircleDetailBean.getImageUrl());
+                            x.image().bind(a, NetUtil.imageUrl + queryCircleDetailBean.getImageUrl());
 
                             TextView b=viewHolder.getViewById(R.id.tv_circleName);
                             b.setText(queryCircleDetailBean.getCircleName());

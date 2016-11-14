@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.school.twohand.customview.loadingview.ShapeLoadingDialog;
 import com.school.twohand.entity.User;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.NetUtil;
@@ -34,6 +35,8 @@ public class RegisterActivity extends AppCompatActivity {
     String name;
     String password;
     String password2;
+    private ShapeLoadingDialog shapeLoadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
         //toolbar
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
+        shapeLoadingDialog = new ShapeLoadingDialog(this);
 
         /*
         在极光上注册
@@ -62,10 +66,17 @@ public class RegisterActivity extends AppCompatActivity {
                password = userPassword.getText().toString();//用户密码
                password2 = userPassword2.getText().toString();//确认用户密码
                if (name.trim().length()!=0&&password.trim().length()!=0&&password2.trim().length()!=0){//判断输入账号或密码不为空
+                   if(name.trim().length()!=11){
+                       Toast.makeText(RegisterActivity.this, "手机号不对哦~", Toast.LENGTH_SHORT).show();
+                       return;
+                   }
+                   if(password.trim().length()<6){
+                       Toast.makeText(RegisterActivity.this, "密码不能少于6位数哦~", Toast.LENGTH_SHORT).show();
+                       return;
+                   }
                    if (password.equals(password2)){//如果两次密码一样则注册
-                       final ProgressDialog pdialog = new ProgressDialog(RegisterActivity.this);
-                       pdialog.setMessage("帮您注册中，同学请稍等。。");
-                       pdialog.show();
+                       shapeLoadingDialog.setLoadingText("帮您注册中，同学请稍等...");
+                       shapeLoadingDialog.show();
                        JMessageClient.register(name, password, new BasicCallback() {
                            @Override
                            public void gotResult(int i, String s) {
@@ -82,7 +93,7 @@ public class RegisterActivity extends AppCompatActivity {
                                        @Override
                                        public void onSuccess(String result) {
                                            if (result!=null) {
-                                               pdialog.cancel();
+                                               shapeLoadingDialog.dismiss();
                                                Intent intent = new Intent();
                                                intent.putExtra("userName", name);
                                                intent.putExtra("userId",result);
@@ -109,7 +120,7 @@ public class RegisterActivity extends AppCompatActivity {
                                        }
                                    });
                                }else {
-                                   pdialog.cancel();
+                                   shapeLoadingDialog.dismiss();
                                    Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
                                }
                            }

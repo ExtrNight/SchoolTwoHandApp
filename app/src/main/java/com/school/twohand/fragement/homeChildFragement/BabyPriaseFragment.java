@@ -17,8 +17,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryPriaseBean;
-import com.school.twohand.query.entity.QueryReleaseBean;
-import com.school.twohand.query.entity.QueryTopicBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
 import com.school.twohand.utils.NetUtil;
@@ -84,7 +82,7 @@ public class BabyPriaseFragment extends Fragment {
                         public void convert(ViewHolder viewHolder, QueryPriaseBean queryPriaseBean, int position) {
                             Log.i("TopicFragment", "convert: convert+11");
                             ImageView a = viewHolder.getViewById(R.id.iv_userImage);
-                            x.image().bind(a, NetUtil.imageUrl + "image/" + queryPriaseBean.getUserHead());
+                            x.image().bind(a, NetUtil.imageUrl + queryPriaseBean.getUserHead());
 
                             TextView b = viewHolder.getViewById(R.id.tv_userName);
                             b.setText(queryPriaseBean.getUserName());
@@ -157,7 +155,7 @@ public class BabyPriaseFragment extends Fragment {
             View view = LayoutInflater.from(getActivity()).inflate(
                     R.layout.each_babypraise_image_item, null);
             ImageView iv_goodsImage = (ImageView) view.findViewById(R.id.iv_babypriase_image_item);
-            String url2 = NetUtil.imageUrl+"image/" + ((QueryPriaseBean) LL.getTag()).getGoodsImage().get(i).getImageAddress();
+            String url2 = NetUtil.imageUrl+((QueryPriaseBean) LL.getTag()).getGoodsImage().get(i).getImageAddress();
             ImageOptions imageOptions2 = new ImageOptions.Builder()
                     .setFailureDrawableId(R.mipmap.ic_launcher)
                     .setLoadingDrawableId(R.mipmap.ic_launcher)

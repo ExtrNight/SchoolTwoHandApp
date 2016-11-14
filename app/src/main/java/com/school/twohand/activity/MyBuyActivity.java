@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -30,7 +29,6 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.lang.reflect.Type;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,16 +56,12 @@ public class MyBuyActivity extends AppCompatActivity {
     public static final int ACHIEVEBUY=5;//交易完成
     public static final int CANCEL=6;//取消订单
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_buy);
         ButterKnife.inject(this);
         getOrderData();
-
 
         lvBuy.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -104,7 +98,7 @@ public class MyBuyActivity extends AppCompatActivity {
                 queryOrderBeen.addAll(newQueryOrderBean);
 
                 if (queryOrderBeanCommonAdapter==null){
-                    queryOrderBeanCommonAdapter=new CommonAdapter<QueryOrderBean>(MyBuyActivity.this,queryOrderBeen,R.layout.item_mybuy) {
+                    queryOrderBeanCommonAdapter=new CommonAdapter<QueryOrderBean>(MyBuyActivity.this,queryOrderBeen, R.layout.item_mybuy) {
                         @Override
                         public void convert(ViewHolder viewHolder, QueryOrderBean queryOrderBean, int position) {
                             //设置item中控件的取值
@@ -141,8 +135,8 @@ public class MyBuyActivity extends AppCompatActivity {
     public void initItemView(ViewHolder viewHolder, QueryOrderBean queryOrderBean, int position){
 
         ImageView a =viewHolder.getViewById(R.id.iv_buyImage);
-        x.image().bind(a,NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
-        Log.i("MyBuyActivity", "initItemView: initItemView"+NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
+        x.image().bind(a, NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
+        Log.i("MyBuyActivity", "initItemView: initItemView"+ NetUtil.imageUrl+queryOrderBean.getGoodsImage().getImageAddress());
         TextView b=viewHolder.getViewById(R.id.tv_buyTitle);
         b.setText(""+queryOrderBean.getGoodsDescribe());
 
@@ -151,9 +145,6 @@ public class MyBuyActivity extends AppCompatActivity {
 
         TextView d=viewHolder.getViewById(R.id.tv_time);
         d.setText(queryOrderBean.getGoodsOrderState().getGoodsOrderStates());
-
-
-
 
         TextView e=viewHolder.getViewById(R.id.tv_time1);
         SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -302,11 +293,6 @@ public class MyBuyActivity extends AppCompatActivity {
                         //评价
                         changeState(queryOrderBean.getOrderId(),ACHIEVEBUY,"已评价",position);
                         break;
-
-
-
-
-
                 }
 
             }
@@ -321,8 +307,6 @@ public class MyBuyActivity extends AppCompatActivity {
                         changeState(queryOrderBean.getOrderId(),CANCEL,"交易关闭",position);
                         Toast.makeText(MyBuyActivity.this,"已取消交易",Toast.LENGTH_SHORT).show();
                         break;
-
-
                 }
             }
         });
@@ -333,12 +317,9 @@ public class MyBuyActivity extends AppCompatActivity {
 
     //更新订单状态，更新界面
     public void changeState(int orderId, final int newStateId, final String newStateName,final int position) {
-
         RequestParams requestParams = new RequestParams(NetUtil.url + "OrderUpdateServlet");
         requestParams.addBodyParameter("orderId", orderId + "");
         requestParams.addBodyParameter("orderStatatusId", newStateId + "");
-
-
         //更新订单，更新界面
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
 

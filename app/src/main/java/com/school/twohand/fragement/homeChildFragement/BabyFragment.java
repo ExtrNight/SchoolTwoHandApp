@@ -1,6 +1,6 @@
 package com.school.twohand.fragement.homeChildFragement;
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.school.twohand.activity.DetailGoodsActivity;
+import com.school.twohand.activity.OrderDetailActivity;
 import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryReleaseBean;
 import com.school.twohand.schooltwohandapp.R;
@@ -46,8 +49,6 @@ public class BabyFragment extends Fragment {
     CommonAdapter<QueryReleaseBean> queryReleaseBeanCommonAdapter;
     List<QueryReleaseBean>  queryReleaseBean=new ArrayList<>();
 
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +56,18 @@ public class BabyFragment extends Fragment {
         lvRelease= (ListView) view.findViewById(R.id.li_baby);
         ButterKnife.inject(getActivity());
         getGoodsData();
+
+     /*   lvRelease.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Intent intent = new Intent(getActivity(), DetailGoodsActivity.class);
+                Gson gson = new Gson();
+
+                intent.putExtra("goodsJson", queryReleaseBean.get(position).getGoods());
+                startActivity(intent);
+            }
+        });*/
         return view;
     }
 
@@ -63,8 +76,6 @@ public class BabyFragment extends Fragment {
         Integer userId=  ((MyApplication)getActivity().getApplication()).getUser().getUserId();
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("userId", userId + "");
-
-
 
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
@@ -104,18 +115,18 @@ public class BabyFragment extends Fragment {
                             TextView e=viewHolder.getViewById(R.id.tv_babySay);
                             e.setText(queryReleaseBean.getMessageSum()+"留言");
                             Log.i("BabyFragment", "convert: convert"+e);
-                            TextView f=viewHolder.getViewById(R.id.tv_babyTime);
+                            /*TextView f=viewHolder.getViewById(R.id.tv_babyTime);
                             SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             Date d1=new Date(queryReleaseBean.getGoodsReleaseTime().getTime());
                             Date d2=new Date(System.currentTimeMillis());
-                            long target=(90*1000*60*60*24);
+                            long target = (9 * 1000 * 60 * 60 * 24);
                             long diff=target-(d2.getTime()-d1.getTime());
                             long days = diff / (1000 * 60 * 60 * 24);
-                            f.setText(days+"天展示时间");
+                            f.setText(days+"天展示时间");*/
 
                         }
                     };
-                    Log.i("BabyFragment", "onSuccess: onSuccess+22");
+
                     lvRelease.setAdapter(queryReleaseBeanCommonAdapter);
                 }else {
                     queryReleaseBeanCommonAdapter.notifyDataSetChanged();

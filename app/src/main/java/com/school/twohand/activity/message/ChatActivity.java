@@ -45,6 +45,7 @@ public class ChatActivity extends AppCompatActivity {
     Button userSend;
     TextView pay;
     TextView chatGoodsPrice;
+    ImageView iv_finish;
     MyApplication myApplication;
     CommonAdapter<Message> commonAdapter;
     ImageView chatGoodsImage;
@@ -57,6 +58,14 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        iv_finish = (ImageView) findViewById(R.id.iv_finish);
+        iv_finish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         content = (ListView) findViewById(R.id.chatContent);
         userInput = (EditText) findViewById(R.id.chatInput);
         userSend = (Button) findViewById(R.id.chatSend);

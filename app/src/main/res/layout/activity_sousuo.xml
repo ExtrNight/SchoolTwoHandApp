@@ -3,14 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     android:orientation="vertical"
     tools:context="com.school.twohand.activity.SousuoActivity">
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="4dp"
-        android:background="#2200ff00">
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:background="#eeeeee">
+        <!--android:background="#2200ff00"-->
+        <!--android:padding="4dp"-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_search_return"
+            android:src="@mipmap/btn_return"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"/>
+
         <SearchView
             android:id="@+id/search_view"
             android:layout_width="wrap_content"
@@ -18,17 +29,29 @@
             android:iconifiedByDefault="false"
             android:imeOptions="actionGo"
             android:queryHint="请输入搜索内容"
-            android:layout_toLeftOf="@+id/sousuoButton"
-            >
-        </SearchView>
-        <Button
-            android:id="@+id/sousuoButton"
-            android:layout_width="70dp"
+            android:paddingLeft="-15dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="8"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/sousuoButton"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="搜索"-->
+            <!--android:layout_gravity="center_vertical"-->
+            <!--android:layout_weight="1" />-->
+        <TextView
+            android:id="@+id/tv_search"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="搜索"
-            android:layout_alignParentRight="true"/>
-    </RelativeLayout>
+            android:layout_gravity="center_vertical"
+            android:textColor="#000000"
+            android:textSize="18dp"
+            android:layout_marginRight="5dp" />
 
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listView"
