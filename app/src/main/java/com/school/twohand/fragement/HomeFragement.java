@@ -201,4 +201,17 @@ public class HomeFragement extends Fragment {
         lp.width = screenWidth / 4;
         line.setLayoutParams(lp);
     }
+
+    //解决系统崩溃的时候的Fragment的错乱问题
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        //super.onSaveInstanceState(outState);
+//    }
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//    }
+
+
+
 }

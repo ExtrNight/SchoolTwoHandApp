@@ -235,7 +235,7 @@ public class EachTaoquanActivity extends AppCompatActivity implements EachTaoqua
             //设置淘圈名
             lvEachTaoquanGoods.tv_taoquan_name.setText(amoyCircle.getCircleName());
             //设置淘圈人气
-            lvEachTaoquanGoods.tv_taoquan_popularity.setText("人气 " + (amoyCircle.getCircleNumber() + 100));
+            lvEachTaoquanGoods.tv_taoquan_popularity.setText("人气 " + amoyCircle.getCircleNumber());
 
         }
     }
