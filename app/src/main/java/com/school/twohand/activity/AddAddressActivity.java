@@ -47,7 +47,6 @@ public class AddAddressActivity extends AppCompatActivity {
                 String number=etNumber.getText().toString();
                 String address=etAddress.getText().toString();
 
-
                 Receipt receipt = new Receipt();
                 receipt.setReceiptDetailed(address);
                 receipt.setReceiptContactNumber(number);

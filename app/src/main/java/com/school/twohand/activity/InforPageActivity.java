@@ -222,11 +222,14 @@ public class InforPageActivity extends AppCompatActivity{
                 long diff=(d2.getTime()-d1.getTime())/(1000 * 60 * 60 * 24);
                 long year = diff/365 ;
 
-                tv3.setText("现居" + user.getUserAddress()+","+year+"岁"+user.getUserSex()+"生");
+                tv3.setText("现居" + user.getUserAddress()+", "+year+"岁"+user.getUserSex()+"生");
 
 
                 TextView tv4 = (TextView) findViewById(R.id.tv_person);
-                tv4.setText(user.getUserPersonalProfile());
+                if(tv4!=null&&user.getUserPersonalProfile()!=null){
+                    tv4.setVisibility(View.VISIBLE);
+                    tv4.setText(user.getUserPersonalProfile());
+                }
 
             }
             @Override

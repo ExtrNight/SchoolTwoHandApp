@@ -296,6 +296,7 @@
         <activity android:name="com.school.twohand.activity.InforPageActivity"/>
         <activity android:name="com.school.twohand.activity.NearBySchoolActivity"/>
         <activity android:name="com.school.twohand.activity.OrderDetailActivity2"/>
+        <activity android:name="com.school.twohand.activity.GetAddressActivity"/>
     </application>
 
 </manifest>

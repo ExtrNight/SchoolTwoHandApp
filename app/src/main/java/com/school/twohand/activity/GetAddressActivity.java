@@ -78,13 +78,13 @@ public class GetAddressActivity extends AppCompatActivity {
                         public void convert(ViewHolder viewHolder, QueryGetAddressBean queryGetAddressBean, int position) {
                             //设置item中控件的取值
                             TextView a = viewHolder.getViewById(R.id.tv_receievename);
-                            a.setText("收货人:" + queryGetAddressBean.getUserName());
+                            a.setText("收货人: " + queryGetAddressBean.getUserName());
 
                             TextView b = viewHolder.getViewById(R.id.tv_phoneNumber);
-                            b.setText("" + queryGetAddressBean.getReceiptNumber());
+                            b.setText("联系方式: " + queryGetAddressBean.getReceiptNumber());
 
                             TextView c = viewHolder.getViewById(R.id.tv_address);
-                            c.setText("收货地址:" + queryGetAddressBean.getReceiptDetail());
+                            c.setText("收货地址: " + queryGetAddressBean.getReceiptDetail());
                         }
                     };
                     liGetAddress.setAdapter(queryGetAddressBeanCommonAdapter);

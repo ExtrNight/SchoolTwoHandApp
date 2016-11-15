@@ -60,11 +60,13 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
 
+/**
+ * 修改个人资料的页面
+ */
 public class MyInforActivity extends AppCompatActivity implements View.OnClickListener {
 
     @InjectView(R.id.goback)
     ImageView goback;
-
     @InjectView(R.id.checksex)
     TextView checksex;
     @InjectView(R.id.rl_sex)
@@ -282,7 +284,6 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
                 showBottoPopupWindow();
                 break;
             case R.id.rl_noaddress:
-
                 LayoutInflater factory = LayoutInflater.from(MyInforActivity.this);//提示框
                 final View view1 = factory.inflate(R.layout.noaddress, null);//这里必须是final的
                 final EditText edit = (EditText) view1.findViewById(R.id.editText1);//获得输入框对象
@@ -451,6 +452,7 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
         x.http().get(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
+                Toast.makeText(MyInforActivity.this, "修改成功~", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -472,61 +474,60 @@ public class MyInforActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-public void getData(){
-    String url= NetUtil.url+"QueryInfoServlet";
-    RequestParams requestParams=new RequestParams(url);
-    requestParams.addQueryStringParameter("userId",user.getUserId()+"");
+    public void getData(){
+        String url= NetUtil.url+"QueryInfoServlet";
+        RequestParams requestParams=new RequestParams(url);
+        requestParams.addQueryStringParameter("userId",user.getUserId()+"");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Gson gson=new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+                User user1= gson.fromJson(result,User.class);
+                Log.i("MyInforActivity", "onSuccess: "+user1);
 
-    x.http().get(requestParams, new Callback.CommonCallback<String>() {
-        @Override
-        public void onSuccess(String result) {
-            Gson gson=new GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-            User user1= gson.fromJson(result,User.class);
-            Log.i("QueryInfoServlet", "onSuccess: "+user1.getUserHead());
+                ImageView imageView1 = (ImageView) findViewById(R.id.iv_headimg1);
+                if(imageView1!=null){
+                    imageView1.setVisibility(View.VISIBLE);
+                    ImageOptions imageOptions = new ImageOptions.Builder().setCircular(true).build();
+                    x.image().bind(imageView1,NetUtil.imageUrl+user1.getUserHead(),imageOptions);
+                }
 
-            ImageView imageView1 = (ImageView) findViewById(R.id.iv_headimg1);
-            imageView1.setVisibility(View.VISIBLE);
-            ImageOptions imageOptions = new ImageOptions.Builder().setCircular(true).build();
-            x.image().bind(imageView1,NetUtil.imageUrl+user1.getUserHead(),imageOptions);
-            Log.i("QueryInfoServlet", "onSuccess: "+NetUtil.imageUrl+user1.getUserHead());
+                TextView tv1= (TextView) findViewById(R.id.checksex);
+                if(tv1!=null){
+                    tv1.setText(user1.getUserSex());
+                }
 
+                TextView tv2= (TextView) findViewById(R.id.checkbirth);
+                Date date=new Date(user1.getUserBirthday().getTime());
+                SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd");
+                String a=aa.format(date);
+                tv2.setText(a);
 
-            TextView tv1= (TextView) findViewById(R.id.checksex);
-            tv1.setText(user1.getUserSex());
+                TextView tv3= (TextView) findViewById(R.id.checknoaddress);
+                if(tv3!=null){
+                    tv3.setText(user1.getUserAddress());
+                }
 
-            TextView tv2= (TextView) findViewById(R.id.checkbirth);
-            Date date=new Date(user1.getUserBirthday().getTime());
-            SimpleDateFormat aa=new SimpleDateFormat("yyyy-MM-dd");
-            String a=aa.format(date);
-            tv2.setText(a);
+                TextView tv4= (TextView) findViewById(R.id.tv_person);
+                tv4.setText(user1.getUserPersonalProfile());
 
-            TextView tv3= (TextView) findViewById(R.id.checknoaddress);
-            tv3.setText(user1.getUserAddress());
+            }
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                ex.getStackTrace();
+            }
 
-            TextView tv4= (TextView) findViewById(R.id.tv_person);
-            tv4.setText(user1.getUserPersonalProfile());
+            @Override
+            public void onCancelled(CancelledException cex) {
 
+            }
 
+            @Override
+            public void onFinished() {
 
-        }
-
-
-        @Override
-        public void onError(Throwable ex, boolean isOnCallback) {
-            ex.getStackTrace();
-        }
-
-        @Override
-        public void onCancelled(CancelledException cex) {
-
-        }
-
-        @Override
-        public void onFinished() {
-
-        }
-    });
-}
+            }
+        });
+    }
 
 }

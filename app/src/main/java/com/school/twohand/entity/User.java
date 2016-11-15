@@ -137,6 +137,24 @@ public class User implements Parcelable {
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "User{" +
+				"userId=" + userId +
+				", userAccount='" + userAccount + '\'' +
+				", userName='" + userName + '\'' +
+				", userPassword='" + userPassword + '\'' +
+				", userHead='" + userHead + '\'' +
+				", userSex='" + userSex + '\'' +
+				", userBirthday=" + userBirthday +
+				", userPersonalProfile='" + userPersonalProfile + '\'' +
+				", userBalance=" + userBalance +
+				", userAmountEarned=" + userAmountEarned +
+				", userAddress='" + userAddress + '\'' +
+				", userSchoolName='" + userSchoolName + '\'' +
+				'}';
+	}
+
 	//--------------Parcelable序列化-------------
 	@Override
 	public int describeContents() {

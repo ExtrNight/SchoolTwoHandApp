@@ -18,7 +18,6 @@ import com.school.twohand.myApplication.MyApplication;
 import com.school.twohand.query.entity.QueryTopicBean;
 import com.school.twohand.schooltwohandapp.R;
 import com.school.twohand.utils.CommonAdapter;
-import com.school.twohand.utils.MyListView;
 import com.school.twohand.utils.NetUtil;
 import com.school.twohand.utils.ViewHolder;
 
@@ -76,7 +75,6 @@ public class TopicFragment extends Fragment {
 
                         @Override
                         public void convert(ViewHolder viewHolder, QueryTopicBean queryTopicBean, int position) {
-                            Log.i("TopicFragment", "convert: convert+11");
                             ImageView a=viewHolder.getViewById(R.id.iv_userImage);
                             x.image().bind(a, NetUtil.imageUrl+queryTopicBean.getUserHead());
 
@@ -107,7 +105,11 @@ public class TopicFragment extends Fragment {
                             }
 
                             TextView f=viewHolder.getViewById(R.id.tv_school);
-                            f.setText("来自"+queryTopicBean.getUserAddress()+" 鱼塘|");
+                            f.setVisibility(View.GONE);
+                            if(queryTopicBean.getUserAddress()!=null){
+                                f.setVisibility(View.VISIBLE);
+                                f.setText("来自"+queryTopicBean.getUserAddress()+" ");
+                            }
 
                             TextView g=viewHolder.getViewById(R.id.tv_priase);
                             g.setText("点赞"+queryTopicBean.getLikeSum());
@@ -116,7 +118,7 @@ public class TopicFragment extends Fragment {
                             h.setText("留言"+queryTopicBean.getMessageSum());
 
                             TextView i=viewHolder.getViewById(R.id.tv_circleName);
-                            i.setText(queryTopicBean.getAmoyCircleName());
+                            i.setText("鱼塘|"+queryTopicBean.getAmoyCircleName());
 
                         }
                     };

@@ -81,7 +81,7 @@
             android:text="这里是商品描述这里是商品描述这里是商品描述这里是商品描述"
             android:maxLines="2"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="15dp"
             android:textColor="@color/black"
             android:textSize="13sp"
             android:ellipsize="end"
@@ -128,7 +128,8 @@
                 android:maxEms="10"
                 android:maxLines="1"
                 android:textColor="#0c87e6"
-                android:ellipsize="end"/>
+                android:ellipsize="end"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/tv_circleName"

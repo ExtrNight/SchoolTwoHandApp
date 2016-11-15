@@ -35,13 +35,13 @@ import java.util.List;
  * Created by Administrator on 2016/9/20 0020.
  */
 public class HomeFragement extends Fragment {
+
     List<Fragment> homeFragmentLists = new ArrayList<>();
     ViewPager vp ;
     TwoFragment twoFragment;
     OneFragment oneFragment;
-
     Button  fenlei;
-    Button sousuo;
+    TextView sousuo;
     ImageView iv_location_school;    //定位到学校
 
     /*
@@ -52,6 +52,7 @@ public class HomeFragement extends Fragment {
     int currentIndex = 0;//当前页
     ImageView line;//字下面的线
     private int screenWidth;//屏幕的宽度
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class HomeFragement extends Fragment {
         line = (ImageView) view.findViewById(R.id.line);//首页切换时的下划线
 
         fenlei = (Button) view.findViewById(R.id.fenlei);
-        sousuo = (Button) view.findViewById(R.id.sousuo);
+        sousuo = (TextView) view.findViewById(R.id.sousuo);
         iv_location_school = (ImageView) view.findViewById(R.id.iv_location_school);
 
         oneFragment = new OneFragment();

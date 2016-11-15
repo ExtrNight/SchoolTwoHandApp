@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@null">
+
+<!--<RelativeLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:background="@null">-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,8 +20,7 @@
             android:layout_marginLeft="4dp"
             android:layout_centerVertical="true" />
 
-
-        <Button
+        <TextView
             android:id="@+id/sousuo"
             android:layout_width="wrap_content"
             android:layout_height="28dp"
@@ -30,10 +30,18 @@
             android:layout_marginRight="39dp"
             android:layout_marginLeft="3dp"
             android:layout_centerVertical="true"
+            android:gravity="center"
             android:text="请输入宝贝关键词或@用户名"
             android:textSize="12sp"
             android:textColor="#8a8a8a"/>
         <!--android:textColor="#222222"-->
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="18dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_location_school"
+            android:src="@mipmap/search_000000_64" />
 
         <Button
             android:id="@+id/fenlei"
@@ -46,14 +54,7 @@
 
     </RelativeLayout>
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="16dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="85dp"
-        android:src="@mipmap/search_000000_64" />
-
-</RelativeLayout>
+<!--</RelativeLayout>-->
 
         <LinearLayout
             android:layout_width="match_parent"
