@@ -39,6 +39,7 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -176,20 +177,16 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                                     circleImageFile.delete();//删除文件，不占用用户存储空间
                                 }
                             }
-
                             @Override
                             public void onError(Throwable ex, boolean isOnCallback) {
                                 Log.i("11111", "onError: "+ex);
                             }
-
                             @Override
                             public void onCancelled(CancelledException cex) {
                             }
-
                             @Override
                             public void onFinished() {
                             }
-
                         });
                         /**
                          * 创建群的方法
@@ -390,6 +387,26 @@ public class CreateTaoquanActivity extends AppCompatActivity {
 
     }
 
+    //压缩图片，转化成输出流
+    private ByteArrayOutputStream compressImage(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        int i = 1;
+        Log.i("LAG", "压缩前的长度: " + baos.toByteArray().length);
+        while (baos.toByteArray().length / 1024 > 1000) {  //循环判断如果压缩后图片是否大于1000kb,大于继续压缩
+            options -= 30;//每次都减少30
+            if (options == 10) {
+                break;
+            }
+            Log.i("LAG", "看看质量减少没，并且执行: " + (i++) + "次---->" + options);
+            baos.reset();//重置baos即清空baos
+            bitmap.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+        }
+        Log.i("LAG", "压缩后的长度: " + baos.toByteArray().length);
+        return baos;
+    }
+
     //将从相册或者相机中选取的照片暂时写入SD卡,相应成功后会删掉
     public void writeImageToSdCard() {
         //开子子线程，将图片暂时写入SD卡
@@ -411,7 +428,12 @@ public class CreateTaoquanActivity extends AppCompatActivity {
                     FileOutputStream fos = null;
                     try {
                         fos = new FileOutputStream(circleImageFile); //获得文件输出流
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);//将bitmap写入输出流
+
+                        //bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);//将bitmap写入输出流
+                        ByteArrayOutputStream baos = compressImage(bitmap);  //把Bitmap压缩到输出流
+                        baos.writeTo(fos);
+                        baos.flush();
+                        baos.close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     } finally {

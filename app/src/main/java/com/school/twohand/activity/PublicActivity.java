@@ -166,31 +166,24 @@ public class PublicActivity extends AppCompatActivity {
                 //详情界面（我的商品，编辑跳转过来，还原界面）
                 Intent intent = getIntent();
                 String detailString = intent.getStringExtra("DetailGoods");
-                Log.i("ddfsdsf", "lastYeMian: " + detailString);
                 if (detailString.equals("DetailGoods")) {
                     imageAddress = new File(intent.getStringExtra("imageurl"));
                     String goodsString = intent.getStringExtra("goodsString");
                     String filesString = intent.getStringExtra("filesString");
-                    Log.i("lastYeMian", "lastYeMian: " + goodsString + "==" + filesString);
                     Gson gson1 = new Gson();
                     Goods goods = gson1.fromJson(goodsString, Goods.class);
                     //amoyId = goods.getGoodsAmoyCircle().getCircleId();
-                    files = gson.fromJson(filesString, new TypeToken<List<File>>() {
-                    }.getType());
+                    files = gson.fromJson(filesString, new TypeToken<List<File>>() {}.getType());
                     classid = goods.getGoodsClass().getClass_id();
-                    Log.i("ddfsdsf", "lastYeMian: " + goods.getGoodsTitle());
 
                     publicTitle.setText(goods.getGoodsTitle());
                     publicContent.setText(goods.getGoodsDescribe());
-                    Log.i("ddfsdsf", "lastYeMian: " + classid);
                     publicClass.setText(classIdConvertString(classid));
 
                     final RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) publicPhoto.getLayoutParams();
                     for (int i = 0; i < files.size(); i++) {
                         Uri uri = Uri.parse(files.get(i).toString());
-                        Log.i("ddfsdsf", "onSuccess: " + uri);
                         if (i == 0) {
-                            Log.i("ddfsdsf", "onSuccess: " + uri);
                             publicPhoto1.setVisibility(View.VISIBLE);
                             publicPhoto1.setImageURI(uri);
                             layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.public_photo1);
@@ -237,9 +230,6 @@ public class PublicActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
 
     //回调请求码是REQUEST_CODE就请求图库，请求码是REQUEST_CODE_CLASS就请求分类界面返回分类结果
     @Override
@@ -429,9 +419,7 @@ public class PublicActivity extends AppCompatActivity {
                 if (is != null) {
                     is.close();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            }  catch (IOException e) {
                 e.printStackTrace();
             }
             files.add(saveImage(bm));
@@ -449,7 +437,6 @@ public class PublicActivity extends AppCompatActivity {
 
     //压缩图片，转化成输出流
     private ByteArrayOutputStream compressImage(Bitmap bitmap) {
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
@@ -656,22 +643,6 @@ public class PublicActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //删除文件夹里所有内容，直接对文件夹调用delete，若文件夹里内容为空，则可以成功删除，否则要将文件夹里所有文件全部删除才可以删除该文件夹
-        if (imageFileDir != null) { //要先判断文件夹不为null，否则若用户没选择图片会出现空指针异常
-            if (imageFileDir.exists()) {
-                //删除保存在本地的图片,不占用用户的内存
-                Log.i("CreateTaoquanDynamic", "onDestroy: 1111");
-                File[] tempImageFiles = imageFileDir.listFiles();
-                for (int i = 0; i < tempImageFiles.length; i++) {
-                    if (tempImageFiles[i] != null) {
-                        if (tempImageFiles[i].isFile() && tempImageFiles[i].exists()) {
-                            tempImageFiles[i].delete();
-                        }
-                    }
-                }
-            }
-        }
-
         //删除文件夹里所有内容，直接对文件夹调用delete，若文件夹里内容为空，则可以成功删除，否则要将文件夹里所有文件全部删除才可以删除该文件夹
         if (imageAddress != null) { //要先判断文件夹不为null，否则若用户没选择图片会出现空指针异常
             if (imageAddress.exists()) {
